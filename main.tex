@@ -1,0 +1,66 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Welcome to Overleaf --- just edit your LaTeX on the left,
+% and we'll compile it for you on the right. If you open the
+% 'Share' menu, you can invite other users to edit at the same
+% time. See www.overleaf.com/learn for more info. Enjoy!
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{article}
+\usepackage{amsmath, amssymb}
+\begin{document}
+Soient $f$ et $g$ $\in \mathbb{F}[x]$ deux polynômes non nuls de degrés respectifs
+n et m, avec $n$,$m$ $\in \mathbb{N}$, on a :
+\[
+\begin{aligned}
+    f &= f_nx^n+\cdots+f_1x+f_0 \\
+    g &= g_nx^m+\cdots+g_1x+g_0
+\end{aligned}
+\]
+\\
+Le résultant de f et g est le déterminant de l'application linéaire 
+\[
+\varphi :
+\mathbb{F}[x]_{<m} \times \mathbb{F}[x]_{<n}
+\longrightarrow
+\mathbb{F}[x]_{<m+n},
+\qquad
+(s,t) \longrightarrow sf + tg,
+\]
+\\
+La matrice de l'application linéaire $\varphi$ est appelée la matrice de Sylvester associée à $f$ et $g$ et est notée $S(f,g)$.
+\\
+Le résultant de $f$ et $g$ est alors donné par :
+\[
+\operatorname{Res}(f,g)=\det S(f,g)
+\]
+La matrice de Sylvester $S(f,g)$ s'écrit sous la forme suivante :
+\[
+S(f,g)=
+\begin{pmatrix}
+f_n &        &        &        & g_m &        &        \\
+f_{n-1} & f_n &        &        & g_{m-1} & g_m &        \\
+\vdots & \vdots & \ddots &        & \vdots & \vdots & \ddots \\
+f_0 & f_1 & \cdots & f_n & g_0 & g_1 & \cdots \\
+    & f_0 & \ddots & \vdots &     & g_0 & \ddots \\
+    &     & \ddots & f_1 &     &     & \ddots \\
+    &     &        & f_0 &     &     & g_0
+\end{pmatrix}
+\]
+Les sous-résultants de $f$ et $g$ sont définis à partir de la matrice de
+Sylvester $S(f,g)$.
+Pour tout entier $k \ge 0$, le $k$-ième sous-résultant de $f$ et $g$,
+noté $\mathrm{SRes}_k(f,g)$, est le déterminant d’une sous-matrice
+appropriée de $S(f,g)$.
+La suite des sous-résultants permet de déterminer le degré du
+$\gcd(f,g)$ : si
+\[
+\mathrm{SRes}_0(f,g)=\cdots=\mathrm{SRes}_{d-1}(f,g)=0
+\quad \text{et} \quad
+\mathrm{SRes}_d(f,g)\neq 0,
+\]
+alors $\deg(\gcd(f,g))=d$, et $\mathrm{SRes}_d(f,g)$ est proportionnel
+au $\gcd(f,g)$.
+
+
+\end{document}
