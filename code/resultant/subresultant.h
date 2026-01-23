@@ -8,7 +8,7 @@
 
 #include "sylvester.h"
 
-int fmpz_poly_subresultants(
+int fmpz_poly_subresultants_naive(
   fmpz_t * subresultants,
   const fmpz_poly_t P,
   const fmpz_poly_t Q
@@ -73,7 +73,7 @@ int fmpz_poly_subresultants(
 //   for (int i = 0; i < 5; i++)
 //     fmpz_init(subresultants[i]);
 
-//   fmpz_poly_subresultants(subresultants, f, g);
+//   fmpz_poly_subresultants_naive(subresultants, f, g);
 //   for (int i = 0; i < 5; i++) {
 //     fmpz_print(subresultants[i]);
 //     printf("\n");
