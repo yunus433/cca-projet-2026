@@ -6,7 +6,7 @@
 #include <flint/fmpz_poly.h>
 #include <flint/fmpz_mat.h>
 
-void fmpz_poly_sylvester_matrix(
+int fmpz_poly_sylvester_matrix(
   fmpz_mat_t S, // Not a pointer, already accessed by referenced in Sylvester types. No dynamic memory allocation either, so no need to free later on
   const fmpz_poly_t P,
   const fmpz_poly_t Q
@@ -20,29 +20,47 @@ void fmpz_poly_sylvester_matrix(
 
   if (m < 0 || n < 0) { // If a polynomial does not exist (degree -1 in Flint)
     fmpz_mat_init(S, 0, 0); // A matrix of 0 size?
-    return;
+    return -1;
   }
 
   fmpz_mat_init(S, N, N);
   fmpz_mat_zero(S);
 
-  for (int i = n; i >= 0; i--) {
-    fmpz_poly_get_coeff_fmpz(tmp, P, i); // The coefficient of poly
+  if (m <= n) {
+    for (int i = n; i >= 0; i--) {
+      fmpz_poly_get_coeff_fmpz(tmp, P, i); // The coefficient of poly
 
-    for (int j = 0; j < m; j++) { // We shift m times
-      fmpz_set(fmpz_mat_entry(S, j + (n - i), j), tmp);
+      for (int j = 0; j < m; j++) { // We shift m times
+        fmpz_set(fmpz_mat_entry(S, j + (n - i), j), tmp);
+      }
+    }
+    
+    for (int i = m; i >= 0; i--) {
+      fmpz_poly_get_coeff_fmpz(tmp, Q, i); // The coefficient of poly
+
+      for (int j = 0; j < n; j++) { // We shift n times
+        fmpz_set(fmpz_mat_entry(S, j + (m - i), j + m), tmp);
+      }
+    }
+  } else {
+    for (int i = m; i >= 0; i--) {
+      fmpz_poly_get_coeff_fmpz(tmp, Q, i); // The coefficient of poly
+
+      for (int j = 0; j < n; j++) { // We shift n times
+        fmpz_set(fmpz_mat_entry(S, j + (m - i), j), tmp);
+      }
+    }
+
+    for (int i = n; i >= 0; i--) {
+      fmpz_poly_get_coeff_fmpz(tmp, P, i); // The coefficient of poly
+
+      for (int j = 0; j < m; j++) { // We shift m times
+        fmpz_set(fmpz_mat_entry(S, j + (n - i), j + n), tmp);
+      }
     }
   }
-  
-  for (int i = m; i >= 0; i--) {
-    fmpz_poly_get_coeff_fmpz(tmp, Q, i); // The coefficient of poly
 
-    for (int j = 0; j < n; j++) { // We shift n times
-      fmpz_set(fmpz_mat_entry(S, j + (m - i), j + m), tmp);
-    }
-  }
-
-  return;
+  return 1;
 }
 
 #endif
