@@ -1,0 +1,29 @@
+\section{Resultant}
+
+For the entire section, let $f, g \in \mathbb{Z}[x]$ with $\deg f = n$ and $\deg g = m$.
+
+First, we define the Sylvester matrix, $S(f, g) \in \mathbb{Z}^{(n+m) \times (n+m)}$, as follows \cite{resultant} :
+\[
+S(f,g)=
+\begin{pmatrix}
+f_n &        &        &        & g_m &        &        \\
+f_{n-1} & f_n &        &        & g_{m-1} & g_m &        \\
+\vdots & \vdots & \ddots &        & \vdots & \vdots & \ddots \\
+f_0 & f_1 & \cdots & f_n & g_0 & g_1 & \cdots \\
+    & f_0 & \ddots & \vdots &     & g_0 & \ddots \\
+    &     & \ddots & f_1 &     &     & \ddots \\
+    &     &        & f_0 &     &     & g_0
+\end{pmatrix}
+\]
+where all the non-specified coefficients are null. We can observe that the first $m$ columns of $S(f,g)$ are coefficients of $f(x)$ shifted $m$ times, and the last $n$ columns are coefficients of $g(x)$ shifted $n$ times. We can also define the matrix with reverse order of $f$ and $g$, or by shifting in rows instead of columns.
+
+Then, the resultant of $f$ and $g$ is defined as \cite{resultant}:
+\[
+res(f, g) = \det S(f, g)
+\]
+
+The resultant is important, as we have the following property:
+\[
+res(f, g) \neq 0 \iff \gcd(f, g) = 1
+\]
+which implies that the resultant of two polynomials is 0 if and only if they have a common root.
