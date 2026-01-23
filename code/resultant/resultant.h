@@ -8,7 +8,7 @@
 
 #include "sylvester.h"
 
-void fmpz_poly_resultant(
+int fmpz_poly_resultant(
   fmpz_t resultant,
   const fmpz_poly_t P,
   const fmpz_poly_t Q
@@ -19,7 +19,7 @@ void fmpz_poly_resultant(
 
   fmpz_mat_det(resultant, S);
 
-  return;
+  return 1;
 }
 
 #endif
