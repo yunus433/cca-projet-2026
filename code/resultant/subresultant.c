@@ -49,35 +49,36 @@ int fmpz_poly_subresultants_naive(
 
 #endif
 
-// int main () {
-//   fmpz_poly_t f, g;
-//   fmpz_poly_init(f);
-//   fmpz_poly_init(g);
+int main () {
+  fmpz_poly_t f, g;
+  fmpz_poly_init(f);
+  fmpz_poly_init(g);
 
-//   // Example: f = 824x^5 - 65x^4 -814x^3 - 741x^2 - 979x- 764, g = 216x^4 + 663x^3 + 880x^2 + 916x + 617
-//   fmpz_poly_set_coeff_si(f, 0, -764);
-//   fmpz_poly_set_coeff_si(f, 1, -979);
-//   fmpz_poly_set_coeff_si(f, 2, -741);
-//   fmpz_poly_set_coeff_si(f, 3, -814);
-//   fmpz_poly_set_coeff_si(f, 4, -65);
-//   fmpz_poly_set_coeff_si(f, 5, 824);
+  // Example: f = 824x^5 - 65x^4 -814x^3 - 741x^2 - 979x- 764, g = 216x^4 + 663x^3 + 880x^2 + 916x + 617
+  fmpz_poly_set_coeff_si(g, 0, -5);
+  fmpz_poly_set_coeff_si(g, 1, 2);
+  fmpz_poly_set_coeff_si(g, 2, 8);
+  fmpz_poly_set_coeff_si(g, 3, -3);
+  fmpz_poly_set_coeff_si(g, 4, -3);
+  fmpz_poly_set_coeff_si(g, 6, 1);
+  fmpz_poly_set_coeff_si(g, 8, 1);
 
-//   fmpz_poly_set_coeff_si(g, 0, 617);
-//   fmpz_poly_set_coeff_si(g, 1, 916);
-//   fmpz_poly_set_coeff_si(g, 2, 880);
-//   fmpz_poly_set_coeff_si(g, 3, 663);
-//   fmpz_poly_set_coeff_si(g, 4, 216);
+  fmpz_poly_set_coeff_si(f, 0, 21);
+  fmpz_poly_set_coeff_si(f, 1, -9);
+  fmpz_poly_set_coeff_si(f, 2, -4);
+  fmpz_poly_set_coeff_si(f, 4, 5);
+  fmpz_poly_set_coeff_si(f, 6, 3);
 
-//   fmpz_t subresultants[5];
+  fmpz_t subresultants[5];
 
-//   for (int i = 0; i < 5; i++)
-//     fmpz_init(subresultants[i]);
+  for (int i = 0; i < 5; i++)
+    fmpz_init(subresultants[i]);
 
-//   fmpz_poly_subresultants_naive(subresultants, f, g);
-//   for (int i = 0; i < 5; i++) {
-//     fmpz_print(subresultants[i]);
-//     printf("\n");
-//   }
+  fmpz_poly_subresultants_naive(subresultants, f, g);
+  for (int i = 0; i < 5; i++) {
+    fmpz_print(subresultants[i]);
+    printf("\n");
+  }
 
-//   return 0;
-// }
+  return 0;
+}
