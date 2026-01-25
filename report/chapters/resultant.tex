@@ -1,6 +1,6 @@
 \section{Resultant}
 
-For the entire section, let $f, g \in \mathbb{Z}[x]$ with $\deg f = n$ and $\deg g = m$.
+For the entire section, let $f, g \in \mathbb{K}[x]$, where $\mathbb{K}$ is a field, with $\deg f = n$ and $\deg g = m$.
 
 First, we define the Sylvester matrix, $S(f, g) \in \mathbb{Z}^{(n+m) \times (n+m)}$, as follows \cite{resultant} :
 \[
@@ -26,4 +26,71 @@ The resultant is important, as we have the following property:
 \[
 res(f, g) \neq 0 \iff \gcd(f, g) = 1
 \]
-which implies that the resultant of two polynomials is 0 if and only if they have a common root.
+which implies that the resultant of two polynomials is 0 if and only if they have a common root.\newline
+
+\begin{proof}
+
+\noindent Let $\mathbb{K}[x]_{<d}$ be the $\mathbb{K}$-vector space with polynomials of degree $< d$, and let its standard bases $(1, x, \dots, x^{d-1})$.
+
+\noindent First, let us reexamine the definition of the Sylvester matrix: We define the $\mathbb{K}$ linear map:
+\[
+\phi : \mathbb{K}[x]_{<m} \oplus \mathbb{K}[x]_{<n} \to \mathbb{K}[x]_{<n+m}
+\]
+such that:
+\[
+\phi(u, v) = u f + v g
+\]
+This definition is a linear map since the addition of polynomials and multiplication of polynomials with a constant polynomial is linear.
+
+\noindent Then, we can observe that the matrix of $\phi$ in the standard bases is exactly the Sylvester matrix, $S(f,g)$. Hence,
+\[
+res(f, g) = 0 \iff \det(S(f, g)) = 0 \iff \det(\phi) = 0 \iff \ker(\phi) \neq \emptyset
+\]
+As a result, we can write:
+\[
+res(f, g) = 0 \iff \exists (u, v) \neq (0, 0), \deg(u) < m, \deg(v) < n : u f + v g = 0
+\]
+
+\noindent We show the contraposition, $\gcd(f, g) \neq 1 \iff res(f,g) = 0$.
+
+\noindent \textbf{$(\implies)$:} Assume $\gcd(f, g) \neq 1$. Then $ \exists h \in \mathbb{K}[x], \deg(h) > 0 : h \mid f $ and $h \mid g$. Let $f_1, g_1 \in \mathbb{K}[x] : f = h f_1, g = h g_1$ and set $u = g_1 , v = - f_1$. Then,
+\[
+u f + v g = g_1 h f_1 - f_1 h g_1 = h \times (g_1 f_1 - f_1 g_1) = 0
+\]
+As $\deg(h) > 0$, we have $\deg(u) < m, \deg(v) < n$. Thus, by the above equality,
+\[
+\gcd(f, g) \neq 1 \implies \exists (u, v) \neq (0, 0), \deg(u) < m, \deg(v) < n : u f + v g = 0 \implies res(f, g) = 0
+\]
+
+\noindent \textbf{$(\impliedby)$:} Assume $res(f, g) = 0$. Then, by the above equality we have
+\[
+(\exists (u, v) \neq (0, 0), \deg(u) < m, \deg(v) < n : u f + v g = 0) \implies uf = - vg
+\]
+
+\noindent We know $u \neq 0$, as $g$ is not 0 and $u$ and $v$ cannot be both 0. Let $d = \gcd(u, g)$ such that:
+\[
+u = d u_1 , g = d g_1 \text{ where } gcd(u_1, g_1) = 1
+\]
+Putting this on the above equation:
+\[
+(d u_1) \times f = -v \times (d g_1) \implies u_1 f = -v g_1
+\]
+\[
+\implies g_1 \mid u_1 f \implies g_1 \mid f \text{ since } gcd(u_1, g_1) = 1
+\]
+
+\noindent Thus, we now have $g_1$ as the common factor of $g$ and $f$. Now showing that $g_1$ is not constant. We know $\deg(u) < m = \deg(g)$:
+\[
+\deg(u) < \deg(g) \implies \deg(d u_1) < \deg(d g_1)
+\]
+\[
+\implies \deg(d) + \deg(u_1) < \deg(d) + \deg(g_1) \implies \deg(u_1) < \deg(g_1)
+\]
+Since we have $\deg(u_1) \geq 0$, $\deg(g_1) > 0$. This shows that $g_1$ is a non-constant common divisor of $f$ and $g$, so $\gcd(f, g) \neq 1$. \newline
+
+\noindent We conclude that
+\[
+res(f, g) \neq 0 \iff \gcd(f, g) = 1
+\]
+
+\end{proof}
