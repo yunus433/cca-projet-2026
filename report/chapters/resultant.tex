@@ -1,6 +1,6 @@
 \section{Resultant}
 
-For the entire section, let $f, g \in \mathbb{K}[x]$, where $\mathbb{K}$ is a field, with $\deg f = n$ and $\deg g = m$.
+For the entire section, let $f, g \in \mathbb{K}[x]$, where $\mathbb{K}$ is a field \issue{(It seems preferable to use a ring here, as later on we use $\mathbb{Z}$)}, with $\deg f = n$ and $\deg g = m$.
 
 First, we define the Sylvester matrix, $S(f, g) \in \issue{\mathbb{Z}}^{(n+m) \times (n+m)}$, as follows \cite{resultant} :
 \[
@@ -15,7 +15,7 @@ f_0 & f_1 & \cdots & f_n & g_0 & g_1 & \cdots \\
     &     &        & f_0 &     &     & g_0
 \end{pmatrix}
 \]
-where all the non-specified coefficients are \issue{null}. We can observe that the first $m$ columns of $S(f,g)$ are coefficients of $f(x)$ shifted $m$ times, and the last $n$ columns are coefficients of $g(x)$ shifted $n$ times. We can also define the matrix with reverse order of $f$ and $g$, or by shifting in rows instead of columns.
+where all the non-specified coefficients are \issue{null}. We can observe that the first $m$ columns of $S(f,g)$ are coefficients of $f(x)$ shifted $m$ times, and the last $n$ columns are coefficients of $g(x)$ shifted $n$ times. We can also define the matrix with reverse order of $f$ and $g$, or by shifting in rows instead of columns. \issue{(Is there any difference among these definitions?)}
 
 Then, the resultant of $f$ and $g$ is defined as \cite{resultant}:
 \[
@@ -26,7 +26,7 @@ The resultant is important, as we have the following property:
 \[
 res(f, g) \neq 0 \iff \gcd(f, g) = 1
 \]
-which implies that the resultant of two polynomials is 0 if and only if they have a common root.\newline
+which implies that the resultant of two polynomials is 0 if and only if they have a common root. \issue{(Is this property true for any field or only for algebraically closed fields?)} \newline
 
 \begin{proof}
 
@@ -42,10 +42,11 @@ such that:
 \]
 This definition is a linear map since the addition of polynomials and multiplication of polynomials with a constant \issue{polynomial} is linear.
 
-\noindent Then, we can observe that the matrix of $\phi$ in the standard bases is exactly the Sylvester matrix, $S(f,g)$. Hence,
+\noindent Then, we can observe that the matrix of $\phi$ in the standard bases is exactly the Sylvester matrix, $S(f,g)$. \issue{(With which definition of Sylvester matrix?)} Hence,
 \[
 res(f, g) = 0 \iff \det(S(f, g)) = 0 \iff \det(\phi) = 0 \iff \ker(\phi) \neq \emptyset
 \]
+\issue{(Is $\det(\phi)$ well-defined? Recall that $\phi$ is a linear map, not a matrix.)}
 As a result, we can write:
 \[
 res(f, g) = 0 \iff \exists (u, v) \neq (0, 0), \deg(u) < m, \deg(v) < n : u f + v g = 0
@@ -94,3 +95,5 @@ res(f, g) \neq 0 \iff \gcd(f, g) = 1
 \]
 
 \end{proof}
+
+\issue{(The proof is okay-ish, but the writing needs improvement: use clean sentences rather than telegraphic mathematical writing, and try to avoid using too many symbols in sentences.)}
