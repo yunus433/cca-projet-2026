@@ -2,7 +2,7 @@
 
 For the entire section, let $f, g \in \mathbb{K}[x]$, where $\mathbb{K}$ is a field, with $\deg f = n$ and $\deg g = m$.
 
-First, we define the Sylvester matrix, $S(f, g) \in \mathbb{Z}^{(n+m) \times (n+m)}$, as follows \cite{resultant} :
+First, we define the Sylvester matrix, $S(f, g) \in \issue{\mathbb{Z}}^{(n+m) \times (n+m)}$, as follows \cite{resultant} :
 \[
 S(f,g)=
 \begin{pmatrix}
@@ -15,7 +15,7 @@ f_0 & f_1 & \cdots & f_n & g_0 & g_1 & \cdots \\
     &     &        & f_0 &     &     & g_0
 \end{pmatrix}
 \]
-where all the non-specified coefficients are null. We can observe that the first $m$ columns of $S(f,g)$ are coefficients of $f(x)$ shifted $m$ times, and the last $n$ columns are coefficients of $g(x)$ shifted $n$ times. We can also define the matrix with reverse order of $f$ and $g$, or by shifting in rows instead of columns.
+where all the non-specified coefficients are \issue{null}. We can observe that the first $m$ columns of $S(f,g)$ are coefficients of $f(x)$ shifted $m$ times, and the last $n$ columns are coefficients of $g(x)$ shifted $n$ times. We can also define the matrix with reverse order of $f$ and $g$, or by shifting in rows instead of columns.
 
 Then, the resultant of $f$ and $g$ is defined as \cite{resultant}:
 \[
@@ -30,7 +30,7 @@ which implies that the resultant of two polynomials is 0 if and only if they hav
 
 \begin{proof}
 
-\noindent Let $\mathbb{K}[x]_{<d}$ be the $\mathbb{K}$-vector space with polynomials of degree $< d$, and let its standard bases $(1, x, \dots, x^{d-1})$.
+\noindent Let $\mathbb{K}[x]_{<d}$ be the $\mathbb{K}$-vector space with polynomials of degree $< d$, and let its standard \issue{bases} $(1, x, \dots, x^{d-1})$.
 
 \noindent First, let us reexamine the definition of the Sylvester matrix: We define the $\mathbb{K}$ linear map:
 \[
@@ -40,7 +40,7 @@ such that:
 \[
 \phi(u, v) = u f + v g
 \]
-This definition is a linear map since the addition of polynomials and multiplication of polynomials with a constant polynomial is linear.
+This definition is a linear map since the addition of polynomials and multiplication of polynomials with a constant \issue{polynomial} is linear.
 
 \noindent Then, we can observe that the matrix of $\phi$ in the standard bases is exactly the Sylvester matrix, $S(f,g)$. Hence,
 \[
