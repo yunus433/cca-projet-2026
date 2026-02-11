@@ -1,6 +1,3 @@
-#ifndef SUBRES_H
-#define SUB_RES_H
-
 #include <flint/flint.h>
 #include <flint/fmpz.h>
 #include <flint/fmpz_poly.h>
@@ -47,9 +44,7 @@ int fmpz_poly_subresultants_naive(
   return 1;
 }
 
-#endif
-
-int main () {
+/*int main () {
   fmpz_poly_t f, g;
   fmpz_poly_init(f);
   fmpz_poly_init(g);
@@ -81,4 +76,4 @@ int main () {
   }
 
   return 0;
-}
+}*/

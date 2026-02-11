@@ -1,5 +1,3 @@
-#ifndef EUCLIDEAN_H
-#define EUCLIDEAN_H
 
 #include <flint/flint.h>
 #include <flint/fmpz.h>
@@ -15,8 +13,6 @@ int fmpz_poly_euclidean_division(
   if (fmpz_poly_is_zero(b))
     return -1;
 
-  fmpz_poly_init(q);
-  fmpz_poly_init(r);
   fmpz_poly_zero(q);
   fmpz_poly_set(r, a);
 
@@ -29,7 +25,7 @@ int fmpz_poly_euclidean_division(
     fmpz_poly_init(s);
 
     slong lc = * fmpz_poly_lead(r);
-
+    
     fmpz_poly_set_coeff_si(s, fmpz_poly_degree(r) - d,  (lc / c));
 
     fmpz_poly_add(q, q, s);
@@ -40,9 +36,8 @@ int fmpz_poly_euclidean_division(
   return 1;
 }
 
-#endif
 
-int main() {
+/*int main() {
   fmpz_poly_t f, g, q, r;
   fmpz_poly_init(f);
   fmpz_poly_init(g);
@@ -63,4 +58,4 @@ int main() {
   printf("\n");
   fmpz_poly_print(r);
   printf("\n");
-}
+}*/

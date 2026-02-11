@@ -59,7 +59,7 @@ void fmpz_poly_pseudo_rem_naive(fmpz_poly_t R, ulong *d,const fmpz_poly_t A, con
     fmpz_poly_clear(Bshift);
 }
 
-int main(void)
+/*int main(void)
 {
     fmpz_poly_t f, g, R, pseudorem;
     ulong d, a;
@@ -104,3 +104,4 @@ int main(void)
     flint_cleanup();
     return 0;
 }
+*/
