@@ -1,5 +1,3 @@
-#ifndef RESULTANT_H
-#define RESULTANT_H
 
 #include <flint/flint.h>
 #include <flint/fmpz.h>
@@ -22,14 +20,13 @@ int fmpz_poly_resultant_naive(
   return 1;
 }
 
-#endif
 
-int main () {
+/*int main () {
   fmpz_poly_t f, g;
   fmpz_poly_init(f);
   fmpz_poly_init(g);
 
-  /* Example: f = 1 + 2x + 3x^2 + 5x^3 + 7x^4, g = 5 + 7x + 9x^2 */
+  // Example: f = 1 + 2x + 3x^2 + 5x^3 + 7x^4, g = 5 + 7x + 9x^2 
   // fmpz_poly_set_coeff_si(f, 0, 1);
   // fmpz_poly_set_coeff_si(f, 1, 2);
   // fmpz_poly_set_coeff_si(f, 2, 3);
@@ -49,4 +46,4 @@ int main () {
   printf("\n");
 
   return 0;
-}
+}*/

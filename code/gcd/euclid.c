@@ -1,6 +1,3 @@
-#ifndef EUCLIDEAN_H
-#define EUCLIDEAN_H
-
 #include <flint/flint.h>
 #include <flint/fmpz.h>
 #include <flint/fmpz_poly.h>
@@ -15,18 +12,19 @@ int fmpz_poly_gcd_euclid(
     return -1;
 
   fmpz_poly_t a, b, tmp;
-  slong d;
+  ulong d;
   fmpz_poly_init(a);
   fmpz_poly_init(b);
   fmpz_poly_init(tmp);
 
   fmpz_poly_set(a, p);
   fmpz_poly_set(b, q);
-
-  while (!fmpz_poly_is_zero(b)) {
+  int i=0;
+  while (!fmpz_poly_is_zero(b)&&i<20) {
     fmpz_poly_pseudo_rem(tmp, &d, a, b);
     fmpz_poly_set(a, b);
     fmpz_poly_set(b, tmp);
+    i++;
   }
 
   fmpz_poly_set(r, a);
@@ -34,9 +32,8 @@ int fmpz_poly_gcd_euclid(
   return 1;
 }
 
-#endif
 
-int main() {
+/*int main() {
   fmpz_poly_t f, g, q, r;
   fmpz_poly_init(f);
   fmpz_poly_init(g);
@@ -55,4 +52,4 @@ int main() {
 
   fmpz_poly_print(r);
   printf("\n");
-}
+}*/

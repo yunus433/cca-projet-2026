@@ -1,10 +1,11 @@
+
 #include <flint/flint.h>
 #include <flint/fmpq.h>
 #include <flint/fmpq_poly.h>
 #include <flint/fmpq_mat.h>
 #include <flint/nmod_poly.h>
 
-int fmpq_poly_subres_euclid(fmpq_t *subres,const fmpq_poly_t P, const fmpq_poly_t Q){
+int fmpq_poly_subres_euclid(fmpq_t subres[],const fmpq_poly_t P, const fmpq_poly_t Q){
     if (fmpq_poly_is_zero(P) || fmpq_poly_is_zero(Q)){
         return -1;
     }
@@ -31,7 +32,7 @@ int fmpq_poly_subres_euclid(fmpq_t *subres,const fmpq_poly_t P, const fmpq_poly_
 
     rho=flint_malloc(sizeof(fmpq_t)*(max_steps+5));
 
-    for(slong i=0;i<max_steps;i++){
+    for(slong i=0;i<max_steps+5;i++){
         fmpq_init(rho[i]);
     }
 
@@ -50,8 +51,6 @@ int fmpq_poly_subres_euclid(fmpq_t *subres,const fmpq_poly_t P, const fmpq_poly_
     fmpq_poly_init(r1);
     fmpq_poly_init(r2);
 
-    fmpq_t lc;
-    fmpq_init(lc);
 
     while(!fmpq_poly_is_zero(b)){
         fmpq_poly_divrem(q,r1,a,b);
@@ -116,16 +115,18 @@ int fmpq_poly_subres_euclid(fmpq_t *subres,const fmpq_poly_t P, const fmpq_poly_
     fmpq_poly_clear(r1);
     fmpq_poly_clear(r2);
 
-    for (slong i = 0; i < max_steps; i++) fmpq_clear(rho[i]);
+    for (slong i = 0; i < max_steps+5; i++) fmpq_clear(rho[i]);
     flint_free(rho);
     flint_free(n);
 
     fmpq_poly_clear(a);
     fmpq_poly_clear(b);
+    fmpq_clear(rho0);
+    fmpq_clear(rho1);
     return 0;
 }
 
-int main(void)
+/*int main(void)
 {
     fmpq_poly_t P, Q;
     fmpq_poly_init(P);
@@ -178,4 +179,4 @@ int main(void)
 
     flint_cleanup();
     return 0;
-}
+}*/
