@@ -1,0 +1,51 @@
+\section{Multivariate Polynomials}
+
+Let $k > 1$ and $f, g \in \mathbb{Z}[x_1, \dots, x_k] = \mathbb{Z}[x_2, \dots, x_k][x_1]$, with $\deg f = n$ and $\deg g = m$. Then, by the definition of the resultant as the determinant of the Sylvester matrix we know that $Res_{x_1}(f, g) \in \mathbb{Z}[x_2, \dots, x_k]$. Moreover, we can write that:
+
+$$
+\deg(Res_{x_1}(f, g)) \leq \deg_{x_1}(g) \times n + \deg_{x_1}(f) \times m
+$$
+
+Informally, this results can be deduced from the fact that determinant is defined as the sum over all permutations of $n$ of multiplication of coefficients in the Sylvester matrix. The coefficients of Sylvester matrix are either 0, a coefficient of $f$, or $g$. Thus, we can upper bound the degree of each term with the degree of the multiplication on each term. Here, an important point is that we shift coefficients of $f$ exactly $m$ times while coefficients of $g$ $n$ times. Thus, terms belonging to $f$ (this is $\deg(f) = n$) are multiplied with the degree of $g$ over $x_1$, which is $\deg_{x_1}(g)$, and vice versa for $g$. Finally, we sum both degrees to express the upper bound of the multiplication of all terms, which is the degree of the biggest term on the left (depending on $f$) times the degree of the biggest term on the right (depending on $g$).
+
+Then, let $\eta \in \mathbb{Z}^{n-1}$, $f(\eta), g(\eta) \in \mathbb{Z}[x_1]$. Then, we cannot say that the below holds for any chosen $\eta$:
+
+$$
+Res_{x_1}(f(\eta), g(\eta)) = Res_{x_1}(f, g)(\eta)
+$$
+
+In other terms, if $O \subseteq \mathbb{Z}^{n-1}$ such that $\forall \eta \in O$ : $Res_{x_1}(f(\eta), g(\eta)) = Res_{x_1}(f, g)(\eta)$, then $O \neq \mathbb{Z}^{n-1}$.
+
+Normally, this equation seems correct, as the determinant of the Sylvester matrix is a polynomial expression in coefficients, so the evoluation commutes. However, resultant is defined as the determinant of the Sylvester matrix. Thus, in order to understand for what values of $\eta$ the above equality does not hold, we need to inspect the contruction of the Sylvester matrix.
+
+As said before, each term of the Sylvester matrix is a polynomial expression, thus the order of evoluation does not change the value of a specific term. However, the determinant actually changes if the matrix inside has a different size. This is the most important observation on this phenomenon: It is not possible for an individual term of the matrix to change based on the order of the evoluation, but the actual size of the matrix may change, which happens if and only if the degree of $f$ or $g$ changes (as the size of the Sylvester matrix depends on the sizes of $f$ and $g$ only by construction).
+
+In short, we can say that the definition of the Sylvester matrix is not the same for the 2 sides of the equation: If the resultant is computed over $f, g$, then the matrix has a generic size of that depends on $\deg(f) \text{ and } \deg(g)$. However, if we first evoluate the matrix, than the size of the matrix depends on $\deg(f(\eta)) \text{ and } \deg(g(\eta))$. Formally:
+
+$$
+Res_{x_1}(f(\eta), g(\eta)) \neq Res_{x_1}(f, g)(\eta) \iff \deg(f) != \deg(f(\eta)) \text{ or } \deg(g)!= \deg(g(\eta))
+$$
+
+As a result, we need to find values of $\eta$ that changes the degree of $f$ or $g$. Trivially, these are the values of $\eta$ that evoluate the leading coefficient of $f$ or $g$ 0. Formally, we can express the values of $\eta$ that does not satisfy this equality as:
+
+$$
+\mathbb{Z}^{n-1} \setminus O = \{\eta \in \mathbb{Z}^{n-1} : lc(f(\eta)) = 0 \text{ or } lc(g(\eta)) = 0\}
+$$
+
+Now that we express the difference in this form, we can observe that this expression is actually inside the union of two Zariski-closed sets in a field $\mathbb{K}^{n-1}$ (that are expressed with $V$)\footnote{Note that since we define Zariski-closed sets on fields, we express this equality as an inclusion: There are values of $\eta$ that evoluate $f$ or $g$ 0 but does not live in $\mathbb{Z}$}. 
+
+$$
+\{\eta \in \mathbb{Z}^{n-1} : lc(f(\eta)) = 0 \text{ or } lc(g(\eta)) = 0\} \subseteq \{\eta \in \mathbb{K}^{n-1} : lc(f(\eta)) = 0 \text{ or } lc(g(\eta)) = 0\}
+$$
+where
+$$
+\{\eta \in \mathbb{K}^{n-1} : lc(f(\eta)) = 0 \text{ or } lc(g(\eta)) = 0\} = V(lc(f)) \cup V(lc(g)) = V(lc(f)lc(g))
+$$
+
+In short, we can say that
+
+$$
+\mathbb{Z}^{n-1} \setminus O \subseteq V(lc(f)lc(g))
+$$
+
+Finally, as $\mathbb{Z}^{n-1} \setminus O$ is included in a closed set, the equation $Res_{x_1}(f(\eta), g(\eta)) = Res_{x_1}(f, g)(\eta)$ is generecially true, i.e. it holds for all values of $\eta$ except on a Zariski-closed set.

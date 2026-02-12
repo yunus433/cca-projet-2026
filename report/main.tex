@@ -1,0 +1,52 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{textcomp}
+\usepackage{lmodern}
+\usepackage{float}
+\usepackage{amsthm}
+\usepackage{xcolor}
+\newcommand{\issue}[1]{\textcolor{red}{#1}}
+
+\geometry{margin=2cm}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textbf{CCA Project}}
+\fancyhead[R]{Yunus GÜRLEK, Frederic XIA}
+\fancyfoot[C]{\thepage}
+\setcounter{page}{0}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{5cm}
+    {\Huge \textbf{CCA Project} \par}
+    \vspace{3cm}
+    {\Large Yunus GÜRLEK \par}
+    \vspace{0.5cm}
+    {\Large Frederic XIA \par}
+    \vfill
+    {\large \today \par}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\input{chapters/resultant.tex}
+\input{chapters/subresultant.tex}
+\input{chapters/multivariate.tex}
+
+\newpage
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
+
