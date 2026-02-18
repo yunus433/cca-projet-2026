@@ -31,7 +31,7 @@ void generate_random_polysQ(fmpq_poly_t F,fmpq_poly_t G,flint_rand_t state,slong
 }
 
 int main(){
-    int N=5;
+    int N=5000;
     fmpz_poly_t P,Q,q,r,R;
     fmpz_poly_init(P);
     fmpz_poly_init(Q);
@@ -43,9 +43,11 @@ int main(){
     flint_randseed(state, s, s + 1UL);
     fmpz_poly_init(R);
     
-    fmpq_poly_t F,G;
+    fmpq_poly_t F,G,q2,r2;
     fmpq_poly_init(F);
     fmpq_poly_init(G);
+    fmpq_poly_init(q2);
+    fmpq_poly_init(r2);
 
     slong degree=100;
     slong bits=50;
@@ -80,15 +82,14 @@ int main(){
 
 
     /*printf("TEST POUR LA FONCTION division euclidienne\n");
-    for(int i=0;i<N;i++){ //PROBLEME LES DIVISIONS NE SONT PAS TOUJOURS REALISABLES
-        printf("iteration %d\n",i);
-        generate_random_polys(P,Q,state,degree,bits);
+    for(int i=0;i<N;i++){ //ENVIRON 4,8 FOIS PLUS LENT
+        generate_random_polysQ(F,G,state,degree,bits);
         start=clock();
-        fmpz_poly_euclidean_division(q,r,P,Q);
+        fmpq_poly_euclidean_division(q2,r2,F,G);
         end=clock();
         add1+=end-start;
         start=clock();
-        fmpz_poly_divrem(q,r,P,Q);
+        fmpq_poly_divrem(q2,r2,F,G);
         end=clock();
         add2+=end-start;
     }
@@ -102,7 +103,7 @@ int main(){
     add1=0;
     add2=0;*/
     
-    /*printf("TEST POUR LA FONCTION PSEUDO REMAINDER\n");
+    printf("TEST POUR LA FONCTION PSEUDO REMAINDER\n"); //CHANGER ET FAIRE QUUNE ITERATION
     ulong d;
     for(int i=0;i<N;i++){ //sur les grandes instances on remarque que ca prend 3,75 fois plus de temps avec la fonction naïve
         generate_random_polys(P,Q,state,degree,bits);
@@ -123,11 +124,10 @@ int main(){
     printf("FLINT : %.6e sec\n", time2);
     printf("La fonction naive est %.2f fois plus lent que la fonction FLINT\n", time1 / time2);
     add1=0;
-    add2=0;*/
+    add2=0;
 
-    /*printf("TEST POUR LA FONCTION GCD\n"); //Pareil que pour la division euclidienne
+    /*printf("TEST POUR LA FONCTION GCD\n"); //820 fois plus lent ???
     for(int i=0;i<N;i++){
-        printf("iteration %d\n",i);
         generate_random_polys(P,Q,state,degree,bits);
         start=clock();
         fmpz_poly_gcd_euclid(R,P,Q);
@@ -146,9 +146,45 @@ int main(){
     printf("FLINT : %.6e sec\n", time2);
     printf("La fonction naive est %.2f fois plus lent que la fonction FLINT\n", time1 / time2);*/
 
-    fmpz_poly_clear(P);
+    /*fmpz_poly_clear(P);
     fmpz_poly_clear(Q);
     fmpz_clear(resultant);
-    flint_randclear(state);
+    flint_randclear(state);*/
+    
+    /*printf("TEST CORRECTNESS PSEUDO REM\n");
+
+    generate_random_polys(P, Q, state, degree, bits);
+
+    // éviter division par 0
+    while (fmpz_poly_is_zero(Q))
+        generate_random_polys(P, Q, state, degree, bits);
+
+    fmpz_poly_t R1, R2;
+    fmpz_poly_init(R1);
+    fmpz_poly_init(R2);
+
+    ulong d1, d2;
+
+    fmpz_poly_pseudo_rem_naive(R1, &d1, P, Q);
+    fmpz_poly_pseudo_rem(R2, &d2, P, Q);
+
+    // afficher
+    printf("Naive remainder:\n");
+    fmpz_poly_print(R1);
+    printf("\nd1 = %lu\n\n", d1);
+
+    printf("FLINT remainder:\n");
+    fmpz_poly_print(R2);
+    printf("\nd2 = %lu\n\n", d2);
+
+    // comparaison
+    if (fmpz_poly_equal(R1, R2) && d1 == d2)
+        printf("OK : meme resultat\n");
+    else
+        printf("DIFFERENT\n");
+
+    fmpz_poly_clear(R1);
+    fmpz_poly_clear(R2);*/
+
     return 0;
 }
