@@ -3,34 +3,48 @@
 #include <flint/fmpz.h>
 #include <flint/fmpz_poly.h>
 #include <flint/fmpz_mat.h>
+#include <flint/fmpq.h>
+#include <flint/fmpq_poly.h>
+#include <flint/fmpq_mat.h>
 
-int fmpz_poly_euclidean_division(
-  fmpz_poly_t q,
-  fmpz_poly_t r,
-  const fmpz_poly_t a,
-  const fmpz_poly_t b
+int fmpq_poly_euclidean_division(
+  fmpq_poly_t q,
+  fmpq_poly_t r,
+  const fmpq_poly_t a,
+  const fmpq_poly_t b
 ) {
-  if (fmpz_poly_is_zero(b))
+  if (fmpq_poly_is_zero(b))
     return -1;
 
-  fmpz_poly_zero(q);
-  fmpz_poly_set(r, a);
+  fmpq_poly_zero(q);
+  fmpq_poly_set(r, a);
 
-  slong d, c;
-  d = fmpz_poly_degree(b);
-  c = * fmpz_poly_lead(b);
+  slong d;
+  d = fmpq_poly_degree(b);
 
-  while (fmpz_poly_degree(r) >= d) {
-    fmpz_poly_t s;
-    fmpz_poly_init(s);
+  fmpq_t c;
+  fmpq_init(c);
+  fmpq_poly_get_coeff_fmpq(c,b,d);
 
-    slong lc = * fmpz_poly_lead(r);
+  while (fmpq_poly_degree(r) >= d && !fmpq_poly_is_zero(r)) {
+    fmpq_poly_t s;
+    fmpq_poly_init(s);
+    slong dr = fmpq_poly_degree(r);
+    fmpq_t lc,coeff;
+    fmpq_init(lc);
+    fmpq_init(coeff);
+    fmpq_poly_get_coeff_fmpq(lc,r,dr);
+    fmpq_div(coeff,lc,c);
     
-    fmpz_poly_set_coeff_si(s, fmpz_poly_degree(r) - d,  (lc / c));
+    fmpq_poly_set_coeff_fmpq(s, dr - d,  coeff);
 
-    fmpz_poly_add(q, q, s);
-    fmpz_poly_mul(s, s, b);
-    fmpz_poly_sub(r, r, s);
+    fmpq_poly_add(q, q, s);
+    fmpq_poly_mul(s, s, b);
+    fmpq_poly_sub(r, r, s);
+
+    fmpq_poly_clear(s);
+    fmpq_clear(lc);
+    fmpq_clear(coeff);
   }
 
   return 1;
