@@ -12,19 +12,21 @@ int fmpz_poly_gcd_euclid(
     return -1;
 
   fmpz_poly_t a, b, tmp;
-  ulong d;
+  ulong d;  
   fmpz_poly_init(a);
   fmpz_poly_init(b);
   fmpz_poly_init(tmp);
 
   fmpz_poly_set(a, p);
   fmpz_poly_set(b, q);
-  int i=0;
-  while (!fmpz_poly_is_zero(b)&&i<20) {
+
+  while (!fmpz_poly_is_zero(b)) {
     fmpz_poly_pseudo_rem(tmp, &d, a, b);
+    if (!fmpz_poly_is_zero(tmp)){
+      fmpz_poly_primitive_part(tmp, tmp);
+    }
     fmpz_poly_set(a, b);
     fmpz_poly_set(b, tmp);
-    i++;
   }
 
   fmpz_poly_set(r, a);

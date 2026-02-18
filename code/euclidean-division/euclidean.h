@@ -5,12 +5,15 @@
 #include <flint/fmpz.h>
 #include <flint/fmpz_poly.h>
 #include <flint/fmpz_mat.h>
+#include <flint/fmpq.h>
+#include <flint/fmpq_poly.h>
+#include <flint/fmpq_mat.h>
 
-int fmpz_poly_euclidean_division(
-  fmpz_poly_t q,
-  fmpz_poly_t r,
-  const fmpz_poly_t a,
-  const fmpz_poly_t b
+int fmpq_poly_euclidean_division(
+  fmpq_poly_t q,
+  fmpq_poly_t r,
+  const fmpq_poly_t a,
+  const fmpq_poly_t b
 );
 
 #endif
