@@ -1,6 +1,7 @@
 CC      := gcc
 CFLAGS  := -O3 -march=native -Wall -Wextra -std=c11
 INCLUDES:= -Ieuclidean-division -Igcd -Ipseudorem -Iresultant
+LDFLAGS :=
 LDLIBS  := -lflint -lgmp
 TARGET  := a.out
 
@@ -19,7 +20,7 @@ OBJ := $(SRC:.c=.o)
 all: $(TARGET)
 
 $(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $@ $(LDLIBS)
+	$(CC) $(CFLAGS) $(OBJ) -o $@ $(LDFLAGS) $(LDLIBS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
