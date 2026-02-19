@@ -8,3 +8,6 @@ a
 *.log
 *.synctex.gz
 *.toc
+
+*.o
+*.out
