@@ -20,7 +20,7 @@ int fmpz_poly_sylvester_matrix(
     return -1;
   }
 
-  fmpz_mat_init(S, N, N);
+  fmpz_mat_init(S, N, N); // TO DO: ne pas initialiser ici!
   fmpz_mat_zero(S);
 
   if (m <= n) {
@@ -57,6 +57,8 @@ int fmpz_poly_sylvester_matrix(
     }
   }
 
+  // TODO fmpz_mat_clear -> fuit de mémoire
+
   return 1;
 }
 
@@ -85,3 +87,5 @@ int fmpz_poly_sylvester_matrix(
 
 //   return 0;
 // }
+
+// C flags fsanitize, memoryleaks

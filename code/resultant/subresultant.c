@@ -38,6 +38,7 @@ int fmpz_poly_subresultants_naive(
     m -= 1;
     N -= 2; // The matrix is shrink by 2 columns / rows at each iteration
 
+    // TODO regarder s'il y a window_clear
     fmpz_mat_window_init(W, W, 0, 0, N, N); // The new submatrix 
   }
 
