@@ -55,7 +55,7 @@ int fmpq_poly_subres_euclid(fmpq_t subres[],const fmpq_poly_t P, const fmpq_poly
     while(!fmpq_poly_is_zero(b)){
         fmpq_poly_divrem(q,r1,a,b);
         slong deg_r1=fmpq_poly_degree(r1);
-        fmpq_poly_get_coeff_fmpq(rho[rho_len],r1,deg_r1);
+        fmpq_poly_get_coeff_fmpq(rho[rho_len],r1,deg_r1); // TODO degr1 peut etre -1 si r1 == 0
         rho_len++;
         fmpq_poly_make_monic(r2,r1);
         n[n_len]=fmpq_poly_degree(r2);
