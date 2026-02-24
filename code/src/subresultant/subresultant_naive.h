@@ -1,12 +1,12 @@
-#ifndef SUBRES_H
-#define SUB_RES_H
+#ifndef SUBRESULTANT_NAIVE_H
+#define SUBRESULTANT_NAIVE_H
 
 #include <flint/flint.h>
 #include <flint/fmpz.h>
 #include <flint/fmpz_poly.h>
 #include <flint/fmpz_mat.h>
 
-#include "../sylvester_matrix/sylvester_matrix.h"
+#include "../sylvester_matrix/sylvester_matrix.c"
 
 int fmpz_poly_subresultant_naive(
   fmpz_t * subresultants,

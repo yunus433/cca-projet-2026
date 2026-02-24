@@ -1,6 +1,6 @@
 #include "subresultant_pseudo_remainder.h"
 
-int fmpz_subres_pseudo_rem(
+int fmpz_poly_subresultant_pseudo_remainder(
     fmpz_t *subresultants,
     const fmpz_poly_t P,
     const fmpz_poly_t Q
@@ -97,63 +97,5 @@ int fmpz_subres_pseudo_rem(
     fmpz_clear(tmp2);
     fmpz_clear(tmp3);
 
-    return 0;
-}
-
-
-int main(void)
-{
-    fmpz_poly_t P, Q;
-    fmpz_poly_init(P);
-    fmpz_poly_init(Q);
-
-    // P = x^3 + 2x^2 + 3x + 4
-    fmpz_poly_set_coeff_si(P, 3, -3);
-    fmpz_poly_set_coeff_si(P, 2, 8);
-    fmpz_poly_set_coeff_si(P, 1, 2);
-    fmpz_poly_set_coeff_si(P, 0, -5);
-    fmpz_poly_set_coeff_si(P, 8, 1);
-    fmpz_poly_set_coeff_si(P, 6, 1);
-    fmpz_poly_set_coeff_si(P, 4, -3);
-
-
-
-    // Q = 3x^2 + 2x + 1
-    fmpz_poly_set_coeff_si(Q, 2, -4);
-    fmpz_poly_set_coeff_si(Q, 1, -9);
-    fmpz_poly_set_coeff_si(Q, 0, 21);
-    fmpz_poly_set_coeff_si(Q, 4, 5);
-    fmpz_poly_set_coeff_si(Q, 6, 3);
-
-
-    slong d = fmpz_poly_degree(Q);   // degré de g
-    fmpz_t *subresultants = flint_malloc(sizeof(fmpz_t) * (d + 1));
-    for (slong k = 0; k <= d; k++) {
-        fmpz_init(subresultants[k]);
-        fmpz_zero(subresultants[k]);
-    }
-    
-
-    int ret = fmpz_subres_pseudo_rem(subresultants, P, Q);
-    if (ret != 0) {
-        printf("Erreur return -1 \n");
-        return 1;
-    }
-
-    for (slong k = d; k >= 0; k--) {
-        printf("sigma_%ld = ", k);
-        fmpz_print(subresultants[k]);
-        printf("\n");
-    }
-
-    for (slong k = 0; k <= d; k++) {
-        fmpz_clear(subresultants[k]);
-    }
-    flint_free(subresultants);
-
-    fmpz_poly_clear(P);
-    fmpz_poly_clear(Q);
-
-    flint_cleanup();
     return 0;
 }
