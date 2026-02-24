@@ -18,5 +18,5 @@ int fmpz_poly_resultant_naive(
 
   fmpz_mat_clear(S);
 
-  return 1;
+  return 0;
 }
