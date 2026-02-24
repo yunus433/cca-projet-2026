@@ -6,7 +6,7 @@
 #include <flint/fmpz_poly.h>
 #include <flint/fmpz_mat.h>
 
-#include "../sylvester_matrix/sylvester_matrix.h"
+#include "../sylvester_matrix/sylvester_matrix.c"
 
 int fmpz_poly_resultant_naive(
   fmpz_t resultant,
