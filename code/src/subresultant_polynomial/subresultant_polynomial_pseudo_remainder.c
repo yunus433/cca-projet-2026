@@ -1,13 +1,7 @@
 // gcc-15 -O2 pseudo-rem.c $(pkg-config --cflags --libs flint) -oa
 // QUESTION: Comparison with wikipedia?
 
-#ifndef SUBRESPOLYPSEUDO_H
-#define SUBRESPOLYPSEUDO_H
-
-#include <flint/flint.h>
-#include <flint/fmpz.h>
-#include <flint/fmpz_poly.h>
-#include <flint/fmpz_poly_mat.h>
+#include "subresultant_polynomial_pseudo_remainder.h"
 
 slong pow_slong(slong a, slong b) {
   slong ans = 1;
@@ -29,7 +23,7 @@ slong pow_slong(slong a, slong b) {
   return ans;
 }
 
-int fmpz_subresultant_polynomials_pseudo_remainder_sequence(
+int fmpz_subresultant_polynomial_pseudo_remainder(
   fmpz_poly_t * subresultant_polynomials,
   const fmpz_poly_t P,
   const fmpz_poly_t Q
@@ -95,8 +89,6 @@ int fmpz_subresultant_polynomials_pseudo_remainder_sequence(
 
   return 1;
 }
-
-#endif
 
 int main () {
   fmpz_poly_t f, g;

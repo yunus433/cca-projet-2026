@@ -1,15 +1,7 @@
 // gcc-15 -O2 subres-poly.c sylvester-poly.h $(pkg-config --cflags --libs flint)
 // QUESTION: Comparison with wikipedia?
 
-#ifndef SUBRESPOLY_H
-#define SUBRESPOLY_H
-
-#include <flint/flint.h>
-#include <flint/fmpz.h>
-#include <flint/fmpz_poly.h>
-#include <flint/fmpz_poly_mat.h>
-
-#include "sylvester-poly.h"
+#include "subresultant_polynomial_naive.h"
 
 void fmpz_poly_mat_swap_cols_inplace(fmpz_poly_mat_t A, slong c1, slong c2) {
     slong r, nrows = fmpz_poly_mat_nrows(A);
@@ -31,7 +23,7 @@ int fmpz_subresultant_polynomials_naive(
   const fmpz_poly_t Q
 ) {
   fmpz_poly_mat_t S, W;
-  fmpz_poly_sylvester_mat_poly(S, P, Q);
+  fmpz_poly_polynomial_sylvester_matrix(S, P, Q);
 
   int n = fmpz_poly_degree(P);
   int m = fmpz_poly_degree(Q);
@@ -90,8 +82,6 @@ int fmpz_subresultant_polynomials_naive(
 
   return 1;
 }
-
-#endif
 
 int main () {
   fmpz_poly_t f, g;

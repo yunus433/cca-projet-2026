@@ -1,11 +1,11 @@
 
-#include <flint/flint.h>
-#include <flint/fmpq.h>
-#include <flint/fmpq_poly.h>
-#include <flint/fmpq_mat.h>
-#include <flint/nmod_poly.h>
+#include "subresultant_euclid.h"
 
-int fmpq_poly_subres_euclid(fmpq_t subres[],const fmpq_poly_t P, const fmpq_poly_t Q){
+int fmpq_poly_subresultant_euclid(
+    fmpq_t *subresultants,
+    const fmpq_poly_t P,
+    const fmpq_poly_t Q
+) {
     if (fmpq_poly_is_zero(P) || fmpq_poly_is_zero(Q)){
         return -1;
     }
@@ -70,11 +70,11 @@ int fmpq_poly_subres_euclid(fmpq_t subres[],const fmpq_poly_t P, const fmpq_poly
     fmpq_init(sigma_ip1);
     fmpq_init(factor);
     
-    //initialisation subres à 0
-    for (slong k = 0; k <= d; k++) fmpq_zero(subres[k]);
+    //initialisation subresultants à 0
+    for (slong k = 0; k <= d; k++) fmpq_zero(subresultants[k]);
 
-    fmpq_pow_si(subres[n[1]], rho[1], n[0] - n[1]);  // sigma_{n1}
-    fmpq_set(sigma_i, subres[n[1]]);
+    fmpq_pow_si(subresultants[n[1]], rho[1], n[0] - n[1]);  // sigma_{n1}
+    fmpq_set(sigma_i, subresultants[n[1]]);
 
     // prod_rho = rho0*rho1
     fmpq_mul(prod_rho, rho[0], rho[1]); //
@@ -100,7 +100,7 @@ int fmpq_poly_subres_euclid(fmpq_t subres[],const fmpq_poly_t P, const fmpq_poly
         fmpq_mul(sigma_ip1, factor, sigma_i);
 
         if (0 <= n_ip1 && n_ip1 <= d) {
-            fmpq_set(subres[n_ip1], sigma_ip1);
+            fmpq_set(subresultants[n_ip1], sigma_ip1);
         }
 
         fmpq_set(sigma_i, sigma_ip1);
@@ -152,12 +152,12 @@ int fmpq_poly_subres_euclid(fmpq_t subres[],const fmpq_poly_t P, const fmpq_poly
 
 
     slong d = fmpq_poly_degree(Q);   // degré de g
-    fmpq_t *subres = flint_malloc(sizeof(fmpq_t) * (d + 1));
+    fmpq_t *subresultants = flint_malloc(sizeof(fmpq_t) * (d + 1));
     for (slong k = 0; k <= d; k++) {
-        fmpq_init(subres[k]);
+        fmpq_init(subresultants[k]);
     }
 
-    int ret = fmpq_poly_subres_euclid(subres, P, Q);
+    int ret = fmpq_poly_subres_euclid(subresultants, P, Q);
     if (ret != 0) {
         printf("Erreur return -1 \n");
         return 1;
@@ -165,14 +165,14 @@ int fmpq_poly_subres_euclid(fmpq_t subres[],const fmpq_poly_t P, const fmpq_poly
 
     for (slong k = d; k >= 0; k--) {
         printf("sigma_%ld = ", k);
-        fmpq_print(subres[k]);
+        fmpq_print(subresultants[k]);
         printf("\n");
     }
 
     for (slong k = 0; k <= d; k++) {
-        fmpq_clear(subres[k]);
+        fmpq_clear(subresultants[k]);
     }
-    flint_free(subres);
+    flint_free(subresultants);
 
     fmpq_poly_clear(P);
     fmpq_poly_clear(Q);

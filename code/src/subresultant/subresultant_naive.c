@@ -1,27 +1,22 @@
-#include <flint/flint.h>
-#include <flint/fmpz.h>
-#include <flint/fmpz_poly.h>
-#include <flint/fmpz_mat.h>
+#include "subresultant_naive.h"
 
-#include "sylvester.h"
-
-int fmpz_poly_subresultants_naive(
+int fmpz_poly_subresultant_naive(
   fmpz_t * subresultants,
   const fmpz_poly_t P,
   const fmpz_poly_t Q
 ) {
-  fmpz_mat_t S, W;
-  fmpz_poly_sylvester_matrix(S, P, Q);
-
   int n = fmpz_poly_degree(P);
   int m = fmpz_poly_degree(Q);
-  int N = n + m, temp = n;
+  int N = n + m, tmp = n;
 
   if (m > n) { // m is always the smaller degree
     n = m;
-    m = temp;
+    m = tmp;
   }
 
+  fmpz_mat_t S, W;
+  fmpz_mat_init(S, N, N);
+  fmpz_poly_sylvester_matrix(S, P, Q);
   fmpz_mat_window_init(W, S, 0, 0, N, N); // The entire matrix
 
   int K = m;
@@ -41,6 +36,9 @@ int fmpz_poly_subresultants_naive(
     // TODO regarder s'il y a window_clear
     fmpz_mat_window_init(W, W, 0, 0, N, N); // The new submatrix 
   }
+
+  fmpz_mat_clear(S);
+  fmpz_mat_window_clear(W);
 
   return 1;
 }
