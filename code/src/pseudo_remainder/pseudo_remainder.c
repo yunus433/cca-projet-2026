@@ -1,5 +1,19 @@
 #include "pseudo_remainder.h"
 
+static int poly_is_monomial(const fmpz_poly_t P)
+{
+    slong len = fmpz_poly_length(P);
+    int nz = 0;
+
+    for (slong i = 0; i < len; i++)
+    {
+        const fmpz *ci = fmpz_poly_get_coeff_ptr(P, i);
+        if (ci && !fmpz_is_zero(ci))
+            if (++nz > 1) return 0;
+    }
+    return nz == 1;
+}
+
 void fmpz_poly_pseudo_remainder(
     fmpz_poly_t R,
     ulong *d,
@@ -7,23 +21,60 @@ void fmpz_poly_pseudo_remainder(
     const fmpz_poly_t B
 ) { //R_{k+1}=lcB*R_k - lcR*x^shift*B
     fmpz_poly_t Q, term, tmp, Bshift;
-    fmpz_t lcB, lcR;
+    fmpz_t lcB, lcR,lcBabs;
 
     fmpz_poly_init(Q);
     fmpz_poly_init(term);
     fmpz_poly_init(tmp);
     fmpz_poly_init(Bshift);
-
     fmpz_init(lcB);
     fmpz_init(lcR);
-
+    fmpz_init(lcBabs);
     fmpz_poly_set(R, A);
     fmpz_poly_zero(Q);
 
     fmpz_set(lcB, fmpz_poly_lead(B));
-
+    fmpz_abs(lcBabs,lcB);
     *d = 0;
 
+
+    /* Cas trivial : si A = 0 => R = 0, d = 0 */
+    if (fmpz_poly_is_zero(A))
+    {
+        fmpz_poly_zero(R);
+        *d = 0;
+        goto cleanup;
+    }
+
+    /* Cas trivial : si deg(A) < deg(B) => pas de pseudo-division */
+    if (fmpz_poly_degree(A) < fmpz_poly_degree(B))
+    {
+        fmpz_poly_set(R, A);
+        *d = 0;
+        goto cleanup;
+    }
+        /* Cas monôme/constant : branche spéciale */
+    if (poly_is_monomial(B))
+    {
+        slong k = fmpz_poly_degree(B);   // B = lcB * x^k
+
+        /* si lcB = ±1 => d=0 (convention FLINT observée) */
+        if (fmpz_is_one(lcB) || fmpz_cmp_si(lcB, -1) == 0)
+        {
+            *d = 0;
+            /* R = A mod x^k (reste de la division par x^k) */
+            fmpz_poly_set(R, A);
+            fmpz_poly_truncate(R, k);
+            goto cleanup;
+        }
+
+        /* sinon : d=1 et R = lcB*(A mod x^k) */
+        *d = 1;
+        fmpz_poly_set(R, A);
+        fmpz_poly_truncate(R, k);
+        fmpz_poly_scalar_mul_fmpz(R, R, lcB);
+        goto cleanup;
+    }
     const slong degB = fmpz_poly_degree(B);
     while (!fmpz_poly_is_zero(R) && fmpz_poly_degree(R) >= degB)
     {
@@ -51,7 +102,34 @@ void fmpz_poly_pseudo_remainder(
 
         (*d)++;
     }
+    /* 1) Convention pour lcB = ±1 */
+    if (fmpz_is_one(lcB) || fmpz_cmp_si(lcB, -1) == 0)
+    {
+        if (fmpz_cmp_si(lcB, -1) == 0 && ((*d) & 1UL))
+            fmpz_poly_neg(R, R);
+        *d = 0;
+    }
+    else if (!fmpz_poly_is_zero(R))
+    {
+        /* 2) Normalisation : si content(R) divisible par |lcB|, on divise par lcB et on décrémente d */
+        fmpz_t cont;
+        fmpz_init(cont);
 
+        while (*d > 0)
+        {
+            fmpz_poly_content(cont, R);
+
+            if (!fmpz_divisible(cont, lcBabs))
+                break;
+
+            fmpz_poly_scalar_divexact_fmpz(R, R, lcB);  /* division par lcB SIGNÉ */
+            (*d)--;
+        }
+
+        fmpz_clear(cont);
+    }
+    cleanup:
+    /* NB : si R==0, on ne touche pas à d ici */  
     fmpz_clear(lcB);
     fmpz_clear(lcR);
 
@@ -59,8 +137,7 @@ void fmpz_poly_pseudo_remainder(
     fmpz_poly_clear(term);
     fmpz_poly_clear(tmp);
     fmpz_poly_clear(Bshift);
-
-    return 0;
+    fmpz_clear(lcBabs);
 }
 
 /*int main(void)

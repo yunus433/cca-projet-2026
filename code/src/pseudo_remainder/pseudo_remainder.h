@@ -6,7 +6,7 @@
 #include <flint/fmpz.h>
 #include <flint/fmpz_poly.h>
 
-int fmpz_poly_pseudo_remainder(
+void fmpz_poly_pseudo_remainder(
   fmpz_poly_t R,
   ulong *d,
   const fmpz_poly_t A,
