@@ -8,7 +8,7 @@
 
 #include "../sylvester_matrix/polynomial_sylvester_matrix.c"
 
-int fmpz_subresultant_polynomials_naive(
+int fmpz_poly_subresultant_polynomial_naive(
   fmpz_poly_t * subresultant_polynomials,
   const fmpz_poly_t P,
   const fmpz_poly_t Q
