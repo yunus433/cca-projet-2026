@@ -1,6 +1,7 @@
 #ifndef SUBRESULTANT_POLYNOMIAL_PSEUDO_REMAINDER
 #define SUBRESULTANT_POLYNOMIAL_PSEUDO_REMAINDER
 
+
 #include <flint/flint.h>
 #include <flint/fmpz.h>
 #include <flint/fmpz_poly.h>

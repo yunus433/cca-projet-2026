@@ -1,19 +1,18 @@
-// gcc-15 -O2 subres-poly.c sylvester-poly.h $(pkg-config --cflags --libs flint)
+// gcc-15 -O2 subresultant_polynomial_naive.c ../sylvester_matrix/polynomial_sylvester_matrix.h $(pkg-config --cflags --libs flint)
 // QUESTION: Comparison with wikipedia?
 
 #include "subresultant_polynomial_naive.h"
 
-void fmpz_poly_mat_swap_cols_inplace(fmpz_poly_mat_t A, slong c1, slong c2) {
+void _fmpz_poly_mat_swap_cols_inplace(fmpz_poly_mat_t A, slong c1, slong c2) {
     slong r, nrows = fmpz_poly_mat_nrows(A);
 
     if (c1 == c2) return;
 
-    for (r = 0; r < nrows; r++)
-    {
-        fmpz_poly_swap(
-            fmpz_poly_mat_entry(A, r, c1),
-            fmpz_poly_mat_entry(A, r, c2)
-        );
+    for (r = 0; r < nrows; r++) {
+      fmpz_poly_swap(
+        fmpz_poly_mat_entry(A, r, c1),
+        fmpz_poly_mat_entry(A, r, c2)
+      );
     }
 }
 
@@ -22,9 +21,7 @@ int fmpz_subresultant_polynomials_naive(
   const fmpz_poly_t P,
   const fmpz_poly_t Q
 ) {
-  fmpz_poly_mat_t S, W;
-  fmpz_poly_polynomial_sylvester_matrix(S, P, Q);
-
+  fmpz_poly_mat_t S, V, W;
   int n = fmpz_poly_degree(P);
   int m = fmpz_poly_degree(Q);
   int N = n + m, temp = n;
@@ -34,11 +31,13 @@ int fmpz_subresultant_polynomials_naive(
     m = temp;
   }
 
-  fmpz_poly_mat_window_init(W, S, 0, 0, N, N); // The entire matrix
-
-  // We build the matrix V, polynomial multiplication
-  fmpz_poly_mat_t V;
+  fmpz_poly_mat_init(S, N, N);
   fmpz_poly_mat_init(V, N, N);
+
+  if (fmpz_poly_polynomial_sylvester_matrix(S, P, Q))
+    return -1;
+
+  fmpz_poly_mat_window_init(W, S, 0, 0, N, N); // The entire matrix
 
   fmpz_poly_mat_one(V); // The initial version is Id
 
@@ -52,15 +51,14 @@ int fmpz_subresultant_polynomials_naive(
     fmpz_poly_mat_t T;
     fmpz_poly_mat_init(T, nk, mk);
     fmpz_poly_mat_mul(T, V, W);
-    fmpz_poly_mat_print(V, "x");
-    fmpz_poly_mat_print(W, "x");
-    fmpz_poly_mat_print(T, "x");
+
     fmpz_poly_mat_det(subresultant_polynomials[k], T);
 
     for (int i = 0; i < n+m-1; i++) {
       fmpz_poly_set_coeff_si(fmpz_poly_mat_entry(V, i, i), 0, 0);
       fmpz_poly_set_coeff_si(fmpz_poly_mat_entry(V, i+1, i), 0, 1);
     }
+
     fmpz_poly_set_coeff_si(fmpz_poly_mat_entry(V, n+m-1, n+m-1), 0, 0);
     fmpz_poly_set_coeff_si(fmpz_poly_mat_entry(V, n+m-1, n+m-2), 0, 0);
 
@@ -69,18 +67,22 @@ int fmpz_subresultant_polynomials_naive(
     for (int i = 0; i <= k+1; i++)
       fmpz_poly_set_coeff_si(fmpz_poly_mat_entry(V, n+m-3, N-2-i), i, 1);
 
-    for (int i = m - 1; i < m + n - 1; i++) {
-      fmpz_poly_mat_swap_cols_inplace(W, i, i + 1);
-    }
+    for (int i = m - 1; i < m + n - 1; i++)
+      _fmpz_poly_mat_swap_cols_inplace(W, i, i + 1);
 
     n -= 1;
     m -= 1;
     N -= 1; // The matrix is shrink by 1 row at each iteration
 
     fmpz_poly_mat_window_init(W, W, 0, 0, N, n+m); // The new submatrix 
+    fmpz_poly_mat_clear(T);
   }
 
-  return 1;
+  fmpz_poly_mat_window_clear(S);
+  fmpz_poly_mat_window_clear(V);
+  fmpz_poly_mat_window_clear(W);
+
+  return 0;
 }
 
 int main () {
@@ -124,7 +126,11 @@ int main () {
   for (int i = 0; i < 7; i++) {
     fmpz_poly_print_pretty(subresultant_polys[i], "x");
     printf("\n");
+    fmpz_poly_clear(subresultant_polys[i]);
   }
+
+  fmpz_poly_clear(f);
+  fmpz_poly_clear(g);
 
   return 0;
 }
