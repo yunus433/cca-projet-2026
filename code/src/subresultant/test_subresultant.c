@@ -25,8 +25,8 @@ int fmpz_poly_subresultant_test(
   fmpz_t R[degree], S[degree], T[degree];
   fmpz_poly_t A, B;
 
-  flint_rand_init(rand_state);
-  flint_rand_set_seed(rand_state, time(NULL), time(NULL));
+  flint_randinit(rand_state);
+  flint_randseed(rand_state, time(NULL), time(NULL));
 
   for (int i = 0; i < degree; i++) {
     fmpz_init(R[i]);
@@ -88,7 +88,7 @@ int fmpz_poly_subresultant_test(
       if (!fmpz_equal(R[i], S[i]) || !fmpz_equal(R[i], T[i])) {
         is_all_successful = 0;
 
-        printf("Test %d is unsuccessful.\n");
+        printf("Test %d is unsuccessful.\n",i+1);
         printf("Polynomial A:\n");
         fmpz_poly_print_pretty(A, "x");
         printf("\nPolynomial B:\n");
@@ -105,10 +105,10 @@ int fmpz_poly_subresultant_test(
     }
 
     if (is_all_successful)
-      printf("Test %d is successful.\n");
+      printf("Test %d is successful.\n",i+1);
   }
 
-  flint_rand_clear(rand_state);
+  flint_randclear(rand_state);
 
   for (int i = 0; i < degree; i++) {
     fmpz_clear(R[i]);
