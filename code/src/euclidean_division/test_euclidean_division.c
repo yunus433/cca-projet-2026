@@ -1,8 +1,8 @@
-// gcc-15 -O2 euclidean_division.h test_euclidean_division.c  $(pkg-config --cflags --libs flint)
+// gcc-15 -O2 euclidean_division.c test_euclidean_division.c  $(pkg-config --cflags --libs flint)
 
 #include <time.h>
 
-#include "euclidean_division.c"
+#include "euclidean_division.h"
 
 int COEFF_BIT_SIZE = 5;
 
@@ -13,8 +13,8 @@ int fmpq_poly_euclidean_division_test(
   flint_rand_t rand_state;
   fmpq_poly_t Q, R, S, A, B;
 
-  flint_rand_init(rand_state);
-  flint_rand_set_seed(rand_state, time(NULL), time(NULL));
+  flint_randinit(rand_state);
+  flint_randseed(rand_state, time(NULL), time(NULL));
 
   fmpq_poly_init(Q);
   fmpq_poly_init(R);
@@ -46,7 +46,7 @@ int fmpq_poly_euclidean_division_test(
     fmpq_poly_add(S, S, R);
     
     if (!fmpq_poly_equal(S, A)) {
-      printf("Test %d is unsuccessful.\n");
+      printf("Test %d is unsuccessful.\n",i+1);
       printf("Polynomial A:\n");
       fmpq_poly_print_pretty(A, "x");
       printf("\nPolynomial B:\n");
@@ -61,10 +61,10 @@ int fmpq_poly_euclidean_division_test(
       continue;
     }
 
-    printf("Test %d is successful.\n");
+    printf("Test %d is successful.\n",i+1);
   }
 
-  flint_rand_clear(rand_state);
+  flint_randclear(rand_state);
   fmpq_poly_clear(Q);
   fmpq_poly_clear(R);
   fmpq_poly_clear(S);

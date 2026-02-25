@@ -30,7 +30,7 @@ int fmpq_poly_euclidean_division(
 
     fmpq_poly_get_coeff_fmpq(lc,r,dr);
     fmpq_div(coeff,lc,c);
-    
+    fmpq_poly_zero(s);
     fmpq_poly_set_coeff_fmpq(s, dr - d,  coeff);
 
     fmpq_poly_add(q, q, s);
