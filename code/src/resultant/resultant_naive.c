@@ -12,7 +12,8 @@ int fmpz_poly_resultant_naive(
   fmpz_mat_t S;
   fmpz_mat_init(S, N, N);
 
-  fmpz_poly_sylvester_matrix(S, P, Q);
+  if (fmpz_poly_sylvester_matrix(S, P, Q))
+    return -1;
 
   fmpz_mat_det(resultant, S);
 
