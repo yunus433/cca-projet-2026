@@ -1,4 +1,3 @@
-
 #include "subresultant_euclid.h"
 
 int fmpq_poly_subresultant_euclid(
