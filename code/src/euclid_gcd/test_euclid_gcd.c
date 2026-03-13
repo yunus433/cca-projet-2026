@@ -49,7 +49,7 @@ int fmpz_poly_euclid_gcd_test(
     fmpz_poly_scalar_mul_fmpz(S, S, fmpz_poly_lead(R)); // Normalization of the monic polynomial
     
     if (!fmpz_poly_equal(R, S)) {
-      printf("Test %d is unsuccessful.\n");
+      printf("Test %d is unsuccessful.\n", i + 1);
       printf("Polynomial A:\n");
       fmpz_poly_print_pretty(A, "x");
       printf("\nPolynomial B:\n");
@@ -62,7 +62,7 @@ int fmpz_poly_euclid_gcd_test(
       continue;
     }
 
-    printf("Test %d is successful.\n");
+    printf("Test %d is successful.\n", i + 1);
   }
 
   flint_rand_clear(rand_state);
