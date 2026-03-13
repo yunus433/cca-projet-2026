@@ -70,8 +70,9 @@ int fmpq_poly_euclidean_division_test(
   fmpq_poly_clear(S);
   fmpq_poly_clear(A);
   fmpq_poly_clear(B);
+  return 0;
 }
 
 int main() {
-  fmpq_poly_euclidean_division_test(12, 10);
+  return fmpq_poly_euclidean_division_test(12, 10);
 }

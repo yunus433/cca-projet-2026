@@ -118,6 +118,7 @@ int fmpz_poly_subresultant_test(
 
   fmpz_poly_clear(A);
   fmpz_poly_clear(B);
+  return 0;
 }
 
 int main(int argc, char *argv[]) {
@@ -127,5 +128,5 @@ int main(int argc, char *argv[]) {
   if (argc > 1) degree = atoi(argv[1]);
   if (argc > 2) count = atoi(argv[2]);
 
-  fmpz_poly_subresultant_test(degree, count);
+  return fmpz_poly_subresultant_test(degree, count);
 }
