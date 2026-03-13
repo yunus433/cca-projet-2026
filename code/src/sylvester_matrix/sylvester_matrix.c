@@ -11,8 +11,6 @@ int fmpz_poly_sylvester_matrix(
   int n = fmpz_poly_degree(P);
   int m = fmpz_poly_degree(Q);
 
-  int N = n + m; // The Sylvester matrix has size (n+m)x(n+m)
-
   fmpz_mat_zero(S);
 
   if (m < 0 || n < 0) { // If a polynomial does not exist (degree -1 in Flint)

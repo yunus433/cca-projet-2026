@@ -42,7 +42,6 @@ int fmpz_poly_subresultant_polynomial_naive(
   fmpz_poly_mat_one(V); // The initial version is Id
 
   int K = m;
-  int N_ = n + m;
 
   for (int k = 0; k <= K; k++) {
     slong nk = fmpz_poly_mat_nrows(V);
