@@ -6,6 +6,7 @@ int fmpz_poly_sylvester_matrix(
   const fmpz_poly_t Q
 ) {
   fmpz_t tmp; // Temp values
+  fmpz_init(tmp);
 
   int n = fmpz_poly_degree(P);
   int m = fmpz_poly_degree(Q);
@@ -14,8 +15,10 @@ int fmpz_poly_sylvester_matrix(
 
   fmpz_mat_zero(S);
 
-  if (m < 0 || n < 0) // If a polynomial does not exist (degree -1 in Flint)
+  if (m < 0 || n < 0) { // If a polynomial does not exist (degree -1 in Flint)
+    fmpz_clear(tmp);
     return -1;
+  }
 
   if (m <= n) {
     for (int i = n; i >= 0; i--) {
@@ -51,6 +54,7 @@ int fmpz_poly_sylvester_matrix(
     }
   }
 
+  fmpz_clear(tmp);
   return 0;
 }
 
