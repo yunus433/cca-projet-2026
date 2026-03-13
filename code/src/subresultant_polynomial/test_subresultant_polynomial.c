@@ -91,7 +91,7 @@ int fmpz_poly_subresultant_polyonmial_test(
     }
 
     if (is_all_successful)
-      printf("Test %d is successful.\n");
+      printf("Test %d is successful.\n", i + 1);
   }
 
   flint_rand_clear(rand_state);
