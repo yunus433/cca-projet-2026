@@ -21,7 +21,7 @@ void fmpz_poly_pseudo_remainder(
     const fmpz_poly_t B
 ) { //R_{k+1}=lcB*R_k - lcR*x^shift*B
     fmpz_poly_t Q, term, tmp, Bshift;
-    fmpz_t lcB, lcR,lcBabs;
+    fmpz_t lcB, lcR, lcBabs;
 
     fmpz_poly_init(Q);
     fmpz_poly_init(term);
@@ -34,7 +34,7 @@ void fmpz_poly_pseudo_remainder(
     fmpz_poly_zero(Q);
 
     fmpz_set(lcB, fmpz_poly_lead(B));
-    fmpz_abs(lcBabs,lcB);
+    fmpz_abs(lcBabs, lcB);
     *d = 0;
 
 
@@ -53,7 +53,7 @@ void fmpz_poly_pseudo_remainder(
         *d = 0;
         goto cleanup;
     }
-        /* Cas monôme/constant : branche spéciale */
+    /* Cas monôme/constant : branche spéciale */
     if (poly_is_monomial(B))
     {
         slong k = fmpz_poly_degree(B);   // B = lcB * x^k
@@ -95,7 +95,7 @@ void fmpz_poly_pseudo_remainder(
         fmpz_poly_scalar_mul_fmpz(R, R, lcB);
 
         /* tmp = term * B = (c*x^s)*B */
-        fmpz_poly_shift_left(Bshift, B, s);     
+        fmpz_poly_shift_left(Bshift, B, s);
         fmpz_poly_scalar_mul_fmpz(tmp, Bshift, lcR); /* tmp = c*(B*x^s) */
 
         fmpz_poly_sub(R, R, tmp);
@@ -128,8 +128,8 @@ void fmpz_poly_pseudo_remainder(
 
         fmpz_clear(cont);
     }
-    cleanup:
-    /* NB : si R==0, on ne touche pas à d ici */  
+cleanup:
+    /* NB : si R==0, on ne touche pas à d ici */
     fmpz_clear(lcB);
     fmpz_clear(lcR);
 
