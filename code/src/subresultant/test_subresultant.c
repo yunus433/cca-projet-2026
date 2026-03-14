@@ -80,6 +80,7 @@ int fmpz_poly_subresultant_test(
 
     int is_all_successful = 1;
 
+    // FIXME: use another variable instead of i here to avoid confusion with the outer loop
     for (int i = 0; i < degree; i++) {
       fmpz_abs(R[i], R[i]);
       fmpz_abs(S[i], S[i]);

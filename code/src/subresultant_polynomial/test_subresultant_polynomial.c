@@ -68,6 +68,7 @@ int fmpz_poly_subresultant_polyonmial_test(
 
     int is_all_successful = 1;
 
+    // FIXME: use another variable instead of i to avoid confusion with the outer loop
     for (int i = 0; i < degree; i++) {
       printf("\nR[%d] (naive):\n", i);
       fmpz_poly_print_pretty(R[i], "x");
