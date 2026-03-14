@@ -6,7 +6,7 @@
 #include <flint/fmpz_poly.h>
 #include <flint/fmpz_poly_mat.h>
 
-#include "../sylvester_matrix/polynomial_sylvester_matrix.c"
+#include "../sylvester_matrix/polynomial_sylvester_matrix.h"
 
 int fmpz_poly_subresultant_polynomial_naive(
   fmpz_poly_t * subresultant_polynomials,

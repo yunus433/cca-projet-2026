@@ -1,9 +1,9 @@
-// gcc-15 -O2 euclid_gcd.h test_euclid_gcd.c  $(pkg-config --cflags --libs flint)
+// gcc-15 -O2 euclid_gcd.c test_euclid_gcd.c  $(pkg-config --cflags --libs flint)
 
 #include <time.h>
 #include <stdlib.h>
 
-#include "euclid_gcd.c"
+#include "euclid_gcd.h"
 
 int COEFF_BIT_SIZE = 30;
 int DEFAULT_DEGREE = 20;
