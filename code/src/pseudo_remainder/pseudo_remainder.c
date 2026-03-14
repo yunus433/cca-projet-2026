@@ -33,6 +33,8 @@ void fmpz_poly_pseudo_remainder(
     fmpz_poly_set(R, A);
     fmpz_poly_zero(Q);
 
+    // FIXME: handle the case where B is zero
+
     fmpz_set(lcB, fmpz_poly_lead(B));
     fmpz_abs(lcBabs, lcB);
     *d = 0;
