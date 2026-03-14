@@ -12,3 +12,4 @@ a
 *.o
 *.out
 *.h.gch
+*.h.pch
