@@ -1,9 +1,9 @@
-// gcc-15 -O2 resultant_naive.h test_resultant_naive.c  $(pkg-config --cflags --libs flint)
+// gcc-15 -O2 ../sylvester_matrix/sylvester_matrix.c resultant_naive.c test_resultant_naive.c  $(pkg-config --cflags --libs flint)
 
 #include <time.h>
 #include <stdlib.h>
 
-#include "resultant_naive.c"
+#include "resultant_naive.h"
 
 int COEFF_BIT_SIZE = 30;
 int DEFAULT_DEGREE = 20;

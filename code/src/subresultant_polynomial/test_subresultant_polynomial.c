@@ -1,4 +1,4 @@
-// gcc-15 -O2 subresultant_polynomial_naive.h ../sylvester_matrix/polynomial_sylvester_matrix.h subresultant_polynomial_pseudo_remainder.h test_subresultant_polynomial.c  $(pkg-config --cflags --libs flint)
+// gcc-15 -O2 ../sylvester_matrix/polynomial_sylvester_matrix.c subresultant_polynomial_naive.c subresultant_polynomial_pseudo_remainder.c test_subresultant_polynomial.c  $(pkg-config --cflags --libs flint)
 
 // As FLINT does not expose any functions to compute the subresultants directly,
 // this code generates random polynomials and tests if all 3 implementations of the subresultants
@@ -9,8 +9,8 @@
 #include <time.h>
 #include <stdlib.h>
 
-#include "subresultant_polynomial_naive.c"
-#include "subresultant_polynomial_pseudo_remainder.c"
+#include "subresultant_polynomial_naive.h"
+#include "subresultant_polynomial_pseudo_remainder.h"
 
 int COEFF_BIT_SIZE = 30;
 int DEFAULT_DEGREE = 20;
