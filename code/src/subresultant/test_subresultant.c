@@ -22,13 +22,13 @@ int fmpz_poly_subresultant_test(
   int count
 ) {
   flint_rand_t rand_state;
-  fmpz_t R[degree], S[degree], T[degree];
+  fmpz_t R[degree+1], S[degree+1], T[degree+1];
   fmpz_poly_t A, B;
 
   flint_randinit(rand_state);
   flint_randseed(rand_state, time(NULL), time(NULL));
 
-  for (int i = 0; i < degree; i++) {
+  for (int i = 0; i <= degree; i++) {
     fmpz_init(R[i]);
     fmpz_init(S[i]);
     fmpz_init(T[i]);
@@ -81,25 +81,25 @@ int fmpz_poly_subresultant_test(
     int is_all_successful = 1;
 
     // FIXME: use another variable instead of i here to avoid confusion with the outer loop
-    for (int i = 0; i < degree; i++) {
-      fmpz_abs(R[i], R[i]);
-      fmpz_abs(S[i], S[i]);
-      fmpz_abs(T[i], T[i]);
+    for (int j = 0; j < degree; j++) {
+      fmpz_abs(R[j], R[j]);
+      fmpz_abs(S[j], S[j]);
+      fmpz_abs(T[j], T[j]);
 
-      if (!fmpz_equal(R[i], S[i]) || !fmpz_equal(R[i], T[i])) {
+      if (!fmpz_equal(R[j], S[j]) || !fmpz_equal(R[j], T[j])) {
         is_all_successful = 0;
 
-        printf("Test %d is unsuccessful.\n",i+1);
+        printf("Test %d is unsuccessful.\n",j+1);
         printf("Polynomial A:\n");
         fmpz_poly_print_pretty(A, "x");
         printf("\nPolynomial B:\n");
         fmpz_poly_print_pretty(B, "x");
-        printf("\nR[%d] (naive):\n", i);
-        fmpz_print(R[i]);
-        printf("\nS[%d] (euclid):\n", i);
-        fmpz_print(S[i]);
-         printf("\nT[%d] (pseudo remainder):\n", i);
-        fmpz_print(T[i]);
+        printf("\nR[%d] (naive):\n", j);
+        fmpz_print(R[j]);
+        printf("\nS[%d] (euclid):\n", j);
+        fmpz_print(S[j]);
+         printf("\nT[%d] (pseudo remainder):\n", j);
+        fmpz_print(T[j]);
         printf("\n");
         break;
       }
@@ -107,11 +107,16 @@ int fmpz_poly_subresultant_test(
 
     if (is_all_successful)
       printf("Test %d is successful.\n",i+1);
+      for (int k = 0; k <= degree; k++) {
+        fmpz_zero(R[k]);
+        fmpz_zero(S[k]);
+        fmpz_zero(T[k]);
+      }
   }
 
   flint_randclear(rand_state);
 
-  for (int i = 0; i < degree; i++) {
+  for (int i = 0; i <= degree; i++) {
     fmpz_clear(R[i]);
     fmpz_clear(S[i]);
     fmpz_clear(T[i]);
