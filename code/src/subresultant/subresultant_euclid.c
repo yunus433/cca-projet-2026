@@ -1,3 +1,5 @@
+// The implementation is only a reference and not tested, since it is on Q.
+
 #include "subresultant_euclid.h"
 
 int fmpq_poly_subresultant_euclid(
