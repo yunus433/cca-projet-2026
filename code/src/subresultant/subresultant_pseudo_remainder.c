@@ -70,7 +70,7 @@ int fmpz_poly_subresultant_pseudo_remainder(
     }
 
     max_deg = fmpz_poly_degree(rim1);
-    min_deg = fmpz_poly_degree(ri);
+    min_deg = fmpz_poly_degree(ri); // TODO: Update ça comme nécessaire!!!
 
     for (slong k = 0; k <= max_deg; k++) {
     fmpz_zero(subresultants[k]);
