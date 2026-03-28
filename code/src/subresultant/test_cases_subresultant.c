@@ -240,11 +240,10 @@ int main(int argc, char *argv[]) {
     if (argc > 3) count = atoi(argv[2]);
 
     return generate_random_polynomials(degree, count);
-  } else if (!strcmp("RUN", mode)) {
+  } else if  (!strcmp("RUN", mode)) {
     return run_test_cases();
   } else {
     printf("Unknown mode specified, please see the comments.");
     return -1;
   }
-  
 }
