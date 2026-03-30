@@ -1,4 +1,4 @@
-// gcc-15 -O2 interpolation_flint.c  $(pkg-config --cflags --libs flint)
+// gcc-15 -O2 test.c $(pkg-config --cflags --libs flint)
 
 // This file is to test polynomial interpolation in FLINT
 
