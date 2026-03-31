@@ -2,8 +2,8 @@
 
 // As FLINT does not expose any functionality to generate subresultants, random tests can only be
 // performed only if the results are pre-known.
-// Thus, this code runs all test cases in "test_cases.txt" and checks if both subresultant algorithms
-// get both results correct. 
+// Thus, this code runs all test cases in "test_cases.txt" and checks if all subresultant algorithms
+// get results correct. 
 
 // // Note that since subresultant_euclid is on Q, it is not tested. The implementation is only a reference.
 
@@ -14,14 +14,13 @@
 // Third line: Subresultants of the above two polynomials, seperate with a comma and space.
 // The file ends with a new line.
 
-// How it works?
+// How it works?w
 // ./a.out {MODE} {OPTIONS}
 
 // All OPTIONS are optional, only MODE is required
 
 // MODE 1: ./a.out GENERATE {DEGREE} {COUNT}
 // Generates COUNT new polynomials with the specified DEGREE and writes them at the end fof test_cases.txt
-// This code does not delete any previous test cases from test_cases.txt. If wanted, this should be done manually.
 // After running this mode, 2nd line for all new test cases are TO_BE_FILLED by default.
 // You should use Wolfram or a similar tool to generate the subresultant of these polynomials and add in the test_cases.txt.
 
@@ -36,6 +35,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../utils/poly_set_str_pretty.c"
+
 #include "subresultant_naive.h"
 #include "subresultant_pseudo_remainder.h"
 
@@ -47,7 +48,6 @@
 #define NUMBER_BASE 10 // All numbers are in base 10
 
 int generate_random_polynomials(int degree, int count) {
-  FILE *test_cases_human = fopen("./test_cases_human.txt", "w");
   FILE *test_cases = fopen("./test_cases.txt", "w");
 
   flint_rand_t rand_state;
@@ -63,8 +63,6 @@ int generate_random_polynomials(int degree, int count) {
 
   printf("Starting generation...\n");
 
-  fprintf(test_cases_human, "!IMPORTANT! This file is only for easy copy & pasting to Wolfram, do not change anything in this file. Instead, write results into the respective line of test_cases.txt\n\n");
-
   for (int i = 0; i < count; i++) {
     fmpz_poly_randtest(A, rand_state, length, COEFF_BIT_SIZE);
     while (fmpz_poly_is_zero(A))
@@ -74,15 +72,9 @@ int generate_random_polynomials(int degree, int count) {
     while (fmpz_poly_is_zero(B))
       fmpz_poly_randtest(B, rand_state, length, COEFF_BIT_SIZE);
 
-    fmpz_poly_fprint_pretty(test_cases_human, A, "x");
-    fprintf(test_cases_human, "\n");
-    fmpz_poly_fprint_pretty(test_cases_human, B, "x");
-    fprintf(test_cases_human, "\n");
-    fprintf(test_cases_human, "DO NOT FILL HERE!! Fill the same line in test_cases.txt.\n");
-
-    fmpz_poly_fprint(test_cases, A);
+    fmpz_poly_fprint_pretty(test_cases, A, "x");
     fprintf(test_cases, "\n");
-    fmpz_poly_fprint(test_cases, B);
+    fmpz_poly_fprint_pretty(test_cases, B, "x");
     fprintf(test_cases, "\n");
     fprintf(test_cases, "TO BE FILLED: subresultant1,subresultant2,subresultant3,...\n");
   }
@@ -93,7 +85,6 @@ int generate_random_polynomials(int degree, int count) {
   fmpz_poly_clear(A);
   fmpz_poly_clear(B);
 
-  fclose(test_cases_human);
   fclose(test_cases);
 
   return 0;
@@ -120,7 +111,7 @@ int run_test_cases() {
   int successful_test_count_pseudo_remainder = 0;
 
   while (fgets(line, sizeof(line), test_cases)) {
-    if (fmpz_poly_set_str(P, line)) {
+    if (fmpz_poly_set_str_pretty(P, line, "x")) {
       printf("ERROR: Invalid input file format.\n");
       goto safe_exit;
     }
@@ -130,7 +121,7 @@ int run_test_cases() {
       goto safe_exit;
     }
     
-    if (fmpz_poly_set_str(Q, line)) {
+    if (fmpz_poly_set_str_pretty(Q, line, "x")) {
       printf("ERROR: Invalid input file format.\n");
       goto safe_exit;
     }
@@ -141,15 +132,15 @@ int run_test_cases() {
     }
 
     char *subresultant = strtok(line, ",\n");
-    int subresultantCount = 0;
+    int subresultant_polynomial_count = 0;
     while (subresultant != NULL) {
-      if (fmpz_set_str(checks + subresultantCount, subresultant, NUMBER_BASE)) {
+      if (fmpz_set_str(checks + subresultant_polynomial_count, subresultant, NUMBER_BASE)) {
         printf("ERROR: Invalid input file format.\n");
         goto safe_exit;
       }
 
       subresultant = strtok(NULL, ",\n");
-      subresultantCount++;
+      subresultant_polynomial_count++;
     }
 
     test_count++;
@@ -162,7 +153,7 @@ int run_test_cases() {
     } else {
       int isAllSuccessful = 1;
 
-      for (int i = 0; i < subresultantCount && isAllSuccessful; i++)
+      for (int i = 0; i < subresultant_polynomial_count && isAllSuccessful; i++)
         if (!fmpz_equal(subresultants[i], checks + i)) {
           fmpz_print(subresultants[i]);
           printf("\n");
@@ -173,9 +164,9 @@ int run_test_cases() {
           
 
       if (!isAllSuccessful) {
-        printf("FAIL: Test case %d\n", test_count);
+        printf("FAIL: Naive - Test case %d\n", test_count);
       } else {
-        printf("SUCCESS: Test case %d\n", test_count);
+        printf("SUCCESS: Naive - Test case %d\n", test_count);
         successful_test_count_naive++;
       }
     }
@@ -188,7 +179,7 @@ int run_test_cases() {
     } else {
       int isAllSuccessful = 1;
 
-      for (int i = 0; i < subresultantCount && isAllSuccessful; i++)
+      for (int i = 0; i < subresultant_polynomial_count && isAllSuccessful; i++)
         if (!fmpz_equal(subresultants[i], checks + i)) {
           fmpz_print(subresultants[i]);
           printf("\n");
@@ -199,9 +190,9 @@ int run_test_cases() {
           
 
       if (!isAllSuccessful) {
-        printf("FAIL: Test case %d\n", test_count);
+        printf("FAIL: Pseudo Remainder - Test case %d\n", test_count);
       } else {
-        printf("SUCCESS: Test case %d\n", test_count);
+        printf("SUCCESS: Pseudo Remainder - Test case %d\n", test_count);
         successful_test_count_pseudo_remainder++;
       }
     }
