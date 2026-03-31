@@ -13,8 +13,8 @@ int fmpq_poly_euclidean_division_test(
   flint_rand_t rand_state;
   fmpq_poly_t Q, R, S, A, B;
 
-  flint_randinit(rand_state);
-  flint_randseed(rand_state, time(NULL), time(NULL));
+  flint_rand_init(rand_state);
+  flint_rand_set_seed(rand_state, time(NULL), time(NULL));
 
   fmpq_poly_init(Q);
   fmpq_poly_init(R);
@@ -64,7 +64,7 @@ int fmpq_poly_euclidean_division_test(
     printf("Test %d is successful.\n",i+1);
   }
 
-  flint_randclear(rand_state);
+  flint_rand_clear(rand_state);
   fmpq_poly_clear(Q);
   fmpq_poly_clear(R);
   fmpq_poly_clear(S);

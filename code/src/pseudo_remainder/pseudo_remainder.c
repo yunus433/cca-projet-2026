@@ -1,7 +1,6 @@
 #include "pseudo_remainder.h"
 
-static int poly_is_monomial(const fmpz_poly_t P)
-{
+static int poly_is_monomial(const fmpz_poly_t P) {
     slong len = fmpz_poly_length(P);
     int nz = 0;
 
