@@ -17,8 +17,8 @@ int fmpz_poly_resultant_naive_test(
   fmpz_t R, S;
   fmpz_poly_t A, B;
 
-  flint_randinit(rand_state);
-  flint_randseed(rand_state, time(NULL), time(NULL));
+  flint_rand_init(rand_state);
+  flint_rand_set_seed(rand_state, time(NULL), time(NULL));
 
   fmpz_init(R);
   fmpz_init(S);
@@ -68,7 +68,7 @@ int fmpz_poly_resultant_naive_test(
     printf("Test %d is successful.\n",i+1);
   }
 
-  flint_randclear(rand_state);
+  flint_rand_clear(rand_state);
   fmpz_clear(R);
   fmpz_clear(S);
   fmpz_poly_clear(A);

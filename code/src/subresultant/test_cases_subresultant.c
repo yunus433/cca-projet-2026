@@ -17,6 +17,8 @@
 // How it works?
 // ./a.out {MODE} {OPTIONS}
 
+// All OPTIONS are optional, only MODE is required
+
 // MODE 1: ./a.out GENERATE {DEGREE} {COUNT}
 // Generates COUNT new polynomials with the specified DEGREE and writes them at the end fof test_cases.txt
 // This code does not delete any previous test cases from test_cases.txt. If wanted, this should be done manually.
@@ -226,7 +228,7 @@ safe_exit:
 
 int main(int argc, char *argv[]) {
   if (argc < 2) {
-    printf("Invalid options, please see the comment on top of the file to learn how to specify options.\n");
+    printf("Invalid mode, please see the comment on top of the file to learn how to specify options.\n");
     return -1;
   }
 
