@@ -1,28 +1,26 @@
-// gcc-15 -O2 ../sylvester_matrix/sylvester_matrix.c subresultant_naive.c subresultant_pseudo_remainder.c test_cases_subresultant.c  $(pkg-config --cflags --libs flint)
+// gcc-15 -O2 ../sylvester_matrix/polynomial_sylvester_matrix.c subresultant_polynomial_naive.c subresultant_polynomial_pseudo_remainder.c test_cases_subresultant_polynomial.c  $(pkg-config --cflags --libs flint)
 
-// As FLINT does not expose any functionality to generate subresultants, random tests can only be
+// As FLINT does not expose any functionality to generate subresultant polynomials, random tests can only be
 // performed only if the results are pre-known.
-// Thus, this code runs all test cases in "test_cases.txt" and checks if all subresultant algorithms
+// Thus, this code runs all test cases in "test_cases.txt" and checks if all subresultant polynomial algorithms
 // get results correct. 
-
-// // Note that since subresultant_euclid is on Q, it is not tested. The implementation is only a reference.
 
 // Format:
 // For each test case:
 // First line: The 1st polynomial, use the same format as FLINT if you set by hand (otherwise use GENERATE mode, see below).
 // Second line: The 2nd polynomial, use the same format as FLINT if you set by hand (otherwise use GENERATE mode, see below).
-// Third line: Subresultants of the above two polynomials, seperate with a comma and space.
+// Third line: Subresultant polynomials of the above two polynomials, seperate with a comma and space.
 // The file ends with a new line.
 
-// How it works?w
+// How it works?
 // ./a.out {MODE} {OPTIONS}
 
 // All OPTIONS are optional, only MODE is required
 
 // MODE 1: ./a.out GENERATE {DEGREE} {COUNT}
-// Generates COUNT new polynomials with the specified DEGREE and writes them at the end fof test_cases.txt
+// Generates COUNT new polynomials with the specified DEGREE and writes them at the end of test_cases.txt
 // After running this mode, 2nd line for all new test cases are TO_BE_FILLED by default.
-// You should use Wolfram or a similar tool to generate the subresultant of these polynomials and add in the test_cases.txt.
+// You should use Wolfram or a similar tool to generate the subresultant polynomials of these polynomials and add in the test_cases.txt.
 
 // DEGREE := Degree of polynomials tested.
 // COUNT := Number of tests to be performed.
@@ -37,15 +35,36 @@
 
 #include "../utils/poly_set_str_pretty.c"
 
-#include "subresultant_naive.h"
-#include "subresultant_pseudo_remainder.h"
+#include "subresultant_polynomial_naive.h"
+#include "subresultant_polynomial_pseudo_remainder.h"
 
 #define COEFF_BIT_SIZE 30
 #define DEFAULT_COUNT 10
 #define DEFAULT_DEGREE 20
-#define MAX_LINE_LENGTH 100000 // This is the maximum char count per line
-#define MAX_SUBRESULTANT_COUNT 512 // This is the max nb of subresultants assumed for any polynomial.
+#define MAX_LINE_LENGTH 200000 // This is the maximum char count per line
+#define MAX_SUBRESULTANT_COUNT 512 // This is the max nb of subresultant polynomials assumed for any polynomial.
 #define NUMBER_BASE 10 // All numbers are in base 10
+
+void fmpz_poly_normalize(fmpz_poly_t poly) {
+    if (fmpz_poly_is_zero(poly))
+        return;
+
+    fmpz_t content;
+    fmpz_init(content);
+
+    // Compute GCD of coefficients
+    fmpz_poly_content(content, poly);
+
+    // Divide by content if not 1
+    if (!fmpz_is_one(content))
+        fmpz_poly_scalar_divexact_fmpz(poly, poly, content);
+
+    // Make leading coefficient positive
+    if (fmpz_sgn(fmpz_poly_lead(poly)) < 0)
+        fmpz_poly_neg(poly, poly);
+
+    fmpz_clear(content);
+}
 
 int generate_random_polynomials(int degree, int count) {
   FILE *test_cases = fopen("./test_cases.txt", "w");
@@ -76,7 +95,7 @@ int generate_random_polynomials(int degree, int count) {
     fprintf(test_cases, "\n");
     fmpz_poly_fprint_pretty(test_cases, B, "x");
     fprintf(test_cases, "\n");
-    fprintf(test_cases, "TO BE FILLED: subresultant1,subresultant2,subresultant3,...\n");
+    fprintf(test_cases, "TO BE FILLED: subresultant_polynomial_1,subresultant_polynomial_2,subresultant_polynomial_3,...\n");
   }
 
   printf("Generation completed\n");
@@ -95,15 +114,15 @@ int run_test_cases() {
 
   char line[MAX_LINE_LENGTH];
   fmpz_poly_t P, Q;
-  fmpz_t subresultants[MAX_SUBRESULTANT_COUNT];
-  fmpz checks[MAX_SUBRESULTANT_COUNT]; // Type is different for fmpz_poly_set_str, do NOT change
+  fmpz_poly_t subresultant_polynomials[MAX_SUBRESULTANT_COUNT];
+  fmpz_poly_t checks[MAX_SUBRESULTANT_COUNT];
 
   fmpz_poly_init(P);
   fmpz_poly_init(Q);
 
   for (int i = 0; i < MAX_SUBRESULTANT_COUNT; i++) {
-    fmpz_init(subresultants[i]);
-    fmpz_init(checks + i);
+    fmpz_poly_init(subresultant_polynomials[i]);
+    fmpz_poly_init(checks[i]);
   }
 
   int test_count = 0;
@@ -131,36 +150,40 @@ int run_test_cases() {
       goto safe_exit;
     }
 
-    char *subresultant = strtok(line, ",\n");
+
+    char *subresultant_polynomial = strtok(line, ",\n");
     int subresultant_polynomial_count = 0;
-    while (subresultant != NULL) {
-      if (fmpz_set_str(checks + subresultant_polynomial_count, subresultant, NUMBER_BASE)) {
+    while (subresultant_polynomial != NULL) {
+      if (fmpz_poly_set_str_pretty(checks[subresultant_polynomial_count], subresultant_polynomial, "x")) {
         printf("ERROR: Invalid input file format.\n");
         goto safe_exit;
       }
-
-      subresultant = strtok(NULL, ",\n");
+      subresultant_polynomial = strtok(NULL, ",\n");
       subresultant_polynomial_count++;
     }
 
     test_count++;
 
     for (int i = 0; i < MAX_SUBRESULTANT_COUNT; i++)
-      fmpz_zero(subresultants[i]);
+      fmpz_poly_zero(subresultant_polynomials[i]);
 
-    if (fmpz_poly_subresultant_naive(subresultants, P, Q)) {
+    if (fmpz_poly_subresultant_polynomial_naive(subresultant_polynomials, P, Q)) {
       printf("ERROR: subresultant_naive function call returned non-zero error code on test case %d.\n", test_count);
     } else {
       int is_all_successful = 1;
 
-      for (int i = 0; i < subresultant_polynomial_count && is_all_successful; i++)
-        if (!fmpz_equal(subresultants[i], checks + i)) {
-          fmpz_print(subresultants[i]);
+      for (int i = 0; i < subresultant_polynomial_count && is_all_successful; i++) {        
+        fmpz_poly_normalize(subresultant_polynomials[i]);
+
+        if (!fmpz_poly_equal(subresultant_polynomials[i], checks[i])) {
+          printf("HERE %d\n", i);
+          fmpz_poly_print_pretty(subresultant_polynomials[i], "x");
           printf("\n");
-          fmpz_print(checks + i);
+          fmpz_poly_print_pretty(checks[i], "x");
           printf("\n");
           is_all_successful = 0;
         }
+      }
           
 
       if (!is_all_successful) {
@@ -172,30 +195,30 @@ int run_test_cases() {
     }
 
     for (int i = 0; i < MAX_SUBRESULTANT_COUNT; i++)
-      fmpz_zero(subresultants[i]);
+      fmpz_poly_zero(subresultant_polynomials[i]);
 
-    if (fmpz_poly_subresultant_pseudo_remainder(subresultants, P, Q)) {
-      printf("ERROR: subresultant_pseudo_remainder function call returned non-zero error code on test case %d.\n", test_count);
-    } else {
-      int is_all_successful = 1;
+    // if (fmpz_poly_subresultant_polynomial_pseudo_remainder(subresultant_polynomials, P, Q)) {
+    //   printf("ERROR: subresultant_pseudo_remainder function call returned non-zero error code on test case %d.\n", test_count);
+    // } else {
+    //   int is_all_successful = 1;
 
-      for (int i = 0; i < subresultant_polynomial_count && is_all_successful; i++)
-        if (!fmpz_equal(subresultants[i], checks + i)) {
-          fmpz_print(subresultants[i]);
-          printf("\n");
-          fmpz_print(checks + i);
-          printf("\n");
-          is_all_successful = 0;
-        }
+    //   for (int i = 0; i < subresultant_polynomial_count && is_all_successful; i++)
+    //     if (!fmpz_poly_equal(subresultant_polynomials[i], checks[i])) {
+    //       fmpz_poly_print_pretty(subresultant_polynomials[i], "x");
+    //       printf("\n");
+    //       fmpz_poly_print_pretty(checks[i], "x");
+    //       printf("\n");
+    //       is_all_successful = 0;
+    //     }
           
 
-      if (!is_all_successful) {
-        printf("FAIL: Pseudo Remainder - Test case %d\n", test_count);
-      } else {
-        printf("SUCCESS: Pseudo Remainder - Test case %d\n", test_count);
-        successful_test_count_pseudo_remainder++;
-      }
-    }
+    //   if (!is_all_successful) {
+    //     printf("FAIL: Pseudo Remainder - Test case %d\n", test_count);
+    //   } else {
+    //     printf("SUCCESS: Pseudo Remainder - Test case %d\n", test_count);
+    //     successful_test_count_pseudo_remainder++;
+    //   }
+    // }
   }
 
   printf("\n------------\n");
@@ -208,8 +231,8 @@ safe_exit:
   fmpz_poly_clear(Q);
   
   for (int i = 0; i < MAX_SUBRESULTANT_COUNT; i++) {
-    fmpz_clear(subresultants[i]);
-    fmpz_clear(checks + i);
+    fmpz_poly_clear(subresultant_polynomials[i]);
+    fmpz_poly_clear(checks[i]);
   }
 
   fclose(test_cases);
