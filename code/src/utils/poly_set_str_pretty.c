@@ -28,7 +28,7 @@ int fmpz_poly_set_str_pretty(
     return -1;
   }
 
-  if (*returned_var != *expected_var) {
+  if (*returned_var && *returned_var != *expected_var) {
     fmpz_poly_zero(poly);
     return -1;
   }
