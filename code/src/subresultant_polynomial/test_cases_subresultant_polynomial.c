@@ -113,12 +113,14 @@ int run_test_cases() {
   FILE *test_cases = fopen("./test_cases.txt", "r");
 
   char line[MAX_LINE_LENGTH];
-  fmpz_poly_t P, Q;
+  fmpz_poly_t P, Q, TEMP;
   fmpz_poly_t subresultant_polynomials[MAX_SUBRESULTANT_COUNT];
   fmpz_poly_t checks[MAX_SUBRESULTANT_COUNT];
 
   fmpz_poly_init(P);
   fmpz_poly_init(Q);
+
+    fmpz_poly_init(TEMP);
 
   for (int i = 0; i < MAX_SUBRESULTANT_COUNT; i++) {
     fmpz_poly_init(subresultant_polynomials[i]);
@@ -172,15 +174,21 @@ int run_test_cases() {
     } else {
       int is_all_successful = 1;
 
-      for (int i = 0; i < subresultant_polynomial_count && is_all_successful; i++) {        
+      for (int i = 0; i < subresultant_polynomial_count; i++) {        
         fmpz_poly_normalize(subresultant_polynomials[i]);
 
         if (!fmpz_poly_equal(subresultant_polynomials[i], checks[i])) {
           printf("HERE %d\n", i);
           fmpz_poly_print_pretty(subresultant_polynomials[i], "x");
-          printf("\n");
+          printf("\n\n");
           fmpz_poly_print_pretty(checks[i], "x");
-          printf("\n");
+          fmpz_poly_div(TEMP, checks[i], subresultant_polynomials[i]);
+          printf("\n\n");
+          fmpz_poly_print_pretty(TEMP, "x");
+          fmpz_poly_rem(TEMP, checks[i], subresultant_polynomials[i]);
+          printf("\n\n");
+          fmpz_poly_print_pretty(TEMP, "x");
+          printf("\n\n\n");
           is_all_successful = 0;
         }
       }
@@ -229,6 +237,7 @@ safe_exit:
 
   fmpz_poly_clear(P);
   fmpz_poly_clear(Q);
+    fmpz_poly_clear(TEMP);
   
   for (int i = 0; i < MAX_SUBRESULTANT_COUNT; i++) {
     fmpz_poly_clear(subresultant_polynomials[i]);

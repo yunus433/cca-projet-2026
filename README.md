@@ -1,8 +1,8 @@
 # cca-projet-2026
 
 - [75%] fixer les tests
-- [80%] ajouter les tests avec wolfram
-- [0%] essayer bivarie avec flint resultant
+- [100%] ajouter les tests avec wolfram
+- [100%] essayer bivarie avec flint resultant
 - [100%] avoir interpolation avec flint
 - [100%] tester / experimenter sur flint interpolation si plus de points c'est plus vite
         P random deg P = d; d, d + 1, d + 2 jusqu'à une puissance de deux etc points, regarde la vitesse
