@@ -1,0 +1,36 @@
+\section{Subresultants}
+
+As before, for the entire section, let $f, g \in \mathbb{Z}[x]$ with $\deg f = n$ and $\deg g = m$. Moreover, we assume $m \leq n$ without loss of generality.
+
+Resultant of polynomials is important, as it gives us an efficient manner to understand if two polynomials have a common root or not. However, it does not give any other information but about gcd. Thus, we can extend the resultant definition into subresultants, which include all results of the Extended Euclidean Algorithm \cite{subresultant}.
+
+Specifically, the resultant is directly related to the GCD, as shown in the previous section, that it dissapears whenever the GCD is constant. In the case of subresultant, the subresultant polynomial (i.e. the polynomial that is constructed through subresultant determinants, defined below) expresses the remainders (with a scaling factor) in the sequence of the Euclidean GCD algorithm. The advantage over the regular algorithm is that in the case of subresultant polynomials, as they are defined through the determinant of a matrix in $\mathbb{Z}$, they are in $\mathbb{Z}[x]$, which prevents coefficients from growing too big. This is why it is important to be able to compute subresultant polynomials efficiently.
+
+\begin{definition}
+  We define Sylvester matrices for subresultants similar to the resultant's matrix. Given $0 \leq k \leq m$,
+  $$
+  S_k(f,g)=
+  \begin{pmatrix}
+  f_n         &        &        &        & g_m         &        &        &        &        &        \\
+  f_{n-1}     & f_n    &        &        & g_{m-1}     & g_m    &        &        &        &        \\
+  \vdots      &        & \ddots &        & \vdots      &        & \ddots &        &        &        \\
+  f_{n-m+k+1} & \cdots & \cdots & f_n    & g_{k+1}     & \cdots & \cdots & g_m    &        &        \\
+  \vdots      &        &        & \vdots & \vdots      &        &        &        & \ddots &        \\
+  f_{k + 1}   & \cdots & \cdots & f_m    & g_{m-n+k+1} & \cdots & \cdots & \cdots & \cdots & g_m    \\
+  \vdots      &        &        & \vdots & \vdots      &        &        &        &        & \vdots \\
+  f_{2k-m+1}  & \cdots & \cdots & f_k    & g_{2k-n+1}  & \cdots & \cdots & \cdots & \cdots & g_k
+  \end{pmatrix}
+  $$
+  , which can be understood as removing the last $k$-columns of each submatrix of $f$ and $g$, and then removing the last $2k$ rows of the matrix.
+\end{definition}
+
+\begin{definition}
+  Then, the  $k$-th subresultant of $f$ and $g$ is defined as \cite{subresultant}:
+  $$
+  \alpha_k = \det S_k(f, g)
+  $$
+\end{definition}
+
+
+
+Finally, the subresultant matrix is the determinant of a matrix that equals the multiplication of the subresultant Sylvester matrix with the matrix encoding the basis $(1, x, \dots, x^k)$.
