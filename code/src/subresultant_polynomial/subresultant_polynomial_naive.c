@@ -44,6 +44,7 @@ int fmpz_poly_subresultant_polynomial_naive(
   int K = m;
 
   for (int k = 0; k <= K; k++) {
+    printf("%d\n", k);
     slong nk = fmpz_poly_mat_nrows(V);
     slong mk = fmpz_poly_mat_ncols(W);
 
@@ -73,6 +74,7 @@ int fmpz_poly_subresultant_polynomial_naive(
     m -= 1;
     N -= 1; // The matrix is shrink by 1 row at each iteration
 
+    printf("Values n m N: %d %d %d\n", n, m, N);
     fmpz_poly_mat_window_init(W, W, 0, 0, N, n+m); // The new submatrix 
     fmpz_poly_mat_clear(T);
   }

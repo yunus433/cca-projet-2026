@@ -19,3 +19,8 @@ BONUS:
 
 Presentation:
 15 mins
+
+
+- flint version subresultant / subresultant polynomial
+- benchmarks of resultant_interpolation Q et Z of all types
+- fix tests with different leading degrees, finish tests

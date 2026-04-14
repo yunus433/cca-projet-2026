@@ -1,12 +1,12 @@
-// gcc-15 -O2 test_mpoly_resultant_interpolation.c mpoly_resultant_interpolation.c $(pkg-config --cflags --libs flint)
+// gcc-15 -O2 test_mpoly_resultant_interpolation.c fmpz_mpoly_resultant_interpolation.c $(pkg-config --cflags --libs flint)
 
-#include <stdlib.h>
+#include <time.h>
 
 #include "mpoly_resultant_interpolation.h"
 
-int COEFF_BIT_SIZE = 30;
+int COEFF_BIT_SIZE = 100;
 int DEFAULT_EXPO_BIT_SIZE = 5;
-int DEFAULT_LENGTH = 20;
+int DEFAULT_LENGTH = 30;
 int DEFAULT_COUNT = 10;
 
 int fmpz_mpoly_resultant_interpolation_test(
@@ -18,6 +18,8 @@ int fmpz_mpoly_resultant_interpolation_test(
   flint_rand_t rand_state;
   fmpz_mpoly_ctx_t ctx;
   fmpz_mpoly_t P, Q, R1, R2;
+  
+  clock_t start, end;
 
   flint_rand_init(rand_state);
   flint_rand_set_seed(rand_state, time(NULL), time(NULL));
@@ -33,15 +35,23 @@ int fmpz_mpoly_resultant_interpolation_test(
     fmpz_mpoly_randtest_bits(P, rand_state, length, COEFF_BIT_SIZE, expo_bit_size, ctx);
     fmpz_mpoly_randtest_bits(Q, rand_state, length, COEFF_BIT_SIZE, expo_bit_size, ctx);
 
-    if (fmpz_mpoly_resultant_interpolation(R1, P, Q, var_to_compute, ctx, COEFF_BIT_SIZE)) {
+    start = clock();
+    if (fmpz_mpoly_resultant_interpolation_mode(R1, P, Q, var_to_compute, ctx, 0, SMALL_ORDERED)) {
       printf("ERROR: fmpz_mpoly_resultant_interpolation function call returned non-zero error code.\n");
       goto cleanup;
     }
+    end = clock();
 
+    printf("Interpolation: %f\n", (double)(end - start) / CLOCKS_PER_SEC);
+
+    start = clock();
     if (!fmpz_mpoly_resultant(R2, P, Q, var_to_compute, ctx)) {
       printf("ERROR: fmpz_mpoly_resultant function call returned non-zero error code.\n");
       goto cleanup;
     }
+    end = clock();
+
+    printf("Naive: %f\n", (double)(end - start) / CLOCKS_PER_SEC);
 
     printf("Real Degree: %ld\n", fmpz_mpoly_degree_si(R2, var_to_evoluate, ctx));
 
