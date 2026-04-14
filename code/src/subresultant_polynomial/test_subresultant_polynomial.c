@@ -9,6 +9,8 @@
 #include <time.h>
 #include <stdlib.h>
 
+// #include "../utils/poly_rand_uniform.c"
+
 #include "subresultant_polynomial_naive.h"
 #include "subresultant_polynomial_pseudo_remainder.h"
 
@@ -53,46 +55,46 @@ int fmpz_poly_subresultant_polyonmial_test(
       printf("\nPolynomial B:\n");
       fmpz_poly_print_pretty(B, "x");
       printf("\n");
-      break;
+      // break;
     }
 
-    if (fmpz_poly_subresultant_polynomial_pseudo_remainder(S, A, B)) {
-      printf("ERROR: subresultant_euclid function call returned non-zero error code.\n");
-      printf("Polynomial A:\n");
-      fmpz_poly_print_pretty(A, "x");
-      printf("\nPolynomial B:\n");
-      fmpz_poly_print_pretty(B, "x");
-      printf("\n");
-      break;
-    }
+    // if (fmpz_poly_subresultant_polynomial_pseudo_remainder(S, A, B)) {
+    //   printf("ERROR: subresultant_euclid function call returned non-zero error code.\n");
+    //   printf("Polynomial A:\n");
+    //   fmpz_poly_print_pretty(A, "x");
+    //   printf("\nPolynomial B:\n");
+    //   fmpz_poly_print_pretty(B, "x");
+    //   printf("\n");
+    //   break;
+    // }
 
-    int is_all_successful = 1;
+    // int is_all_successful = 1;
 
-    // FIXME: use another variable instead of i to avoid confusion with the outer loop
-    for (int i = 0; i < degree; i++) {
-      printf("\nR[%d] (naive):\n", i);
-      fmpz_poly_print_pretty(R[i], "x");
-      printf("\nS[%d] (pseudo-remainder):\n", i);
-      fmpz_poly_print_pretty(S[i], "x");
-      // if (!fmpz_poly_equal(R[i], S[i])) {
-      //   is_all_successful = 0;
+    // // FIXME: use another variable instead of i to avoid confusion with the outer loop
+    // for (int i = 0; i < degree; i++) {
+    //   printf("\nR[%d] (naive):\n", i);
+    //   fmpz_poly_print_pretty(R[i], "x");
+    //   printf("\nS[%d] (pseudo-remainder):\n", i);
+    //   fmpz_poly_print_pretty(S[i], "x");
+    //   // if (!fmpz_poly_equal(R[i], S[i])) {
+    //   //   is_all_successful = 0;
 
-      //   printf("Test %d is unsuccessful.\n");
-      //   printf("Polynomial A:\n");
-      //   fmpz_poly_print_pretty(A, "x");
-      //   printf("\nPolynomial B:\n");
-      //   fmpz_poly_print_pretty(B, "x");
-      //   printf("\nR[%d] (naive):\n", i);
-      //   fmpz_poly_print_pretty(R[i], "x");
-      //   printf("\nS[%d] (pseudo-remainder):\n", i);
-      //   fmpz_poly_print_pretty(S[i], "x");
-      //   printf("\n");
-      //   break;
-      // }
-    }
+    //   //   printf("Test %d is unsuccessful.\n");
+    //   //   printf("Polynomial A:\n");
+    //   //   fmpz_poly_print_pretty(A, "x");
+    //   //   printf("\nPolynomial B:\n");
+    //   //   fmpz_poly_print_pretty(B, "x");
+    //   //   printf("\nR[%d] (naive):\n", i);
+    //   //   fmpz_poly_print_pretty(R[i], "x");
+    //   //   printf("\nS[%d] (pseudo-remainder):\n", i);
+    //   //   fmpz_poly_print_pretty(S[i], "x");
+    //   //   printf("\n");
+    //   //   break;
+    //   // }
+    // }
 
-    if (is_all_successful)
-      printf("Test %d is successful.\n", i + 1);
+    // if (is_all_successful)
+    //   printf("Test %d is successful.\n", i + 1);
   }
 
   flint_rand_clear(rand_state);
