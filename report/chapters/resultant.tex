@@ -2,114 +2,116 @@
 
 For the entire section, let $f, g \in \mathbb{K}[x]$, where $\mathbb{K}$ is a field, with $\deg f = n$ and $\deg g = m$.
 
-First, we define the Sylvester matrix, $S(f, g) \in \mathbb{K}^{(n+m) \times (n+m)}$, as follows \cite{resultant} :
-$$
-S(f,g)=
-\begin{pmatrix}
-f_n &        &        &        & g_m &        &        \\
-f_{n-1} & f_n &        &        & g_{m-1} & g_m &        \\
-\vdots & \vdots & \ddots &        & \vdots & \vdots & \ddots \\
-f_0 & f_1 & \cdots & f_n & g_0 & g_1 & \cdots \\
-    & f_0 & \ddots & \vdots &     & g_0 & \ddots \\
-    &     & \ddots & f_1 &     &     & \ddots \\
-    &     &        & f_0 &     &     & g_0
-\end{pmatrix}
-$$
-where all the non-specified coefficients are 0. We can observe that the first $m$ columns of $S(f,g)$ are coefficients of $f(x)$ shifted $m$ times, and the last $n$ columns are coefficients of $g(x)$ shifted $n$ times. We can also define the matrix with reverse order of $f$ and $g$, or by shifting in rows instead of columns.
+\begin{definition}
+    We define the Sylvester matrix, $S(f, g) \in \mathbb{K}^{(n+m) \times (n+m)}$, as follows \cite{resultant} :
+    $$
+    S(f,g)=
+    \begin{pmatrix}
+    f_n &        &        &        & g_m &        &        \\
+    f_{n-1} & f_n &        &        & g_{m-1} & g_m &        \\
+    \vdots & \vdots & \ddots &        & \vdots & \vdots & \ddots \\
+    f_0 & f_1 & \cdots & f_n & g_0 & g_1 & \cdots \\
+        & f_0 & \ddots & \vdots &     & g_0 & \ddots \\
+        &     & \ddots & f_1 &     &     & \ddots \\
+        &     &        & f_0 &     &     & g_0
+    \end{pmatrix}
+    $$
+    where all the non-specified coefficients are 0. We can observe that the first $m$ columns of $S(f,g)$ are coefficients of $f(x)$ shifted $m$ times, and the last $n$ columns are coefficients of $g(x)$ shifted $n$ times. We can also define the matrix with reverse order of $f$ and $g$, or by shifting in rows instead of columns.
+\end{definition}
 
-Then, the resultant of $f$ and $g$ is defined as \cite{resultant}:
-$$
-res(f, g) = \det S(f, g)
-$$
+\begin{definition}
+    The resultant of $f$ and $g$ is defined as \cite{resultant}:
+    $$
+    res(f, g) = \det S(f, g)
+    $$
+    Note that this definition of the resultant does not change if we define the Sylvester matrix over rows instead of columns, as this is just the transpose of the Sylvester matrix and determinant stays the same on the matrix transpose. If coefficients are in the reverse order, then it means that there are $n + m$ row permutations (or column permutations in the row-oriented definition), thus the determinant changes sign with $(-1)^{n + m}$.
+\end{definition}
 
-Note that this definition of the resultant does not change if we define the Sylvester matrix over rows instead of columns, as this is just the transpose of the Sylvester matrix and determinant stays the same on the matrix transpose. If coefficients are in the reverse order, then it means that there are $n + m$ row permutations (or column permutations in the row-oriented definition), thus the determinant changes sign with $(-1)^{n + m}$.
-
-The resultant is important, as we have the following property:
-$$
-res(f, g) \neq 0 \iff \gcd(f, g) = 1
-$$
-which implies that the resultant of two polynomials is 0 if and only if there is a non-constant polynomial in $\mathbb{K}$ that divides both $f$ and $g$. This can be interpreted as that $f$ and $g$ have a common root in $\overline{\mathbb{K}}$, the alrebraic closure of $\mathbb{K}$: This final point is important since if $\mathbb{K}$ is not algebraically closed, then the common divisor of $f$ and $g$ may have all of its roots in the algebraic closure of $\mathbb{K}$, so that $f$ and $g$ do not share any common roots in $\mathbb{K}$.
+\begin{proposition}
+    The resultant of two polynomials is 0 if and only if there is a non-constant polynomial in $\mathbb{K}$ that divides both $f$ and $g$. This can be interpreted as that $f$ and $g$ have a common root in $\overline{\mathbb{K}}$, the alrebraic closure of $\mathbb{K}$: This final point is important since if $\mathbb{K}$ is not algebraically closed, then the common divisor of $f$ and $g$ may have all of its roots in the algebraic closure of $\mathbb{K}$, so that $f$ and $g$ do not share any common roots in $\mathbb{K}$.
+    $$
+    res(f, g) \neq 0 \iff \gcd(f, g) = 1
+    $$
+\end{proposition}
 
 \begin{proof}
+    Let $\mathbb{K}[x]_{<d}$ be the $\mathbb{K}$-vector space with polynomials of degree $< d$, and let its standard bases $(1, x, \dots, x^{d-1})$.
 
-\noindent Let $\mathbb{K}[x]_{<d}$ be the $\mathbb{K}$-vector space with polynomials of degree $< d$, and let its standard bases $(1, x, \dots, x^{d-1})$.
+    First, let us reexamine the definition of the Sylvester matrix: We define the $\mathbb{K}$ linear map:
+    $$
+    \phi : \mathbb{K}[x]_{<m} \oplus \mathbb{K}[x]_{<n} \to \mathbb{K}[x]_{<n+m}
+    $$
+    such that:
+    $$
+    \phi(u, v) = u f + v g
+    $$
+    This definition is a linear map since the addition of polynomials and multiplication of polynomials with a constant polynomial is linear.
 
-\noindent First, let us reexamine the definition of the Sylvester matrix: We define the $\mathbb{K}$ linear map:
-$$
-\phi : \mathbb{K}[x]_{<m} \oplus \mathbb{K}[x]_{<n} \to \mathbb{K}[x]_{<n+m}
-$$
-such that:
-$$
-\phi(u, v) = u f + v g
-$$
-This definition is a linear map since the addition of polynomials and multiplication of polynomials with a constant polynomial is linear.
+    Then, we can observe that the matrix of $\phi$ in the standard bases, $Mat(\phi)$, is exactly the Sylvester matrix, $S(f,g)$, for a row-oriented definition.\footnote{Again, the definition of the Sylvester matrix does not change if resultant is different than 0, thus without loss of generality we can prove the above equivalency for any definition of the Sylvester matrix.} Hence,
+    $$
+    res(f, g) = 0 \iff \det(S(f, g)) = 0 \iff \det(Mat(\phi)) = 0 \iff \ker(Mat(\phi)) \neq \emptyset
+    $$
 
-\noindent Then, we can observe that the matrix of $\phi$ in the standard bases, $Mat(\phi)$, is exactly the Sylvester matrix, $S(f,g)$, for a row-oriented definition.\footnote{Again, the definition of the Sylvester matrix does not change if resultant is different than 0, thus without loss of generality we can prove the above equivalency for any definition of the Sylvester matrix.} Hence,
-$$
-res(f, g) = 0 \iff \det(S(f, g)) = 0 \iff \det(Mat(\phi)) = 0 \iff \ker(Mat(\phi)) \neq \emptyset
-$$
+    As a result, we can say that $res(f, g)$ equals 0 if and only if $\ker(Mat(\phi))$ is not empty, meaning that there exists two vectors not both zero such that their value in $\phi$ equals 0. Formally:
+    $$
+    res(f, g) = 0 \iff \exists (u, v) \neq (0, 0), \deg(u) < m, \deg(v) < n : u f + v g = 0
+    $$
 
-As a result, we can say that $res(f, g)$ equals 0 if and only if $\ker(Mat(\phi))$ is not empty, meaning that there exists two vectors not both zero such that their value in $\phi$ equals 0. Formally:
-$$
-res(f, g) = 0 \iff \exists (u, v) \neq (0, 0), \deg(u) < m, \deg(v) < n : u f + v g = 0
-$$
+    We show the contraposition, $\gcd(f, g) \neq 1 \iff res(f,g) = 0$.
 
-\noindent We show the contraposition, $\gcd(f, g) \neq 1 \iff res(f,g) = 0$.
+    \textbf{$(\implies)$:} Assume $\gcd(f, g) \neq 1$. Let $h = gcd(f, g)$, that is $h$ is non-constant and divides $f$ and $g$. Let $f_1, g_1 \in \mathbb{K}[x]$ such that:
 
-\noindent \textbf{$(\implies)$:} Assume $\gcd(f, g) \neq 1$. Let $h = gcd(f, g)$, that is $h$ is non-constant and divides $f$ and $g$. Let $f_1, g_1 \in \mathbb{K}[x]$ such that:
+    $$
+    f = h f_1, g = h g_1
+    $$
 
-$$
-f = h f_1, g = h g_1
-$$
+    Then, we set $u = g_1 \text{ and } v = - f_1$, so that:
+    $$
+    u f + v g = g_1 h f_1 - f_1 h g_1 = h \times (g_1 f_1 - f_1 g_1) = 0
+    $$
 
-\noindent Then, we set $u = g_1 \text{ and } v = - f_1$, so that:
-$$
-u f + v g = g_1 h f_1 - f_1 h g_1 = h \times (g_1 f_1 - f_1 g_1) = 0
-$$
+    As $\deg(h) > 0$, we have $\deg(u) < m, \deg(v) < n$. Thus, by the above equality,
+    $$
+    \gcd(f, g) \neq 1 \implies \exists (u, v) \neq (0, 0), \deg(u) < m, \deg(v) < n : u f + v g = 0 \implies res(f, g) = 0
+    $$
 
-\noindent As $\deg(h) > 0$, we have $\deg(u) < m, \deg(v) < n$. Thus, by the above equality,
-$$
-\gcd(f, g) \neq 1 \implies \exists (u, v) \neq (0, 0), \deg(u) < m, \deg(v) < n : u f + v g = 0 \implies res(f, g) = 0
-$$
+    Simply, polynomials $g_1$ and $- f_1$ are polynomials that satify the above definition so that $res(f, g) = 0$.
 
-\noindent Simply, polynomials $g_1$ and $- f_1$ are polynomials that satify the above definition so that $res(f, g) = 0$.
+    \textbf{$(\impliedby)$:} Assume $res(f, g) = 0$. Then, by the above equality we have:
 
-\noindent \textbf{$(\impliedby)$:} Assume $res(f, g) = 0$. Then, by the above equality we have:
+    $$
+    (\exists (u, v) \neq (0, 0), \deg(u) < m, \deg(v) < n : u f + v g = 0) \implies uf = - vg
+    $$
 
-$$
-(\exists (u, v) \neq (0, 0), \deg(u) < m, \deg(v) < n : u f + v g = 0) \implies uf = - vg
-$$
+    We know $u \neq 0$, as $g$ is not 0 and $u$ and $v$ cannot be both 0. Let $d = \gcd(u, g)$ such that:
 
-\noindent We know $u \neq 0$, as $g$ is not 0 and $u$ and $v$ cannot be both 0. Let $d = \gcd(u, g)$ such that:
+    $$
+    u = d u_1 , g = d g_1 \text{ where } gcd(u_1, g_1) = 1
+    $$
 
-$$
-u = d u_1 , g = d g_1 \text{ where } gcd(u_1, g_1) = 1
-$$
+    Putting this on the above equation:
 
-\noindent Putting this on the above equation:
+    $$
+    (d u_1) \times f = -v \times (d g_1) \implies u_1 f = -v g_1
+    $$
+    $$
+    \implies g_1 \mid u_1 f \implies g_1 \mid f \text{ since } gcd(u_1, g_1) = 1
+    $$
 
-$$
-(d u_1) \times f = -v \times (d g_1) \implies u_1 f = -v g_1
-$$
-$$
-\implies g_1 \mid u_1 f \implies g_1 \mid f \text{ since } gcd(u_1, g_1) = 1
-$$
+    Thus, we now have $g_1$ as the common factor of $g$ and $f$. Now showing that $g_1$ is not constant.
 
-\noindent Thus, we now have $g_1$ as the common factor of $g$ and $f$. Now showing that $g_1$ is not constant.
+    We know $\deg(u) < m = \deg(g)$:
+    $$
+    \deg(u) < \deg(g) \implies \deg(d u_1) < \deg(d g_1)
+    $$
+    $$
+    \implies \deg(d) + \deg(u_1) < \deg(d) + \deg(g_1) \implies \deg(u_1) < \deg(g_1)
+    $$
 
-\noindent We know $\deg(u) < m = \deg(g)$:
-$$
-\deg(u) < \deg(g) \implies \deg(d u_1) < \deg(d g_1)
-$$
-$$
-\implies \deg(d) + \deg(u_1) < \deg(d) + \deg(g_1) \implies \deg(u_1) < \deg(g_1)
-$$
-
-\noindent Since we have $\deg(u_1) \geq 0$, $\deg(g_1) > 0$. This shows that $g_1$ is a non-constant common divisor of $f$ and $g$, so $\gcd(f, g) \neq 1$. \newline
-
-\noindent We conclude that
-$$
-res(f, g) \neq 0 \iff \gcd(f, g) = 1
-$$
-
+    Since we have $\deg(u_1) \geq 0$, $\deg(g_1) > 0$. This shows that $g_1$ is a non-constant common divisor of $f$ and $g$, so $\gcd(f, g) \neq 1$.
+    
+    We conclude that
+    $$
+    res(f, g) \neq 0 \iff \gcd(f, g) = 1
+    $$
 \end{proof}
