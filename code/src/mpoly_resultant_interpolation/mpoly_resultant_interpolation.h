@@ -45,8 +45,17 @@ int fmpq_mpoly_resultant_interpolation(
   const fmpq_mpoly_t P,
   const fmpq_mpoly_t Q,
   slong var,
+  const fmpq_mpoly_ctx_struct *ctx
+);
+
+int fmpq_mpoly_resultant_interpolation_mode(
+  fmpq_mpoly_t R,
+  const fmpq_mpoly_t P,
+  const fmpq_mpoly_t Q,
+  slong var,
   const fmpq_mpoly_ctx_struct *ctx,
-  const flint_bitcnt_t bits
+  const flint_bitcnt_t bits,
+  interpolation_mode_t mode 
 );
 
 #endif
