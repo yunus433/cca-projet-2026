@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../utils/poly_set_str_pretty.c"
+#include "../utils/utils.h"
 
 #include "subresultant_polynomial_naive.h"
 #include "subresultant_polynomial_pseudo_remainder.h"
