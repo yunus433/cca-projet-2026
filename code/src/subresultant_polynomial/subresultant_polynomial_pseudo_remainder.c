@@ -29,6 +29,7 @@ int fmpz_poly_subresultant_polynomial_pseudo_remainder(
   fmpz_init(tmp);
 
   while (fmpz_poly_degree(r1) > 0) {
+    
     if (i == 1) {
       slong dValue = fmpz_poly_degree(r0) - fmpz_poly_degree(r1);
       fmpz_set_si(d, dValue);
