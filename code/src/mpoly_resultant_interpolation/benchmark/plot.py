@@ -4,7 +4,7 @@ import sys
 import os
 import numpy as np
 
-BIT_SIZE = [5, 6]
+BIT_SIZE = [5]
 INCLUDE_RAND = False
 
 def plot_benchmark(mode):

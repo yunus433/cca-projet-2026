@@ -25,8 +25,8 @@ int fmpz_poly_subresultant_polyonmial_test(
   fmpz_poly_t R[degree], S[degree], T[degree];
   fmpz_poly_t A, B;
 
-  flint_randinit(rand_state);
-  flint_randseed(rand_state, time(NULL), time(NULL));
+  flint_rand_init(rand_state);
+  flint_rand_set_seed(rand_state, time(NULL), time(NULL));
 
   for (int i = 0; i < degree; i++) {
     fmpz_poly_init(R[i]);
@@ -47,25 +47,25 @@ int fmpz_poly_subresultant_polyonmial_test(
     } while (fmpz_poly_is_zero(A) || 
             fmpz_poly_is_zero(B) || 
             fmpz_poly_degree(A) == fmpz_poly_degree(B));
-    printf("Polynomial A:\n");
-    fmpz_poly_print_pretty(A, "x");
-    printf("\nPolynomial B:\n");
-    fmpz_poly_print_pretty(B, "x");
-    printf("\n");
+    // printf("Polynomial A:\n");
+    // fmpz_poly_print_pretty(A, "x");
+    // printf("\nPolynomial B:\n");
+    // fmpz_poly_print_pretty(B, "x");
+    // printf("\n");
     
 
-    while (fmpz_poly_is_zero(A)) fmpz_poly_randtest(A, rand_state, length, COEFF_BIT_SIZE);
-    while (fmpz_poly_is_zero(B)) fmpz_poly_randtest(B, rand_state, length, COEFF_BIT_SIZE);
+    // while (fmpz_poly_is_zero(A)) fmpz_poly_randtest(A, rand_state, length, COEFF_BIT_SIZE);
+    // while (fmpz_poly_is_zero(B)) fmpz_poly_randtest(B, rand_state, length, COEFF_BIT_SIZE);
     
-    /*if (fmpz_poly_subresultant_polynomial_naive(R, A, B)) {
-      printf("ERROR: subresultant_naive function call returned non-zero error code.\n");
-      printf("Polynomial A:\n");
-      fmpz_poly_print_pretty(A, "x");
-      printf("\nPolynomial B:\n");
-      fmpz_poly_print_pretty(B, "x");
-      printf("\n");
-      break;
-    }*/
+    // if (fmpz_poly_subresultant_polynomial_naive(R, A, B)) {
+    //   printf("ERROR: subresultant_naive function call returned non-zero error code.\n");
+    //   printf("Polynomial A:\n");
+    //   fmpz_poly_print_pretty(A, "x");
+    //   printf("\nPolynomial B:\n");
+    //   fmpz_poly_print_pretty(B, "x");
+    //   printf("\n");
+    //   break;
+    // }
 
     if (fmpz_poly_subresultant_polynomial_pseudo_remainder(S, A, B)) {
       printf("ERROR: subresultant_euclid function call returned non-zero error code.\n");
@@ -91,8 +91,8 @@ int fmpz_poly_subresultant_polyonmial_test(
 
     // FIXME: use another variable instead of i to avoid confusion with the outer loop
     for (int i = 0; i < degree; i++) {
-      printf("\nR[%d] (naive):\n", i);
-      fmpz_poly_print_pretty(R[i], "x");
+      // printf("\nR[%d] (naive):\n", i);
+      // fmpz_poly_print_pretty(R[i], "x");
       printf("\nS[%d] (pseudo-remainder):\n", i);
       fmpz_poly_print_pretty(S[i], "x");
       printf("\n");
@@ -114,13 +114,13 @@ int fmpz_poly_subresultant_polyonmial_test(
     //   //   printf("\n");
     //   //   break;
     //   // }
-    // }
+    }
 
     // if (is_all_successful)
     //   printf("Test %d is successful.\n", i + 1);
   }
 
-  flint_randclear(rand_state);
+  flint_rand_clear(rand_state);
 
   for (int i = 0; i < degree; i++) {
     fmpz_poly_clear(R[i]);
