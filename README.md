@@ -1,26 +1,26 @@
 # cca-projet-2026
 
-- [75%] fixer les tests
-- [100%] ajouter les tests avec wolfram
-- [100%] essayer bivarie avec flint resultant
-- [100%] avoir interpolation avec flint
-- [100%] tester / experimenter sur flint interpolation si plus de points c'est plus vite
-        P random deg P = d; d, d + 1, d + 2 jusqu'à une puissance de deux etc points, regarde la vitesse
-        pour plus de points => moins vite :(
-        pour pow 2 => moins vite :(
-- [0%] essayer de trouver l'algo de sousresultant sur flint
-- [0%] faire le rapport dans le forme d'une article
-- [100%] créer un générateur de polynomial, uniform sur les coeff
-- [0%] essayer interpolation pour trouver le sous-resultant polynomial bivariée!
+- fixer le naive sousresultant polynomials
+- fixer les signes et dernier coeff de flint sous resultant poly
+- ajoute methode interpolation pour le sousresultant des polybivariee SANS la vérification
+        - comparer ça avec le FLINt sousresultant 
+- trouver le methode FLINT bivariée pour les polynomials sousresultant 
+- trouver le methode FLINT bivariée pour les sousresultant 
+        1. trouver l'implementation
+        2. generer des polynomes sur Z mais les traites comme Q (anneau générique)
+- ajouter les benchmarks sur le rapport
+
+Mr. Wang
+- Ecrire comment faire l'interpolation, mieux expliquer resultant / sous-resultant
+
+
+
+SLIDES: Après la vacance
 
 BONUS:
 - sur flint: comment faire les calculs sur un corps fini? On veut definir des polnomes sur un corps finis, pas Z
              on va faire des calcul multi-modulaires
+        - pas besoin de faire, s'il y a une question on dit que tous les implem de FLINT sont multi-mod donc le notre aussi. 
 
 Presentation:
 15 mins
-
-
-- flint version subresultant / subresultant polynomial
-- benchmarks of resultant_interpolation Q et Z of all types
-- fix tests with different leading degrees, finish tests

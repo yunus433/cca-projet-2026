@@ -53,7 +53,7 @@ void fmpz_poly_pseudo_rem_cohen_2(
         fmpz_poly_set_coeff_si(R, degA, 0);
 
         // normalisation
-        fmpz_poly_normalize(R);
+        _fmpz_poly_normalise(R);
         degA = fmpz_poly_degree(R);
 
         e--;
@@ -103,14 +103,14 @@ int fmpz_subresultant_flint(fmpz_poly_t *res,const fmpz_poly_t P,const fmpz_poly
     fmpz_one(g);
     fmpz_one(h);
 
-    fmpz_poly_set(res[count++], A);
-    fmpz_poly_set(res[count++], B);
+    // fmpz_poly_set(res[count++], A);
+    // fmpz_poly_set(res[count++], B);
 
     while(!fmpz_poly_is_zero(B)){
         const slong delta = fmpz_poly_degree(A) - fmpz_poly_degree(B);
 
         fmpz_poly_pseudo_rem_cohen_2(R,A,B);
-        fmpz_poly_normalize(R);
+        _fmpz_poly_normalise(R);
         if(fmpz_poly_is_zero(R)){
             break;
         }
@@ -129,7 +129,7 @@ int fmpz_subresultant_flint(fmpz_poly_t *res,const fmpz_poly_t P,const fmpz_poly
                 break;
             }
             fmpz_poly_scalar_divexact_fmpz(B,B,b);
-            fmpz_poly_normalize(B);
+            _fmpz_poly_normalise(B);
             fmpz_poly_get_coeff_fmpz(g,A,fmpz_poly_degree(A));
             fmpz_set(h,g);
         }
@@ -149,7 +149,7 @@ int fmpz_subresultant_flint(fmpz_poly_t *res,const fmpz_poly_t P,const fmpz_poly
                 break;
             }
             fmpz_poly_scalar_divexact_fmpz(B,B,b);
-            fmpz_poly_normalize(B);
+            _fmpz_poly_normalise(B);
             
             fmpz_t lcA;
             fmpz_init(lcA);
