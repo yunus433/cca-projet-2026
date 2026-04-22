@@ -42,6 +42,24 @@ int fmpz_mpoly_resultant_interpolation_mode(
   interpolation_mode_t mode 
 );
 
+int fmpz_mpoly_resultant_interpolation_multimod(
+  fmpz_mpoly_t R,
+  const fmpz_mpoly_t P,
+  const fmpz_mpoly_t Q,
+  slong var,
+  const fmpz_mpoly_ctx_struct *ctx
+);
+
+int fmpz_mpoly_resultant_interpolation_multimod_mode(
+  fmpz_mpoly_t R,
+  const fmpz_mpoly_t P,
+  const fmpz_mpoly_t Q,
+  slong var,
+  const fmpz_mpoly_ctx_struct *ctx,
+  const flint_bitcnt_t bits,
+  interpolation_mode_t mode
+);
+
 int fmpq_mpoly_resultant_interpolation(
   fmpq_mpoly_t R,
   const fmpq_mpoly_t P,
@@ -58,6 +76,24 @@ int fmpq_mpoly_resultant_interpolation_mode(
   const fmpq_mpoly_ctx_struct *ctx,
   const flint_bitcnt_t bits,
   interpolation_mode_t mode 
+);
+
+int fmpq_mpoly_resultant_interpolation_multimod(
+  fmpq_mpoly_t R,
+  const fmpq_mpoly_t P,
+  const fmpq_mpoly_t Q,
+  slong var,
+  const fmpq_mpoly_ctx_struct *ctx
+);
+
+int fmpq_mpoly_resultant_interpolation_multimod_mode(
+  fmpq_mpoly_t R,
+  const fmpq_mpoly_t P,
+  const fmpq_mpoly_t Q,
+  slong var,
+  const fmpq_mpoly_ctx_struct *ctx,
+  const flint_bitcnt_t bits,
+  interpolation_mode_t mode
 );
 
 int nmod_mpoly_resultant_interpolation(
