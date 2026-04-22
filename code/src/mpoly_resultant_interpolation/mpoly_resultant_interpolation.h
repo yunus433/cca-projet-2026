@@ -14,6 +14,8 @@
 #include <flint/fmpq.h>
 #include <flint/fmpq_poly.h>
 #include <flint/fmpq_mpoly.h> 
+#include <flint/nmod_poly.h>
+#include <flint/nmod_mpoly.h> 
 
 typedef enum {
   BITSIZE_RANDOM,
@@ -54,6 +56,24 @@ int fmpq_mpoly_resultant_interpolation_mode(
   const fmpq_mpoly_t Q,
   slong var,
   const fmpq_mpoly_ctx_struct *ctx,
+  const flint_bitcnt_t bits,
+  interpolation_mode_t mode 
+);
+
+int nmod_mpoly_resultant_interpolation(
+  nmod_mpoly_t R,
+  const nmod_mpoly_t P,
+  const nmod_mpoly_t Q,
+  slong var,
+  const nmod_mpoly_ctx_struct *ctx
+);
+
+int nmod_mpoly_resultant_interpolation_mode(
+  nmod_mpoly_t R,
+  const nmod_mpoly_t P,
+  const nmod_mpoly_t Q,
+  slong var,
+  const nmod_mpoly_ctx_struct *ctx,
   const flint_bitcnt_t bits,
   interpolation_mode_t mode 
 );

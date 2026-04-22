@@ -1,4 +1,4 @@
-// gcc-15 -O2 test_mpoly_resultant_interpolation.c fmpz_mpoly_resultant_interpolation.c fmpq_mpoly_resultant_interpolation.c $(pkg-config --cflags --libs flint)
+// gcc-15 -O2 test_mpoly_resultant_interpolation.c fmpz_mpoly_resultant_interpolation.c fmpq_mpoly_resultant_interpolation.c nmod_mpoly_resultant_interpolation.c $(pkg-config --cflags --libs flint)
 
 #include <time.h>
 
@@ -8,6 +8,7 @@ int COEFF_BIT_SIZE = 100;
 int DEFAULT_EXPO_BIT_SIZE = 5;
 int DEFAULT_LENGTH = 30;
 int DEFAULT_COUNT = 10;
+ulong DEFAULT_MODULUS = 65537;
 
 int fmpz_mpoly_resultant_interpolation_test(
   int expo_bit_size,
@@ -151,6 +152,73 @@ cleanup:
   return 0;
 }
 
+int nmod_mpoly_resultant_interpolation_test(
+  int expo_bit_size,
+  int length,
+  int count,
+  ulong modulus
+) {
+  flint_rand_t rand_state;
+  nmod_mpoly_ctx_t ctx;
+  nmod_mpoly_t P, Q, R1, R2;
+
+  clock_t start, end;
+
+  if (modulus <= 1) {
+    printf("ERROR: modulus must be > 1.\n");
+    return -1;
+  }
+
+  flint_rand_init(rand_state);
+  flint_rand_set_seed(rand_state, time(NULL), time(NULL));
+  nmod_mpoly_ctx_init(ctx, 2, ORD_LEX, modulus);
+  nmod_mpoly_init(P, ctx);
+  nmod_mpoly_init(Q, ctx);
+  nmod_mpoly_init(R1, ctx);
+  nmod_mpoly_init(R2, ctx);
+
+  int var_to_compute = 0, var_to_evaluate = 1;
+
+  for (int test_case = 0; test_case < count; test_case++) {
+    nmod_mpoly_randtest_bits(P, rand_state, length, expo_bit_size, ctx);
+    nmod_mpoly_randtest_bits(Q, rand_state, length, expo_bit_size, ctx);
+
+    start = clock();
+    if (nmod_mpoly_resultant_interpolation_mode(R1, P, Q, var_to_compute, ctx, 0, SMALL_ORDERED_POS)) {
+      printf("ERROR: nmod_mpoly_resultant_interpolation function call returned non-zero error code.\n");
+      goto cleanup;
+    }
+    end = clock();
+
+    printf("Interpolation: %f\n", (double)(end - start) / CLOCKS_PER_SEC);
+
+    start = clock();
+    if (!nmod_mpoly_resultant(R2, P, Q, var_to_compute, ctx)) {
+      printf("ERROR: nmod_mpoly_resultant function call returned non-zero error code.\n");
+      goto cleanup;
+    }
+    end = clock();
+
+    printf("Naive: %f\n", (double)(end - start) / CLOCKS_PER_SEC);
+
+    printf("Real Degree: %ld\n", nmod_mpoly_degree_si(R2, var_to_evaluate, ctx));
+
+    if (nmod_mpoly_equal(R1, R2, ctx))
+      printf("Test %d is successful.\n", test_case+1);
+    else
+      printf("Test %d is failed.\n", test_case+1);
+  }
+
+cleanup:
+  flint_rand_clear(rand_state);
+  nmod_mpoly_clear(P, ctx);
+  nmod_mpoly_clear(Q, ctx);
+  nmod_mpoly_clear(R1, ctx);
+  nmod_mpoly_clear(R2, ctx);
+  nmod_mpoly_ctx_clear(ctx);
+  return 0;
+}
+
 int main(int argc, char *argv[]) {
   if (argc < 2) {
     printf("ERROR: Please specify the mode.\n");
@@ -162,15 +230,19 @@ int main(int argc, char *argv[]) {
   int expo_bit_size = DEFAULT_EXPO_BIT_SIZE;
   int length = DEFAULT_LENGTH;
   int count = DEFAULT_COUNT;
+  ulong modulus = DEFAULT_MODULUS;
 
   if (argc > 2) expo_bit_size = atoi(argv[2]);
   if (argc > 3) length = atoi(argv[3]);
   if (argc > 4) count = atoi(argv[4]);
+  if (argc > 5) modulus = strtoul(argv[5], NULL, 10);
 
   if (!strcmp("fmpz", mode)) {
     return fmpz_mpoly_resultant_interpolation_test(expo_bit_size, length, count);
   } else if (!strcmp("fmpq", mode)) {
     return fmpq_mpoly_resultant_interpolation_test(expo_bit_size, length, count);
+  } else if (!strcmp("nmod", mode)) {
+    return nmod_mpoly_resultant_interpolation_test(expo_bit_size, length, count, modulus);
   } else {
     printf("ERROR: Unknown mode specified.\n");
     return -1;
