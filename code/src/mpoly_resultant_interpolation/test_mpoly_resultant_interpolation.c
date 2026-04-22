@@ -29,7 +29,7 @@ int fmpz_mpoly_resultant_interpolation_test(
   fmpz_mpoly_init(R1, ctx);
   fmpz_mpoly_init(R2, ctx);
 
-  int var_to_compute = 0, var_to_evoluate = 1;
+  int var_to_compute = 0, var_to_evaluate = 1;
 
   for (int test_case = 0; test_case < count; test_case++) {
     fmpz_mpoly_randtest_bits(P, rand_state, length, COEFF_BIT_SIZE, expo_bit_size, ctx);
@@ -53,7 +53,7 @@ int fmpz_mpoly_resultant_interpolation_test(
 
     printf("Naive: %f\n", (double)(end - start) / CLOCKS_PER_SEC);
 
-    printf("Real Degree: %ld\n", fmpz_mpoly_degree_si(R2, var_to_evoluate, ctx));
+    printf("Real Degree: %ld\n", fmpz_mpoly_degree_si(R2, var_to_evaluate, ctx));
 
     if (fmpz_mpoly_equal(R1, R2, ctx))
       printf("Test %d is successful.\n", test_case+1);
@@ -99,7 +99,7 @@ int fmpq_mpoly_resultant_interpolation_test(
   fmpq_mpoly_init(R1, ctx);
   fmpq_mpoly_init(R2, ctx);
 
-  int var_to_compute = 0, var_to_evoluate = 1;
+  int var_to_compute = 0, var_to_evaluate = 1;
 
   for (int test_case = 0; test_case < count; test_case++) {
     fmpq_mpoly_randtest_bits(P, rand_state, length, COEFF_BIT_SIZE, expo_bit_size, ctx);
@@ -123,7 +123,7 @@ int fmpq_mpoly_resultant_interpolation_test(
 
     printf("Naive: %f\n", (double)(end - start) / CLOCKS_PER_SEC);
 
-    printf("Real Degree: %ld\n", fmpq_mpoly_degree_si(R2, var_to_evoluate, ctx));
+    printf("Real Degree: %ld\n", fmpq_mpoly_degree_si(R2, var_to_evaluate, ctx));
 
     if (fmpq_mpoly_equal(R1, R2, ctx))
       printf("Test %d is successful.\n", test_case+1);

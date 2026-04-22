@@ -19,7 +19,7 @@ void benchmark(
   int length_increment,
   int count
 ) {
-  int var_to_compute = 0, var_to_evoluate = 1;
+  int var_to_compute = 0, var_to_evaluate = 1;
 
   clock_t start, end;
   flint_rand_t rand_state;
@@ -65,7 +65,7 @@ void benchmark(
         // fmpq_mpoly_print_pretty(R_inter, vars, ctx);
         // printf("\n");
 
-        slong degree = fmpq_mpoly_degree_si(R_lib, var_to_evoluate, ctx);
+        slong degree = fmpq_mpoly_degree_si(R_lib, var_to_evaluate, ctx);
 
         if (degree <= 0) {
           i--;
