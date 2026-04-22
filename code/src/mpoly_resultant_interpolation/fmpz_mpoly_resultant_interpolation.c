@@ -45,8 +45,14 @@ int fmpz_mpoly_resultant_interpolation(
   fmpz_init(temp);
 
   fmpz *x = FLINT_ARRAY_ALLOC(number_of_points, fmpz);
+  if (x == NULL) {
+    code = -1;
+    goto cleanup;
+  }
   fmpz *y = FLINT_ARRAY_ALLOC(number_of_points, fmpz);
-  if (x == NULL || y == NULL) {
+  if (y == NULL) {
+    flint_free(x);
+    x = NULL;
     code = -1;
     goto cleanup;
   }
@@ -132,12 +138,16 @@ cleanup:
   fmpz_poly_clear(resultant);
   fmpz_clear(temp);
 
-  if (x != NULL && y != NULL) {
+  if (x != NULL) {
     for (slong i = 0; i < number_of_points; i++) {
       fmpz_clear(x + i);
-      fmpz_clear(y + i);
     }
     flint_free(x);
+  }
+  if (y != NULL) {
+    for (slong i = 0; i < number_of_points; i++) {
+      fmpz_clear(y + i);
+    }
     flint_free(y);
   }
 
@@ -194,8 +204,14 @@ int fmpz_mpoly_resultant_interpolation_mode(
   fmpz_init(temp);
 
   fmpz *x = FLINT_ARRAY_ALLOC(number_of_points, fmpz);
+  if (x == NULL) {
+    code = -1;
+    goto cleanup;
+  }
   fmpz *y = FLINT_ARRAY_ALLOC(number_of_points, fmpz);
-  if (x == NULL || y == NULL) {
+  if (y == NULL) {
+    flint_free(x);
+    x = NULL;
     code = -1;
     goto cleanup;
   }
@@ -318,12 +334,16 @@ cleanup:
   fmpz_poly_clear(resultant);
   fmpz_clear(temp);
 
-  if (x != NULL && y != NULL) {
+  if (x != NULL) {
     for (slong i = 0; i < number_of_points; i++) {
       fmpz_clear(x + i);
-      fmpz_clear(y + i);
     }
     flint_free(x);
+  }
+  if (y != NULL) {
+    for (slong i = 0; i < number_of_points; i++) {
+      fmpz_clear(y + i);
+    }
     flint_free(y);
   }
 
