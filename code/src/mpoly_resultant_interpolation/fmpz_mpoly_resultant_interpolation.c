@@ -10,7 +10,8 @@ int fmpz_mpoly_resultant_interpolation(
   int code = 0;
   slong var_to_compute = var;
   slong var_to_evaluate = var_to_compute ? 0 : 1;
-  slong vars[1], exps[1];
+  slong vars[1];
+  ulong exps[1];
 
   fmpz_mpoly_t temp_mpoly;
   fmpz_poly_t lead_p, lead_q, temp_poly, temp_poly_2, resultant;
@@ -123,7 +124,8 @@ int fmpz_mpoly_resultant_interpolation_mode(
   int code = 0;
   slong var_to_compute = var;
   slong var_to_evaluate = var_to_compute ? 0 : 1;
-  slong vars[1], exps[1];
+  slong vars[1];
+  ulong exps[1];
 
   flint_rand_t rand_state;
   fmpz_mpoly_t temp_mpoly;

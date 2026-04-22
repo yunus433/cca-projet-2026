@@ -14,7 +14,7 @@ int fmpz_mpoly_resultant_interpolation_test(
   int length,
   int count
 ) {
-  const char *vars[] = {"x", "y"};
+  // const char *vars[] = {"x", "y"};
   flint_rand_t rand_state;
   fmpz_mpoly_ctx_t ctx;
   fmpz_mpoly_t P, Q, R1, R2;
@@ -77,6 +77,7 @@ cleanup:
   fmpz_mpoly_clear(R1, ctx);
   fmpz_mpoly_clear(R2, ctx);
   fmpz_mpoly_ctx_clear(ctx);
+  return 0;
 }
 
 int fmpq_mpoly_resultant_interpolation_test(
@@ -84,7 +85,7 @@ int fmpq_mpoly_resultant_interpolation_test(
   int length,
   int count
 ) {
-  const char *vars[] = {"x", "y"};
+  // const char *vars[] = {"x", "y"};
   flint_rand_t rand_state;
   fmpq_mpoly_ctx_t ctx;
   fmpq_mpoly_t P, Q, R1, R2;
@@ -147,6 +148,7 @@ cleanup:
   fmpq_mpoly_clear(R1, ctx);
   fmpq_mpoly_clear(R2, ctx);
   fmpq_mpoly_ctx_clear(ctx);
+  return 0;
 }
 
 int main(int argc, char *argv[]) {
