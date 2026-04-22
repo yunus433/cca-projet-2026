@@ -7,6 +7,9 @@ int fmpz_mpoly_resultant_interpolation(
   slong var,
   const fmpz_mpoly_ctx_struct *ctx
 ) {
+  if (fmpz_mpoly_ctx_nvars(ctx) != 2 || var < 0 || var >= 2)
+    return -1;
+
   int code = 0;
   slong var_to_compute = var;
   slong var_to_evaluate = var_to_compute ? 0 : 1;
@@ -119,7 +122,8 @@ int fmpz_mpoly_resultant_interpolation_mode(
   const flint_bitcnt_t bits, // This is only used for mode BITSIZE_RANDOM
   interpolation_mode_t mode
 ) {
-  srand(time(NULL));
+  if (fmpz_mpoly_ctx_nvars(ctx) != 2 || var < 0 || var >= 2)
+    return -1;
 
   int code = 0;
   slong var_to_compute = var;
