@@ -42,10 +42,19 @@ int fmpq_mpoly_resultant_interpolation(
 
   // printf("Number of Points: %ld\n", number_of_points);
   fmpq_t value, temp;
-  fmpq x[number_of_points], y[number_of_points];
-
   fmpq_init(value);
   fmpq_init(temp);
+
+  fmpq *x = FLINT_ARRAY_ALLOC(number_of_points, fmpq);
+  fmpq *y = FLINT_ARRAY_ALLOC(number_of_points, fmpq);
+  if (x == NULL || y == NULL) {
+    code = -1;
+    goto cleanup;
+  }
+  for (slong i = 0; i < number_of_points; i++) {
+    fmpq_init(x + i);
+    fmpq_init(y + i);
+  }
 
   vars[0] = var_to_compute;
   exps[0] = degP_var;
@@ -67,9 +76,6 @@ int fmpq_mpoly_resultant_interpolation(
 
   fmpq_set_si(value, 1, 1);
   for (slong i = 0; i < number_of_points; i++) {
-    fmpq_init(x + i);
-    fmpq_init(y + i);
-
     fmpq_set(x + i, value);
     fmpq_next_signed_calkin_wilf(value, value);
 
@@ -124,9 +130,13 @@ cleanup:
   fmpq_clear(value);
   fmpq_clear(temp);
 
-  for (slong i = 0; i < number_of_points; i++) {
-    fmpq_clear(x + i);
-    fmpq_clear(y + i);
+  if (x != NULL && y != NULL) {
+    for (slong i = 0; i < number_of_points; i++) {
+      fmpq_clear(x + i);
+      fmpq_clear(y + i);
+    }
+    flint_free(x);
+    flint_free(y);
   }
 
   return code;
@@ -179,10 +189,19 @@ int fmpq_mpoly_resultant_interpolation_mode(
 
   // printf("Number of Points: %ld\n", number_of_points);
   fmpq_t value, temp;
-  fmpq x[number_of_points], y[number_of_points];
-
   fmpq_init(value);
   fmpq_init(temp);
+
+  fmpq *x = FLINT_ARRAY_ALLOC(number_of_points, fmpq);
+  fmpq *y = FLINT_ARRAY_ALLOC(number_of_points, fmpq);
+  if (x == NULL || y == NULL) {
+    code = -1;
+    goto cleanup;
+  }
+  for (slong i = 0; i < number_of_points; i++) {
+    fmpq_init(x + i);
+    fmpq_init(y + i);
+  }
 
   vars[0] = var_to_compute;
   exps[0] = degP_var;
@@ -204,9 +223,6 @@ int fmpq_mpoly_resultant_interpolation_mode(
 
   fmpq_set_si(value, 1, 1);
   for (slong i = 0; i < number_of_points; i++) {
-    fmpq_init(x + i);
-    fmpq_init(y + i);
-
     if (mode == BITSIZE_RANDOM) {
       fmpq_randbits(x + i, rand_state, bits);
 
@@ -296,9 +312,13 @@ cleanup:
   fmpq_clear(value);
   fmpq_clear(temp);
 
-  for (slong i = 0; i < number_of_points; i++) {
-    fmpq_clear(x + i);
-    fmpq_clear(y + i);
+  if (x != NULL && y != NULL) {
+    for (slong i = 0; i < number_of_points; i++) {
+      fmpq_clear(x + i);
+      fmpq_clear(y + i);
+    }
+    flint_free(x);
+    flint_free(y);
   }
 
   return code;
