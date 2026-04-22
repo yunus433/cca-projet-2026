@@ -7,7 +7,7 @@ int fmpq_mpoly_resultant_interpolation(
   slong var,
   const fmpq_mpoly_ctx_struct *ctx
 ) {
-  int code = 0, degP, degQ;
+  int code = 0;
   slong var_to_compute = var;
   slong var_to_evaluate = var_to_compute ? 0 : 1;
   slong vars[1], exps[1];
@@ -118,7 +118,7 @@ int fmpq_mpoly_resultant_interpolation_mode(
 ) {
   srand(time(NULL));
 
-  int code = 0, degP, degQ;
+  int code = 0;
   slong var_to_compute = var;
   slong var_to_evaluate = var_to_compute ? 0 : 1;
   slong vars[1], exps[1];
