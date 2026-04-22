@@ -9,7 +9,7 @@ int fmpq_mpoly_resultant_interpolation(
 ) {
   int code = 0, degP, degQ;
   slong var_to_compute = var;
-  slong var_to_evoluate = var_to_compute ? 0 : 1;
+  slong var_to_evaluate = var_to_compute ? 0 : 1;
   slong vars[1], exps[1];
 
   fmpq_mpoly_t temp_mpoly;
@@ -22,7 +22,7 @@ int fmpq_mpoly_resultant_interpolation(
   fmpq_poly_init(temp_poly_2);
   fmpq_poly_init(resultant);
 
-  slong number_of_points = (fmpq_mpoly_degree_si(P, var_to_evoluate, ctx) * fmpq_mpoly_degree_si(Q, var_to_compute, ctx) + fmpq_mpoly_degree_si(Q, var_to_evoluate, ctx) * fmpq_mpoly_degree_si(P, var_to_compute, ctx)) + 1;
+  slong number_of_points = (fmpq_mpoly_degree_si(P, var_to_evaluate, ctx) * fmpq_mpoly_degree_si(Q, var_to_compute, ctx) + fmpq_mpoly_degree_si(Q, var_to_evaluate, ctx) * fmpq_mpoly_degree_si(P, var_to_compute, ctx)) + 1;
   // printf("Number of Points: %ld\n", number_of_points);
   fmpq_t value, temp;
   fmpq x[number_of_points], y[number_of_points];
@@ -33,12 +33,12 @@ int fmpq_mpoly_resultant_interpolation(
   vars[0] = var_to_compute;
   exps[0] = fmpq_mpoly_degree_si(P, var_to_compute, ctx);
   fmpq_mpoly_get_coeff_vars_ui(temp_mpoly, P, vars, exps, 1, ctx);
-  fmpq_mpoly_get_fmpq_poly(lead_p, temp_mpoly, var_to_evoluate, ctx);
+  fmpq_mpoly_get_fmpq_poly(lead_p, temp_mpoly, var_to_evaluate, ctx);
 
   vars[0] = var_to_compute;
   exps[0] = fmpq_mpoly_degree_si(Q, var_to_compute, ctx);
   fmpq_mpoly_get_coeff_vars_ui(temp_mpoly, Q, vars, exps, 1, ctx);
-  fmpq_mpoly_get_fmpq_poly(lead_q, temp_mpoly, var_to_evoluate, ctx);
+  fmpq_mpoly_get_fmpq_poly(lead_q, temp_mpoly, var_to_evaluate, ctx);
 
   fmpq_set_si(value, 1, 1);
   for (slong i = 0; i < number_of_points; i++) {
@@ -61,7 +61,7 @@ int fmpq_mpoly_resultant_interpolation(
   }
 
   for (slong i = 0; i < number_of_points; i++) {
-    if (!fmpq_mpoly_evaluate_one_fmpq(temp_mpoly, P, var_to_evoluate, x + i, ctx)) {
+    if (!fmpq_mpoly_evaluate_one_fmpq(temp_mpoly, P, var_to_evaluate, x + i, ctx)) {
       printf("ERROR in fmpq_mpoly_resultant_interpolation: fmpq_mpoly_evaluate_one_fmpq returned non-zero error code.");
       code = -1;
       goto cleanup;
@@ -72,7 +72,7 @@ int fmpq_mpoly_resultant_interpolation(
       goto cleanup;
     }
 
-    if (!fmpq_mpoly_evaluate_one_fmpq(temp_mpoly, Q, var_to_evoluate, x + i, ctx)) {
+    if (!fmpq_mpoly_evaluate_one_fmpq(temp_mpoly, Q, var_to_evaluate, x + i, ctx)) {
       printf("ERROR in fmpq_mpoly_resultant_interpolation: fmpq_mpoly_evaluate_one_fmpq returned non-zero error code.");
       code = -1;
       goto cleanup;
@@ -87,7 +87,7 @@ int fmpq_mpoly_resultant_interpolation(
   }
 
   fmpq_poly_interpolate_fast(resultant, x, y, number_of_points);
-  fmpq_mpoly_set_fmpq_poly(R, resultant, var_to_evoluate, ctx);
+  fmpq_mpoly_set_fmpq_poly(R, resultant, var_to_evaluate, ctx);
 
 cleanup:
   fmpq_mpoly_clear(temp_mpoly, ctx);
@@ -120,7 +120,7 @@ int fmpq_mpoly_resultant_interpolation_mode(
 
   int code = 0, degP, degQ;
   slong var_to_compute = var;
-  slong var_to_evoluate = var_to_compute ? 0 : 1;
+  slong var_to_evaluate = var_to_compute ? 0 : 1;
   slong vars[1], exps[1];
 
   flint_rand_t rand_state;
@@ -136,7 +136,7 @@ int fmpq_mpoly_resultant_interpolation_mode(
   fmpq_poly_init(temp_poly_2);
   fmpq_poly_init(resultant);
 
-  slong number_of_points = (fmpq_mpoly_degree_si(P, var_to_evoluate, ctx) * fmpq_mpoly_degree_si(Q, var_to_compute, ctx) + fmpq_mpoly_degree_si(Q, var_to_evoluate, ctx) * fmpq_mpoly_degree_si(P, var_to_compute, ctx)) + 1;
+  slong number_of_points = (fmpq_mpoly_degree_si(P, var_to_evaluate, ctx) * fmpq_mpoly_degree_si(Q, var_to_compute, ctx) + fmpq_mpoly_degree_si(Q, var_to_evaluate, ctx) * fmpq_mpoly_degree_si(P, var_to_compute, ctx)) + 1;
   // printf("Number of Points: %ld\n", number_of_points);
   fmpq_t value, temp;
   fmpq x[number_of_points], y[number_of_points];
@@ -147,12 +147,12 @@ int fmpq_mpoly_resultant_interpolation_mode(
   vars[0] = var_to_compute;
   exps[0] = fmpq_mpoly_degree_si(P, var_to_compute, ctx);
   fmpq_mpoly_get_coeff_vars_ui(temp_mpoly, P, vars, exps, 1, ctx);
-  fmpq_mpoly_get_fmpq_poly(lead_p, temp_mpoly, var_to_evoluate, ctx);
+  fmpq_mpoly_get_fmpq_poly(lead_p, temp_mpoly, var_to_evaluate, ctx);
 
   vars[0] = var_to_compute;
   exps[0] = fmpq_mpoly_degree_si(Q, var_to_compute, ctx);
   fmpq_mpoly_get_coeff_vars_ui(temp_mpoly, Q, vars, exps, 1, ctx);
-  fmpq_mpoly_get_fmpq_poly(lead_q, temp_mpoly, var_to_evoluate, ctx);
+  fmpq_mpoly_get_fmpq_poly(lead_q, temp_mpoly, var_to_evaluate, ctx);
 
   fmpq_set_si(value, 1, 1);
   for (slong i = 0; i < number_of_points; i++) {
@@ -209,7 +209,7 @@ int fmpq_mpoly_resultant_interpolation_mode(
   }
 
   for (slong i = 0; i < number_of_points; i++) {
-    if (!fmpq_mpoly_evaluate_one_fmpq(temp_mpoly, P, var_to_evoluate, x + i, ctx)) {
+    if (!fmpq_mpoly_evaluate_one_fmpq(temp_mpoly, P, var_to_evaluate, x + i, ctx)) {
       printf("ERROR in fmpq_mpoly_resultant_interpolation: fmpq_mpoly_evaluate_one_fmpq returned non-zero error code.");
       code = -1;
       goto cleanup;
@@ -220,7 +220,7 @@ int fmpq_mpoly_resultant_interpolation_mode(
       goto cleanup;
     }
 
-    if (!fmpq_mpoly_evaluate_one_fmpq(temp_mpoly, Q, var_to_evoluate, x + i, ctx)) {
+    if (!fmpq_mpoly_evaluate_one_fmpq(temp_mpoly, Q, var_to_evaluate, x + i, ctx)) {
       printf("ERROR in fmpq_mpoly_resultant_interpolation: fmpq_mpoly_evaluate_one_fmpq returned non-zero error code.");
       code = -1;
       goto cleanup;
@@ -235,7 +235,7 @@ int fmpq_mpoly_resultant_interpolation_mode(
   }
 
   fmpq_poly_interpolate_fast(resultant, x, y, number_of_points);
-  fmpq_mpoly_set_fmpq_poly(R, resultant, var_to_evoluate, ctx);
+  fmpq_mpoly_set_fmpq_poly(R, resultant, var_to_evaluate, ctx);
 
 cleanup:
   flint_rand_clear(rand_state);

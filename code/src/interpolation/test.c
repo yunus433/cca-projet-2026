@@ -54,7 +54,7 @@ int test_interpolation_flint(
       printf("Test %d is unsuccessful.\n", i+1);
       printf("Polynomial P:\n");
       fmpz_poly_print_pretty(P, "x");
-      printf("\nPolynomial Q (evoluated):\n");
+      printf("\nPolynomial Q (evaluated):\n");
       fmpz_poly_print_pretty(Q, "x");
       break;
     }
