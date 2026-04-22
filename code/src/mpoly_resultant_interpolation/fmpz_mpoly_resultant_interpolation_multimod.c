@@ -296,7 +296,7 @@ fmpz_mpoly_resultant_interpolation_multimod(
     const fmpz_mpoly_ctx_struct *ctx)
 {
     int success = 0;
-    slong attempts, good_primes, stable;
+    slong good_primes, stable;
     slong degA_expected, degB_expected;
     ulong p;
     fmpz_t M;
@@ -330,18 +330,16 @@ fmpz_mpoly_resultant_interpolation_multimod(
 
     /* Start from primes just above 2^30 (about 31-bit primes). */
     p = UWORD(1) << 30;
-    attempts = 0;
     good_primes = 0;
     stable = 0;
 
-    while (attempts < 2500 && good_primes < 800)
+    while (1)
     {
         int ok;
         nmod_mpoly_ctx_t pctx;
         nmod_mpoly_t Rp;
 
         p = n_nextprime(p, 1);
-        attempts++;
 
         nmod_mpoly_ctx_init(pctx, ctx->minfo->nvars, ctx->minfo->ord, p);
         nmod_mpoly_init(Rp, pctx);
@@ -447,7 +445,7 @@ fmpz_mpoly_resultant_interpolation_multimod_mode(
     interpolation_mode_t mode)
 {
     int success = 0;
-    slong attempts, good_primes, stable;
+    slong good_primes, stable;
     slong degA_expected, degB_expected;
     ulong p;
     fmpz_t M;
@@ -481,18 +479,16 @@ fmpz_mpoly_resultant_interpolation_multimod_mode(
 
     /* Start from primes just above 2^30 (about 31-bit primes). */
     p = UWORD(1) << 30;
-    attempts = 0;
     good_primes = 0;
     stable = 0;
 
-    while (attempts < 2500 && good_primes < 800)
+    while (1)
     {
         int ok;
         nmod_mpoly_ctx_t pctx;
         nmod_mpoly_t Rp;
 
         p = n_nextprime(p, 1);
-        attempts++;
 
         nmod_mpoly_ctx_init(pctx, ctx->minfo->nvars, ctx->minfo->ord, p);
         nmod_mpoly_init(Rp, pctx);
