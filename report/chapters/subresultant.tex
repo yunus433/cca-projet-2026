@@ -43,14 +43,7 @@ We now state the structure theorem for subresultants, which gives the relation b
     \end{itemize}
 \end{theorem}
 
-The proof of the structure theorem relies on a detailed analysis of the determinants of the matrices $M_{i,j}(f,g)$. It is also possible to compute explicitly the multiplicative constants in the proportionality relations. For instance, let $t_{j-1}=\lc(\sResP_{j-1}(f,g))$ denote the leading coefficient of $\sResP_{j}(f,g)$, one can show that
-\begin{equation*}
-    \sRes_j(f,g)t_{i-1}\sResP_{k-1}(f,g) = -\Rem(\sRes_k(f,g)t_{j-1}\sResP_j(f,g),\sResP_{j-1}(f,g)).
-\end{equation*}
-
-We refer the reader to \cite[Chapter 8]{basu2006algorithms} for a detailed proof of the structure theorem for subresultants, as well as the explicit formulas for the multiplicative constants.
-
-\paragraph{The subresultant algorithm.} The structure theorem for subresultants gives us a way to compute the sequence of subresultant polynomials, and thus the GCD and the resultant of two polynomials, without performing any division in the fraction field of $R$. The algorithm is given as follows.
+We refer the reader to \cite[Chapter 8]{basu2006algorithms} for a detailed proof of the structure theorem for subresultants, as well as the explicit formulas for the scaling factors. This theorem enables computation of the sequence of subresultant polynomials, and hence the GCD and resultant of two polynomials, without performing any division in the fraction field of $R$. The algorithm is given as follows.
 
 \begin{algorithm}
     \caption{The subresultant algorithm}
