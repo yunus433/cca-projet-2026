@@ -1,36 +1,84 @@
-\section{Subresultants}
+\subsection{Subresultant polynomials}
 
-As before, for the entire section, let $f, g \in \mathbb{Z}[x]$ with $\deg f = n$ and $\deg g = m$. Moreover, we assume $m \leq n$ without loss of generality.
+% As before, for the entire section, let $f, g \in \mathbb{Z}[x]$ with $\deg f = n$ and $\deg g = m$. Moreover, we assume $m \leq n$ without loss of generality.
 
-Resultant of polynomials is important, as it gives us an efficient manner to understand if two polynomials have a common root or not. However, it does not give any other information but about gcd. Thus, we can extend the resultant definition into subresultants, which include all results of the Extended Euclidean Algorithm \cite{subresultant}.
+% Resultant of polynomials is important, as it gives us an efficient manner to understand if two polynomials have a common root or not. However, it does not give any other information but about gcd. Thus, we can extend the resultant definition into subresultants, which include all results of the Extended Euclidean Algorithm \cite{subresultant}.
 
-Specifically, the resultant is directly related to the GCD, as shown in the previous section, that it dissapears whenever the GCD is constant. In the case of subresultant, the subresultant polynomial (i.e. the polynomial that is constructed through subresultant determinants, defined below) expresses the remainders (with a scaling factor) in the sequence of the Euclidean GCD algorithm. The advantage over the regular algorithm is that in the case of subresultant polynomials, as they are defined through the determinant of a matrix in $\mathbb{Z}$, they are in $\mathbb{Z}[x]$, which prevents coefficients from growing too big. This is why it is important to be able to compute subresultant polynomials efficiently.
+% Specifically, the resultant is directly related to the GCD, as shown in the previous section, that it dissapears whenever the GCD is constant. In the case of subresultant, the subresultant polynomial (i.e. the polynomial that is constructed through subresultant determinants, defined below) expresses the remainders (with a scaling factor) in the sequence of the Euclidean GCD algorithm. The advantage over the regular algorithm is that in the case of subresultant polynomials, as they are defined through the determinant of a matrix in $\mathbb{Z}$, they are in $\mathbb{Z}[x]$, which prevents coefficients from growing too big. This is why it is important to be able to compute subresultant polynomials efficiently.
 
-\begin{definition}
-  We define Sylvester matrices for subresultants similar to the resultant's matrix. Given $0 \leq k \leq m$,
-  $$
-  S_k(f,g)=
-  \begin{pmatrix}
-  f_n         &        &        &        & g_m         &        &        &        &        &        \\
-  f_{n-1}     & f_n    &        &        & g_{m-1}     & g_m    &        &        &        &        \\
-  \vdots      &        & \ddots &        & \vdots      &        & \ddots &        &        &        \\
-  f_{n-m+k+1} & \cdots & \cdots & f_n    & g_{k+1}     & \cdots & \cdots & g_m    &        &        \\
-  \vdots      &        &        & \vdots & \vdots      &        &        &        & \ddots &        \\
-  f_{k + 1}   & \cdots & \cdots & f_m    & g_{m-n+k+1} & \cdots & \cdots & \cdots & \cdots & g_m    \\
-  \vdots      &        &        & \vdots & \vdots      &        &        &        &        & \vdots \\
-  f_{2k-m+1}  & \cdots & \cdots & f_k    & g_{2k-n+1}  & \cdots & \cdots & \cdots & \cdots & g_k
-  \end{pmatrix}
-  $$
-  , which can be understood as removing the last $k$-columns of each submatrix of $f$ and $g$, and then removing the last $2k$ rows of the matrix.
+Likewise, we can define subresultant polynomials with the determinants of certain submatrices of the Sylvester matrix. Suppose that $p>q$.
+
+\begin{definition}[Sylvester-Habicht matrix]
+    Given $0\leq i\leq q$, the $i$-th Sylvester-Habicht matrix $S_i(f,g)$ is the $(p+q-i)\times(p+q-2i)$ submatrix of $S(f,g)$ obtained as follows: take the first $p-i$ columns of $S(f,g)$ without their last $i$ zero rows, then append the next $q-i$ columns starting from the $(p+1)$-th row of $S(f,g)$ without their last $i$ zero rows.
 \end{definition}
 
-\begin{definition}
-  Then, the  $k$-th subresultant of $f$ and $g$ is defined as \cite{subresultant}:
-  $$
-  \alpha_k = \det S_k(f, g)
-  $$
+For $0\leq j\leq i$, we denote by $M_{i,j}(f,g)$ the $(p+q-2i)\times(p+q-2i)$ submatrix of $S_i(f,g)$ obtained by taking the first $p+q-2i-1$ rows of $S_i(f,g)$ and the $(p+q-i-j)$-th row of $S_i(f,g)$. Then, $M_{i,i}(f,g)$ is the matrix of the linear map
+\begin{align*}
+    \phi_i : R[x]_{<q-i} \oplus R[x]_{<p-i} & \to R[x]_{<p+q-2i} \\
+    (u,v)                                   & \mapsto uf + vg
+\end{align*}
+in the canonical monomial basis. The determinant of $M_{i,j}(f,g)$ is often referred to as the $j$-th subresultant $\sRes_j(f,g)$ of $f$ and $g$. We now give the definition of the $i$-th subresultant polynomial of $f$ and $g$.
+
+\begin{definition}[Subresultant polynomial]
+    Given $0\leq i\leq q$, the $i$-th subresultant polynomial of $f$ and $g$, denoted by $\sResP_i(f,g)$, is defined as
+    \begin{equation*}
+        \sResP_i(f,g) = \sum_{j=0}^i \det(M_{i,j}(f,g)) x^j.
+    \end{equation*}
+
+    We say that $\sResP_i(f,g)$ is non-defective if $\deg(\sResP_i(f,g))=i$ (i.e., $\sRes_i(f,g)\neq 0$), and defective otherwise.
 \end{definition}
 
+We now state the structure theorem for subresultants, which gives the relation between subresultant polynomials. An immediate consequence is that non-defective subresultant polynomials are essentially the remainders in the Euclidean algorithm, up to a scaling factor.
 
+\begin{theorem}[{\cite[Thm. 8.56]{basu2006algorithms}}]
+    Let $0\leq i\leq q$. Suppose that $\sResP_{i-1}(f,g)$ is non-zero and of degree $0\leq j\leq i-1$. Then,
+    \begin{itemize}
+        \item If $\sResP_{j-1}(f,g)$ is zero, then $\sResP_{i-1}(f,g)\propto\gcd(f,g)$.
 
-Finally, the subresultant matrix is the determinant of a matrix that equals the multiplication of the subresultant Sylvester matrix with the matrix encoding the basis $(1, x, \dots, x^k)$.
+              Moreover, $\sResP_{k}(f,g)=0$ for all $k\leq j-1$.
+
+        \item If $\sResP_{j-1}(f,g)$ is non-zero and of degree $0\leq k\leq j-1$, then $\sResP_{k-1}(f,g)$ is proportional to $\Rem(\sResP_{i-1}(f,g),\sResP_{j-1}(f,g))$.
+
+              Moreover, if $\sResP_{j-1}(f,g)$ is defective, then $\sResP_{k}(f,g)\propto\sResP_{j-1}(f,g)$, and for all $k+1\leq\ell\leq j-2$, $\sResP_{\ell}(f,g)=0$.
+    \end{itemize}
+\end{theorem}
+
+The proof of the structure theorem relies on a detailed analysis of the determinants of the matrices $M_{i,j}(f,g)$. It is also possible to compute explicitly the multiplicative constants in the proportionality relations. For instance, let $t_{j-1}=\lc(\sResP_{j-1}(f,g))$ denote the leading coefficient of $\sResP_{j}(f,g)$, one can show that
+\begin{equation*}
+    \sRes_j(f,g)t_{i-1}\sResP_{k-1}(f,g) = -\Rem(\sRes_k(f,g)t_{j-1}\sResP_j(f,g),\sResP_{j-1}(f,g)).
+\end{equation*}
+
+We refer the reader to \cite[Chapter 8]{basu2006algorithms} for a detailed proof of the structure theorem for subresultants, as well as the explicit formulas for the multiplicative constants.
+
+\paragraph{The subresultant algorithm.} The structure theorem for subresultants gives us a way to compute the sequence of subresultant polynomials, and thus the GCD and the resultant of two polynomials, without performing any division in the fraction field of $R$. The algorithm is given as follows.
+
+\begin{algorithm}
+    \caption{The subresultant algorithm}
+    \begin{algorithmic}
+        \Require $f,g \in R[x], p = \deg(f), q = \deg(g), p\geq q$
+        \Ensure $(\sResP_i(f,g))_{0\leq i\leq q}$
+        \State $\sResP_{p} \gets f$, $s_p \gets 1$, $t_p \gets 1$
+        \State $\sResP_{p-1} \gets g$, $t_{p-1} \gets b_q$
+        \State $\sResP_{q} \gets \varepsilon_{p-q} b_q^{p-q-1} g$, $s_q \gets \varepsilon_{p-q} b_q^{p-q}$
+        \State $i \gets p+1$, $j \gets p$
+        \While{$\sResP_{j-1}\neq 0$}
+        \State $k \gets \deg(\sResP_{j-1})$
+        \For{$\delta=1$ to $j-k-1$}
+        \State $t_{j-\delta-1} \gets (-1)^{\delta}(t_{j-1}t_{j-\delta})/s_j$
+        \EndFor
+        \State $s_{k} \gets t_{k}$
+        \State $\sResP_{k} \gets s_k \sResP_{j-1}/t_{j-1}$
+        \For{$\ell=k+1$ to $j-1$}
+        \State $\sResP_{\ell} \gets 0$
+        \EndFor
+        \State $\sResP_{k-1} \gets -\Rem(s_{k}t_{j-1}\sResP_{i-1},\sResP_{j-1})/(s_j t_{i-1})$
+        \State $t_{k-1} \gets \lc(\sResP_{k-1})$
+        \State $i \gets j$, $j \gets k$
+        \EndWhile
+        \For{$\ell=0$ to $j-2$}
+        \State $\sResP_{\ell} \gets 0$
+        \EndFor
+        \\
+        \Return $(\sResP_i)_{0\leq i\leq q}$
+    \end{algorithmic}
+\end{algorithm}
