@@ -46,7 +46,7 @@ We now state the structure theorem for subresultants, which gives the relation b
 We refer the reader to \cite[Chapter 8]{basu2006algorithms} for a detailed proof of the structure theorem for subresultants, as well as the explicit formulas for the scaling factors. This theorem enables computation of the sequence of subresultant polynomials, and hence the GCD and resultant of two polynomials, without performing any division in the fraction field of $R$. The algorithm is given as follows.
 
 \begin{algorithm}
-    \caption{The subresultant algorithm}
+    \caption{The subresultant algorithm}\label{alg:subres}
     \begin{algorithmic}
         \Require $f,g\in R[x]$, $p=\deg(f)$, $q=\deg(g)$, $p>q$
         \Ensure $(\sResP_i(f,g))_{0\leq i\leq q}$
@@ -59,14 +59,17 @@ We refer the reader to \cite[Chapter 8]{basu2006algorithms} for a detailed proof
         \State $i \gets p+1$, $j \gets p$
         \While{$\sResP_{j-1}\neq 0$}
         \State $k \gets \deg(\sResP_{j-1})$
+        \State // Lazard's optimization for computing $s_{k}=\sRes_{k}(f,g)$
         \For{$\delta=1$ to $j-k-1$}
         \State $t_{j-\delta-1} \gets (-1)^{\delta}(t_{j-1}t_{j-\delta})/s_j$
         \EndFor
         \State $s_{k} \gets t_{k}$
+        \State // Computation of defective subresultant polynomials (optional)
         \State $\sResP_{k} \gets s_k \sResP_{j-1}/t_{j-1}$
         \For{$\ell=k+1$ to $j-1$}
         \State $\sResP_{\ell} \gets 0$
         \EndFor
+        \State // Computation of the next non-defective subresultant polynomial
         \State $\sResP_{k-1} \gets -\Rem(s_{k}t_{j-1}\sResP_{i-1},\sResP_{j-1})/(s_j t_{i-1})$
         \State $t_{k-1} \gets \lc(\sResP_{k-1})$
         \State $i \gets j$, $j \gets k$
