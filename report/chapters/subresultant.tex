@@ -48,11 +48,15 @@ We refer the reader to \cite[Chapter 8]{basu2006algorithms} for a detailed proof
 \begin{algorithm}
     \caption{The subresultant algorithm}
     \begin{algorithmic}
-        \Require $f,g \in R[x], p = \deg(f), q = \deg(g), p\geq q$
+        \Require $f,g\in R[x]$, $p=\deg(f)$, $q=\deg(g)$, $p>q$
         \Ensure $(\sResP_i(f,g))_{0\leq i\leq q}$
-        \State $\sResP_{p} \gets f$, $s_p \gets 1$, $t_p \gets 1$
-        \State $\sResP_{p-1} \gets g$, $t_{p-1} \gets b_q$
-        \State $\sResP_{q} \gets \varepsilon_{p-q} b_q^{p-q-1} g$, $s_q \gets \varepsilon_{p-q} b_q^{p-q}$
+        \State $\sResP_{p} \gets f$
+        \State $s_p \gets 1$, $t_p \gets 1$
+        \State $\sResP_{p-1} \gets g$
+        \State $t_{p-1} \gets b_q$
+        \State $\varepsilon_{p-q} \gets (-1)^{(p-q)(p-q-1)/2}$
+        \State $\sResP_{q} \gets \varepsilon_{p-q} b_q^{p-q-1} g$
+        \State $s_q \gets \varepsilon_{p-q} b_q^{p-q}$
         \State $i \gets p+1$, $j \gets p$
         \While{$\sResP_{j-1}\neq 0$}
         \State $k \gets \deg(\sResP_{j-1})$
@@ -75,3 +79,5 @@ We refer the reader to \cite[Chapter 8]{basu2006algorithms} for a detailed proof
         \Return $(\sResP_i)_{0\leq i\leq q}$
     \end{algorithmic}
 \end{algorithm}
+
+We emphasize that for the subresultant polynomials to be well-defined in $R[x]$, the assumption that $p>q$ is crucial. In the case of $p=q$, the algorithm defines $\sResP_{q}(f,g)=b_q^{-1} g$, which may fail to lie in $R[x]$ if $b_q$ is not a unit. Nevertheless, the polynomials $\sResP_i(f,g)$ for $0\leq i\leq q-1$ remain well-defined in $R[x]$ and can be computed by the algorithm; we do not pursue the case of $p=q$ in this report for simplicity.
