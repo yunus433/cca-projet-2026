@@ -12,6 +12,8 @@
 \usepackage{float}
 \usepackage{amsthm}
 \usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{verbatim}
 \newcommand{\issue}[1]{\textcolor{red}{#1}}
 
 \geometry{margin=2cm}
@@ -25,6 +27,9 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem{definition}{Definition}
 \newtheorem{proposition}{Proposition}
+\newtheorem{example}{Example}
+\DeclareMathOperator{\sResP}{sResP}
+\DeclareMathOperator{\Res}{Res}
 
 \begin{document}
 
@@ -43,6 +48,7 @@
 \tableofcontents
 \newpage
 
+\input{chapters/intro.tex}
 \input{chapters/resultant.tex}
 \input{chapters/subresultant.tex}
 \input{chapters/multivariate.tex}
