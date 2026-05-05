@@ -5,7 +5,7 @@ The resultant of $f$ and $g$ with respect to $x_1$, denoted by $\Res_{x_1}(f,g)$
 
 While subresultant algorithms can be used to compute $\Res_{x_1}(f,g)$ (resp. the subresultants), their efficiency may be compromised by the rapid growth of the coefficients in $R=\mathbb{Z}[x_2,\dots,x_n]$ during the computation. To mitigate this, one may instead evaluate the input polynomials at suitable values of $x_2,\dots,x_n$, compute the resultant of the resulting univariate polynomials in $x_1$, and then interpolate to recover $\Res_{x_1}(f,g)$. This evaluation-interpolation approach replaces expensive symbolic computations in $R$ with more efficient numerical computations in $\mathbb{Z}$, often leading to significant performance improvements.
 
-Still, it is crucial to ensure that the evaluation points are chosen such that the interpolation process is valid and yields the correct resultant. In the following, we discuss the conditions under which this approach is valid and how to choose suitable evaluation points.
+Still, it is crucial to ensure that the evaluation points are chosen such that the interpolation process is valid and yields the correct result. In the following, we discuss the conditions under which this approach is valid and how to choose suitable evaluation points.
 
 \subsection{Specialization property of the resultant}
 
@@ -25,7 +25,7 @@ What happens in the above example is that the degree of $f$ and $g$ changes afte
   $h(\eta)\neq 0$ implies that $\lc_{x_1}(f)(\eta)\neq 0$ and $\lc_{x_1}(g)(\eta)\neq 0$. Therefore, $\deg_{x_1}(f(\eta))=\deg_{x_1}(f)$ and $\deg_{x_1}(g(\eta))=\deg_{x_1}(g)$, so that $S(f(\eta),g(\eta))=S(f,g)(\eta)$, hence the result.
 \end{proof}
 
-The property that $h(\eta)\neq 0$ is a generic condition, as it holds for all $\eta\in\mathbb{C}^{n-1}$ except those in the proper Zariski-closed set defined by $h=0$. Therefore, we can choose as many evaluation points as we want in $\mathbb{Z}^{n-1}$ such that the above equality holds, and then interpolate to recover $\Res_{x_1}(f,g)$. A natural question is to ask how many evaluation points we need to recover $\Res_{x_1}(f,g)$ by interpolation. This can be answered by the following result.
+The property that $h(\eta)\neq 0$ is a generic condition, as it holds for all $\eta\in\mathbb{C}^{n-1}$ except those in the proper Zariski-closed set defined by $h=0$. Therefore, we can choose as many evaluation points as we want in $\mathbb{Z}^{n-1}$ such that $h$ does not vanish at these points, and then interpolate to recover $\Res_{x_1}(f,g)$. A natural question is to ask how many evaluation points we need to recover $\Res_{x_1}(f,g)$ by interpolation. This can be answered by the following result.
 
 \begin{proposition}
   Let $f,g\in\mathbb{Z}[x_1,\dots,x_n]$. Denote by $\deg_{x_2,\dots,x_n}(f)$ (resp. $\deg_{x_2,\dots,x_n}(g)$) the total degree of $f$ (resp. $g$) with respect to $x_2,\dots,x_n$. Then, we have
