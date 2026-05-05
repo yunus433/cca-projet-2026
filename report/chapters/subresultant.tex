@@ -53,10 +53,9 @@ We refer the reader to \cite[Chapter 8]{basu2006algorithms} for a detailed proof
         \State $\sResP_{p} \gets f$
         \State $s_p \gets 1$, $t_p \gets 1$
         \State $\sResP_{p-1} \gets g$
-        \State $t_{p-1} \gets b_q$
-        \State $\varepsilon_{p-q} \gets (-1)^{(p-q)(p-q-1)/2}$
-        \State $\sResP_{q} \gets \varepsilon_{p-q} b_q^{p-q-1} g$
-        \State $s_q \gets \varepsilon_{p-q} b_q^{p-q}$
+        \State $t_{p-1} \gets \lc(\sResP_{p-1})$
+        \State $\sResP_{q} \gets (-1)^{(p-q)(p-q-1)/2} \lc(\sResP_{p-1})^{p-q-1}\sResP_{p-1}$
+        \State $s_q \gets \lc(\sResP_{q})$
         \State $i \gets p+1$, $j \gets p$
         \While{$\sResP_{j-1}\neq 0$}
         \State $k \gets \deg(\sResP_{j-1})$
