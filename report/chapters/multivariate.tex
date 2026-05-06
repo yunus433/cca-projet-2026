@@ -56,7 +56,9 @@ To compute $\sResP_i(f,g)$, we can then compute $\sResP_i(f(\eta),g(\eta))$ for 
 
 \paragraph{Computing non-defective subresultant polynomials.}
 
-Algorithm \ref{alg:subres} can be easily adapted to compute only non-defective subresultant polynomials, since the computation of defective subresultant polynomials is optional. A natural question is to ask whether we can compute non-defective subresultant polynomials more efficiently than computing all subresultant polynomials. The answer is positive, but one needs to take extra attention to the choice of evaluation points.
+Algorithm \ref{alg:subres} can be readily modified to compute only the non-defective subresultant polynomials by omitting Lines 15-19. One immediate application of this variant is the computation of the Sturm–Habicht sequence of $f$, i.e., the sequence of non-defective subresultant polynomials of $f$ and its derivative $\frac{\partial f}{\partial x_1}$, up to sign changes.
+
+A natural question is to ask whether we can compute non-defective subresultant polynomials more efficiently than computing all subresultant polynomials. The answer is positive, but one needs to take extra attention to the choice of evaluation points.
 
 \begin{example}
     Let $f=x_1^4+x_1^2x_2+1$ and $g=x_1^3+x_1+x_2$. Then, the non-defective subresultant polynomials of $f$ and $g$ with respect to $x_1$ are
