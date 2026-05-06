@@ -1,0 +1,75 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{textcomp}
+\usepackage{lmodern}
+\usepackage{float}
+\usepackage{amsthm}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{verbatim}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\newcommand{\issue}[1]{\textcolor{red}{#1}}
+
+\geometry{margin=2cm}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textbf{Fast computation of multivariate subresultants}}
+\fancyhead[R]{Yunus GÜRLEK, Frédéric XIA}
+\fancyfoot[C]{\thepage}
+\setcounter{page}{0}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\DeclareMathOperator{\Rem}{Rem}
+\DeclareMathOperator{\sResP}{sResP}
+\DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\sRes}{sRes}
+\DeclareMathOperator{\lc}{lc}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{5cm}
+    {\Huge \textbf{Fast computation of multivariate subresultants} \par}
+    \vspace{0.5cm}
+    {\Large A report for the CCA Project \#13 \par}
+    \vspace{3cm}
+    {\Large Yunus GÜRLEK \par}
+    \vspace{0.5cm}
+    {\Large Frédéric XIA \par}
+    \vspace{1.5cm}
+    {\large Supervisor:\par}
+    \vspace{0.5cm}
+    {\large Weijia WANG \par}
+    \vfill
+    {\large \today \par}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\input{chapters/intro.tex}
+\input{chapters/resultant.tex}
+\input{chapters/subresultant.tex}
+\input{chapters/multivariate.tex}
+\input{chapters/benchmark.tex}
+
+\newpage
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
+
