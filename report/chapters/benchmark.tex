@@ -1,0 +1,63 @@
+\section{Benchmarks}
+
+Here, we present some benchmarkings for the comparison of our algorithm against the FLINT library for bivariate polynomial resultant computation.
+
+All benchmarks presented below are performed on an Apple MacBook with 8-core Apple M2 SoC, 16 GB unified memory.
+
+Note that for our proposed implementation, we present 6 different running times, based on the selection method of points that are used to interpolate the polynomial:
+
+- Random Points: Fully random points in the bitsize of polynomial coefficients.
+- Random Positive Points: Fully random and positive points in the bitsize of polynomial coefficients.
+- Small Random Points: Small random points in the bitsize of the degree of the polynomial.
+- Small Random Positive Points: Small random and positive points in the bitsize of the degree of the polynomial.
+- Ordered Points: Ordered points in the ascending order of bitsize.
+- Ordered Positive Points: Ordered and positive points in the ascending order of bitsize.
+
+\subsection{FMPQ Benchmarks}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{./images/fmpq_bitsize_2.png}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{./images/fmpq_bitsize_3.png}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{./images/fmpq_bitsize_4.png}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{./images/fmpq_bitsize_5.png}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{./images/fmpq_bitsize_6.png}
+\end{figure}
+
+\subsection{FMPZ Benchmarks}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{./images/fmpz_bitsize_2.png}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{./images/fmpz_bitsize_3.png}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{./images/fmpz_bitsize_4.png}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{./images/fmpz_bitsize_5.png}
+\end{figure}
