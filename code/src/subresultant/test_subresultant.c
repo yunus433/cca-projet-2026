@@ -33,15 +33,15 @@ int fmpz_poly_subresultant_test(
   int count
 ) {
   flint_rand_t rand_state;
-  fmpz_t R[degree+1], S[degree+1];
+  fmpz R[degree+1], S[degree+1];
   fmpz_poly_t A, B;
 
   flint_rand_init(rand_state);
   flint_rand_set_seed(rand_state, time(NULL), time(NULL));
 
   for (int i = 0; i <= degree; i++) {
-    fmpz_init(R[i]);
-    fmpz_init(S[i]);
+    fmpz_init(R + i);
+    fmpz_init(S + i);
   }
 
   fmpz_poly_init(A);
@@ -83,10 +83,10 @@ int fmpz_poly_subresultant_test(
 
     // FIXME: use another variable instead of i here to avoid confusion with the outer loop
     for (int j = 0; j < degree; j++) {
-      fmpz_abs(R[j], R[j]);
-      fmpz_abs(S[j], S[j]);
+      fmpz_abs(R + j, R + j);
+      fmpz_abs(S + j, S + j);
 
-      if (!fmpz_equal(R[j], S[j])) {
+      if (!fmpz_equal(R + j, S + j)) {
         is_all_successful = 0;
 
         break;
@@ -101,9 +101,9 @@ int fmpz_poly_subresultant_test(
       fmpz_poly_print_pretty(B, "x");
       for (int j = 0; j < degree; j++) {
         printf("\nR[%d] (naive):\n", j);
-        fmpz_print(R[j]);
+        fmpz_print(R + j);
          printf("\nS[%d] (pseudo remainder):\n", j);
-        fmpz_print(S[j]);
+        fmpz_print(S + j);
         printf("\n");
       }
     }
@@ -111,16 +111,16 @@ int fmpz_poly_subresultant_test(
     if (is_all_successful)
       printf("Test %d is successful.\n", i+1);
       for (int k = 0; k <= degree; k++) {
-        fmpz_zero(R[k]);
-        fmpz_zero(S[k]);
+        fmpz_zero(R + k);
+        fmpz_zero(S + k);
       }
   }
 
   flint_rand_clear(rand_state);
 
   for (int i = 0; i <= degree; i++) {
-    fmpz_clear(R[i]);
-    fmpz_clear(S[i]);
+    fmpz_clear(R + i);
+    fmpz_clear(S + i);
   }
 
   fmpz_poly_clear(A);

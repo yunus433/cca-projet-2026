@@ -13,7 +13,27 @@
 Mr. Wang
 - Ecrire comment faire l'interpolation, mieux expliquer resultant / sous-resultant
 
+À Faire:
+- Rapport: Ajouter l'algo, les explications, etc..
+        Details de l'implementation
+        Multimodulaire
+        Sous resultant aussi, mais pais sous resultant poly
+- Benchmarks: 
+        length 32, inc 2
+        exp bitsize 6-7 
+        coeff: 50
+        count: 5
+- Expliquer les résultats
+- FMPZ subresultant => implementation subresultant
+- Essayer d'expliquer la condition d'élimination de sousresultants aussi
 
+Presentation:
+- un peu example (pseudo remainder aussi si on veut)
+- pas d'autres algo, seulement methode avec interpolation
+- les benchmarks
+
+13 mercredi => slides etc..
+21 jeudi => repetition
 
 SLIDES: Après la vacance
 

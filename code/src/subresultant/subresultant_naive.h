@@ -9,7 +9,7 @@
 #include "../sylvester_matrix/sylvester_matrix.h"
 
 int fmpz_poly_subresultant_naive(
-  fmpz_t * subresultants,
+  fmpz * subresultants,
   const fmpz_poly_t P,
   const fmpz_poly_t Q
 );
