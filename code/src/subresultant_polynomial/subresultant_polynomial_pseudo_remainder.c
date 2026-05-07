@@ -1,5 +1,7 @@
 // gcc-15 -O2 subresultant_polynomial_pseudo_remainder.c $(pkg-config --cflags --libs flint) -oa
 
+// This algorithm computes not only the greatest common divisor (the last non zero ri), but also all the subresultant polynomials: The remainder ri is the (deg(ri−1) − 1)-th subresultant polynomial. If deg(ri) < deg(ri−1) − 1, the deg(ri)-th subresultant polynomial is lc(ri)deg(ri−1)−deg(ri)−1ri. All the other subresultant polynomials are zero.
+
 #include "subresultant_polynomial_pseudo_remainder.h"
 
 int fmpz_poly_subresultant_polynomial_pseudo_remainder(
@@ -29,7 +31,6 @@ int fmpz_poly_subresultant_polynomial_pseudo_remainder(
   fmpz_init(tmp);
 
   while (fmpz_poly_degree(r1) > 0) {
-    
     if (i == 1) {
       slong dValue = fmpz_poly_degree(r0) - fmpz_poly_degree(r1);
       fmpz_set_si(d, dValue);
@@ -69,6 +70,8 @@ int fmpz_poly_subresultant_polynomial_pseudo_remainder(
     i++;
   }
 
+  printf("%d\n", i);
+
   fmpz_poly_set(subresultant_polynomials[i - 2], r1);
 
   fmpz_poly_clear(r0);
@@ -84,51 +87,44 @@ int fmpz_poly_subresultant_polynomial_pseudo_remainder(
   return 0;
 }
 
-// int main () {
-//   fmpz_poly_t f, g;
-//   fmpz_poly_init(f);
-//   fmpz_poly_init(g);
+int main () {
+  fmpz_poly_t f, g;
+  fmpz_poly_init(f);
+  fmpz_poly_init(g);
 
-//   // Example: f = 824x^5 - 65x^4 -814x^3 - 741x^2 - 979x- 764, g = 216x^4 + 663x^3 + 880x^2 + 916x + 617
-//   // fmpz_poly_set_coeff_si(g, 0, -764);
-//   // fmpz_poly_set_coeff_si(g, 1, -979);
-//   // fmpz_poly_set_coeff_si(g, 2, -741);
-//   // fmpz_poly_set_coeff_si(g, 3, -814);
-//   // fmpz_poly_set_coeff_si(g, 4, -65);
-//   // fmpz_poly_set_coeff_si(g, 5, 824);
-//   fmpz_poly_set_coeff_si(g, 0, -5);
-//   fmpz_poly_set_coeff_si(g, 1, 2);
-//   fmpz_poly_set_coeff_si(g, 2, 8);
-//   fmpz_poly_set_coeff_si(g, 3, -3);
-//   fmpz_poly_set_coeff_si(g, 4, -3);
-//   fmpz_poly_set_coeff_si(g, 6, 1);
-//   fmpz_poly_set_coeff_si(g, 8, 1);
+  // Example: f = 824x^5 - 65x^4 -814x^3 - 741x^2 - 979x- 764, g = 216x^4 + 663x^3 + 880x^2 + 916x + 617
+  // fmpz_poly_set_coeff_si(g, 0, -764);
+  // fmpz_poly_set_coeff_si(g, 1, -979);
+  // fmpz_poly_set_coeff_si(g, 2, -741);
+  // fmpz_poly_set_coeff_si(g, 3, -814);
+  // fmpz_poly_set_coeff_si(g, 4, -65);
+  // fmpz_poly_set_coeff_si(g, 5, 824);
+  fmpz_poly_set_coeff_si(g, 0, 2);
+  fmpz_poly_set_coeff_si(g, 17, 1);
 
-//   // fmpz_poly_set_coeff_si(f, 0, 617);
-//   // fmpz_poly_set_coeff_si(f, 1, 916);
-//   // fmpz_poly_set_coeff_si(f, 2, 880);
-//   // fmpz_poly_set_coeff_si(f, 3, 663);
-//   // fmpz_poly_set_coeff_si(f, 4, 216);
-//   fmpz_poly_set_coeff_si(f, 0, 21);
-//   fmpz_poly_set_coeff_si(f, 1, -9);
-//   fmpz_poly_set_coeff_si(f, 2, -4);
-//   fmpz_poly_set_coeff_si(f, 4, 5);
-//   fmpz_poly_set_coeff_si(f, 6, 3);
+  // fmpz_poly_set_coeff_si(f, 0, 617);
+  // fmpz_poly_set_coeff_si(f, 1, 916);
+  // fmpz_poly_set_coeff_si(f, 2, 880);
+  // fmpz_poly_set_coeff_si(f, 3, 663);
+  // fmpz_poly_set_coeff_si(f, 4, 216);
+  fmpz_poly_set_coeff_si(f, 2, 4);
+  fmpz_poly_set_coeff_si(f, 17, -2);
+  fmpz_poly_set_coeff_si(f, 20, 1);
   
-//   fmpz_poly_t subresultant_polys[7];
+  fmpz_poly_t subresultant_polys[21];
 
-//   for (int i = 0; i < 7; i++)
-//     fmpz_poly_init(subresultant_polys[i]);
+  for (int i = 0; i < 21; i++)
+    fmpz_poly_init(subresultant_polys[i]);
 
-//   fmpz_subresultant_polynomial_pseudo_remainder(subresultant_polys,  g, f);
-//   for (int i = 0; i < 7; i++) {
-//     fmpz_poly_print_pretty(subresultant_polys[i], "x");
-//     printf("\n");
-//     fmpz_poly_clear(subresultant_polys[i]);
-//   }
+  fmpz_poly_subresultant_polynomial_pseudo_remainder(subresultant_polys,  g, f);
+  for (int i = 0; i < 21; i++) {
+    fmpz_poly_print_pretty(subresultant_polys[i], "x");
+    printf("\n");
+    fmpz_poly_clear(subresultant_polys[i]);
+  }
 
-//   fmpz_poly_clear(f);
-//   fmpz_poly_clear(g);
+  fmpz_poly_clear(f);
+  fmpz_poly_clear(g);
 
-//   return 0;
-// }
+  return 0;
+}

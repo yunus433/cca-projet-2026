@@ -14,7 +14,7 @@
 // Third line: Subresultants of the above two polynomials, seperate with a comma and space.
 // The file ends with a new line.
 
-// How it works?w
+// How it works?
 // ./a.out {MODE} {OPTIONS}
 
 // All OPTIONS are optional, only MODE is required
@@ -95,14 +95,14 @@ int run_test_cases() {
 
   char line[MAX_LINE_LENGTH];
   fmpz_poly_t P, Q;
-  fmpz_t subresultants[MAX_SUBRESULTANT_COUNT];
+  fmpz subresultants[MAX_SUBRESULTANT_COUNT];
   fmpz checks[MAX_SUBRESULTANT_COUNT]; // Type is different for fmpz_poly_set_str, do NOT change
 
   fmpz_poly_init(P);
   fmpz_poly_init(Q);
 
   for (int i = 0; i < MAX_SUBRESULTANT_COUNT; i++) {
-    fmpz_init(subresultants[i]);
+    fmpz_init(subresultants + i);
     fmpz_init(checks + i);
   }
 
@@ -132,30 +132,30 @@ int run_test_cases() {
     }
 
     char *subresultant = strtok(line, ",\n");
-    int subresultant_polynomial_count = 0;
+    int subresultant_count = 0;
     while (subresultant != NULL) {
-      if (fmpz_set_str(checks + subresultant_polynomial_count, subresultant, NUMBER_BASE)) {
+      if (fmpz_set_str(checks + subresultant_count, subresultant, NUMBER_BASE)) {
         printf("ERROR: Invalid input file format.\n");
         goto safe_exit;
       }
 
       subresultant = strtok(NULL, ",\n");
-      subresultant_polynomial_count++;
+      subresultant_count++;
     }
 
     test_count++;
 
     for (int i = 0; i < MAX_SUBRESULTANT_COUNT; i++)
-      fmpz_zero(subresultants[i]);
+      fmpz_zero(subresultants + i);
 
     if (fmpz_poly_subresultant_naive(subresultants, P, Q)) {
       printf("ERROR: subresultant_naive function call returned non-zero error code on test case %d.\n", test_count);
     } else {
       int is_all_successful = 1;
 
-      for (int i = 0; i < subresultant_polynomial_count && is_all_successful; i++)
-        if (!fmpz_equal(subresultants[i], checks + i)) {
-          fmpz_print(subresultants[i]);
+      for (int i = 0; i < subresultant_count && is_all_successful; i++)
+        if (!fmpz_equal(subresultants + i, checks + i)) {
+          fmpz_print(subresultants + i);
           printf("\n");
           fmpz_print(checks + i);
           printf("\n");
@@ -172,16 +172,16 @@ int run_test_cases() {
     }
 
     for (int i = 0; i < MAX_SUBRESULTANT_COUNT; i++)
-      fmpz_zero(subresultants[i]);
+      fmpz_zero(subresultants + i);
 
     if (fmpz_poly_subresultant_pseudo_remainder(subresultants, P, Q)) {
       printf("ERROR: subresultant_pseudo_remainder function call returned non-zero error code on test case %d.\n", test_count);
     } else {
       int is_all_successful = 1;
 
-      for (int i = 0; i < subresultant_polynomial_count && is_all_successful; i++)
-        if (!fmpz_equal(subresultants[i], checks + i)) {
-          fmpz_print(subresultants[i]);
+      for (int i = 0; i < subresultant_count && is_all_successful; i++)
+        if (!fmpz_equal(subresultants + i, checks + i)) {
+          fmpz_print(subresultants + i);
           printf("\n");
           fmpz_print(checks + i);
           printf("\n");
@@ -208,7 +208,7 @@ safe_exit:
   fmpz_poly_clear(Q);
   
   for (int i = 0; i < MAX_SUBRESULTANT_COUNT; i++) {
-    fmpz_clear(subresultants[i]);
+    fmpz_clear(subresultants + i);
     fmpz_clear(checks + i);
   }
 
@@ -229,8 +229,8 @@ int main(int argc, char *argv[]) {
     int degree = DEFAULT_DEGREE;
     int count = DEFAULT_COUNT;
 
-    if (argc > 2) degree = atoi(argv[1]);
-    if (argc > 3) count = atoi(argv[2]);
+    if (argc > 2) degree = atoi(argv[2]);
+    if (argc > 3) count = atoi(argv[3]);
 
     return generate_random_polynomials(degree, count);
   } else if  (!strcmp("RUN", mode)) {

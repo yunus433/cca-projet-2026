@@ -31,7 +31,7 @@ static void _clear_all(
 }
 
 int fmpz_poly_subresultant_pseudo_remainder(
-    fmpz_t *subresultants,
+    fmpz *subresultants,
     const fmpz_poly_t P,
     const fmpz_poly_t Q
 ) {
@@ -73,7 +73,7 @@ int fmpz_poly_subresultant_pseudo_remainder(
     min_deg = fmpz_poly_degree(ri); // TODO: Update ça comme nécessaire!!!
 
     for (slong k = 0; k <= max_deg; k++) {
-    fmpz_zero(subresultants[k]);
+    fmpz_zero(subresultants + k);
     }
 
     {
@@ -83,7 +83,7 @@ int fmpz_poly_subresultant_pseudo_remainder(
         if (q >= 0 && q <= min_deg) {
             ulong gap = (ulong)(p - q);
             fmpz_pow_ui(tmp1, fmpz_poly_lead(ri), gap);
-            fmpz_set(subresultants[q], tmp1);
+            fmpz_set(subresultants + q, tmp1);
         }
     }
     
@@ -178,12 +178,12 @@ int fmpz_poly_subresultant_pseudo_remainder(
         }
 
         if (deg_ip1 >= 0 && deg_ip1 <= min_deg) {
-            fmpz_set(subresultants[deg_ip1], fmpz_poly_lead(rip1));
+            fmpz_set(subresultants + deg_ip1, fmpz_poly_lead(rip1));
         }
 
         for (slong j = deg_ip1 + 1; j < deg_i; j++) {
             if (j >= 0 && j <= min_deg) {
-                fmpz_zero(subresultants[j]);
+                fmpz_zero(subresultants + j);
             }
         }
         fmpz_set(gammaim1, gammai);

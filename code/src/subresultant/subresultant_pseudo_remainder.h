@@ -9,7 +9,7 @@
 #include <flint/fmpz_poly.h>
 
 int fmpz_poly_subresultant_pseudo_remainder(
-    fmpz_t *subresultants,
+    fmpz *subresultants,
     const fmpz_poly_t P,
     const fmpz_poly_t Q
 );

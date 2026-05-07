@@ -261,8 +261,8 @@ int main(int argc, char *argv[]) {
     int degree = DEFAULT_DEGREE;
     int count = DEFAULT_COUNT;
 
-    if (argc > 2) degree = atoi(argv[1]);
-    if (argc > 3) count = atoi(argv[2]);
+    if (argc > 2) degree = atoi(argv[2]);
+    if (argc > 3) count = atoi(argv[3]);
 
     return generate_random_polynomials(degree, count);
   } else if  (!strcmp("RUN", mode)) {

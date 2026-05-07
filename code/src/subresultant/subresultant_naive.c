@@ -1,7 +1,7 @@
 #include "subresultant_naive.h"
 
 int fmpz_poly_subresultant_naive(
-  fmpz_t *subresultants,
+  fmpz *subresultants,
   const fmpz_poly_t P,
   const fmpz_poly_t Q
 ) {
@@ -27,7 +27,7 @@ int fmpz_poly_subresultant_naive(
   fmpz_mat_window_init(W, S, 0, 0, N, N);
 
   for (int k = 0; k <= K; k++) {
-    fmpz_mat_det(subresultants[k], W);
+    fmpz_mat_det(subresultants + k, W);
 
     if (m > 0) {
       for (int i = m - 1; i < m + n - 1; i++) {
