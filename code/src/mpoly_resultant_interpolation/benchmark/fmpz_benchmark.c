@@ -3,12 +3,12 @@
 #include "../mpoly_resultant_interpolation.h"
 
 int COEFF_BIT_SIZE = 50;
-int DEFAULT_EXPO_BIT_SIZE_START = 5;
-int DEFAULT_EXPO_BIT_SIZE_END = 5;
+int DEFAULT_EXPO_BIT_SIZE_START = 7;
+int DEFAULT_EXPO_BIT_SIZE_END = 7;
 int DEFAULT_LENGTH_START = 4;
-int DEFAULT_LENGTH_END = 25;
+int DEFAULT_LENGTH_END = 32;
 int DEFAULT_LENGTH_INC = 2;
-int DEFAULT_COUNT = 20;
+int DEFAULT_COUNT = 5;
 int OUTPUT_NAME_LENGTH = 100;
 
 void benchmark(
@@ -77,65 +77,65 @@ void benchmark(
         int bitsize = (degree > 0 ? log2(degree) : 0) + 4;
         printf("Degree: %ld, Bitsize: %d\n", degree, bitsize);
 
-        // start = clock();
-        // if (fmpz_mpoly_resultant_interpolation_mode(R_inter, P, Q, var_to_compute, ctx, COEFF_BIT_SIZE, BITSIZE_RANDOM)) {
-        //   printf("ERROR: fmpz_mpoly_resultant_interpolation function call returned non-zero error code.\n");
-        //   goto cleanup;
-        // }
-        // end = clock();
-        // printf("Bitsize random call completed.\n");
+        start = clock();
+        if (fmpz_mpoly_resultant_interpolation_mode(R_inter, P, Q, var_to_compute, ctx, COEFF_BIT_SIZE, BITSIZE_RANDOM)) {
+          printf("ERROR: fmpz_mpoly_resultant_interpolation function call returned non-zero error code.\n");
+          goto cleanup;
+        }
+        end = clock();
+        printf("Bitsize random call completed.\n");
 
-        // t_rand += (double)(end - start) / CLOCKS_PER_SEC;
+        t_rand += (double)(end - start) / CLOCKS_PER_SEC;
 
-        // if (!fmpz_mpoly_equal(R_lib, R_inter, ctx)) {
-        //   printf("ERROR: Two implementations are not equal, mode = BITSIZE_RANDOM\n");
-        //   goto cleanup;
-        // }
+        if (!fmpz_mpoly_equal(R_lib, R_inter, ctx)) {
+          printf("ERROR: Two implementations are not equal, mode = BITSIZE_RANDOM\n");
+          goto cleanup;
+        }
 
-        // start = clock();
-        // if (fmpz_mpoly_resultant_interpolation_mode(R_inter, P, Q, var_to_compute, ctx, COEFF_BIT_SIZE, BITSIZE_RANDOM_POS)) {
-        //   printf("ERROR: fmpz_mpoly_resultant_interpolation function call returned non-zero error code.\n");
-        //   goto cleanup;
-        // }
-        // end = clock();
-        // printf("Bitsize random positive small call completed.\n");
+        start = clock();
+        if (fmpz_mpoly_resultant_interpolation_mode(R_inter, P, Q, var_to_compute, ctx, COEFF_BIT_SIZE, BITSIZE_RANDOM_POS)) {
+          printf("ERROR: fmpz_mpoly_resultant_interpolation function call returned non-zero error code.\n");
+          goto cleanup;
+        }
+        end = clock();
+        printf("Bitsize random positive small call completed.\n");
 
-        // t_rand_pos += (double)(end - start) / CLOCKS_PER_SEC;
+        t_rand_pos += (double)(end - start) / CLOCKS_PER_SEC;
 
-        // if (!fmpz_mpoly_equal(R_lib, R_inter, ctx)) {
-        //   printf("ERROR: Two implementations are not equal, mode = BITSIZE_RANDOM_POS\n");
-        //   goto cleanup;
-        // }
+        if (!fmpz_mpoly_equal(R_lib, R_inter, ctx)) {
+          printf("ERROR: Two implementations are not equal, mode = BITSIZE_RANDOM_POS\n");
+          goto cleanup;
+        }
 
-        // start = clock();
-        // if (fmpz_mpoly_resultant_interpolation_mode(R_inter, P, Q, var_to_compute, ctx, bitsize, BITSIZE_RANDOM)) {
-        //   printf("ERROR: fmpz_mpoly_resultant_interpolation function call returned non-zero error code.\n");
-        //   goto cleanup;
-        // }
-        // end = clock();
-        // printf("Bitsize random small call completed.\n");
+        start = clock();
+        if (fmpz_mpoly_resultant_interpolation_mode(R_inter, P, Q, var_to_compute, ctx, bitsize, BITSIZE_RANDOM)) {
+          printf("ERROR: fmpz_mpoly_resultant_interpolation function call returned non-zero error code.\n");
+          goto cleanup;
+        }
+        end = clock();
+        printf("Bitsize random small call completed.\n");
 
-        // t_rand_small += (double)(end - start) / CLOCKS_PER_SEC;
+        t_rand_small += (double)(end - start) / CLOCKS_PER_SEC;
 
-        // if (!fmpz_mpoly_equal(R_lib, R_inter, ctx)) {
-        //   printf("ERROR: Two implementations are not equal, mode = BITSIZE_RANDOM_SMALL\n");
-        //   goto cleanup;
-        // }
+        if (!fmpz_mpoly_equal(R_lib, R_inter, ctx)) {
+          printf("ERROR: Two implementations are not equal, mode = BITSIZE_RANDOM_SMALL\n");
+          goto cleanup;
+        }
 
-        // start = clock();
-        // if (fmpz_mpoly_resultant_interpolation_mode(R_inter, P, Q, var_to_compute, ctx, bitsize, BITSIZE_RANDOM_POS)) {
-        //   printf("ERROR: fmpz_mpoly_resultant_interpolation function call returned non-zero error code.\n");
-        //   goto cleanup;
-        // }
-        // end = clock();
-        // printf("Bitsize random small positive call completed.\n");
+        start = clock();
+        if (fmpz_mpoly_resultant_interpolation_mode(R_inter, P, Q, var_to_compute, ctx, bitsize, BITSIZE_RANDOM_POS)) {
+          printf("ERROR: fmpz_mpoly_resultant_interpolation function call returned non-zero error code.\n");
+          goto cleanup;
+        }
+        end = clock();
+        printf("Bitsize random small positive call completed.\n");
 
-        // t_rand_small_pos += (double)(end - start) / CLOCKS_PER_SEC;
+        t_rand_small_pos += (double)(end - start) / CLOCKS_PER_SEC;
 
-        // if (!fmpz_mpoly_equal(R_lib, R_inter, ctx)) {
-        //   printf("ERROR: Two implementations are not equal, mode = BITSIZE_RANDOM_SMALL_POS\n");
-        //   goto cleanup;
-        // }
+        if (!fmpz_mpoly_equal(R_lib, R_inter, ctx)) {
+          printf("ERROR: Two implementations are not equal, mode = BITSIZE_RANDOM_SMALL_POS\n");
+          goto cleanup;
+        }
 
         start = clock();
         if (fmpz_mpoly_resultant_interpolation_mode(R_inter, P, Q, var_to_compute, ctx, 0, SMALL_ORDERED)) {
@@ -143,7 +143,7 @@ void benchmark(
           goto cleanup;
         }
         end = clock();
-        printf("Small ordered call completed.\n");
+        printf("Small ordered call completed. %lf\n", (double)(end - start) / CLOCKS_PER_SEC);
 
         t_order += (double)(end - start) / CLOCKS_PER_SEC;
 
@@ -158,7 +158,7 @@ void benchmark(
           goto cleanup;
         }
         end = clock();
-        printf("Small ordered positive call completed.\n");
+        printf("Small ordered positive call completed. %lf\n", (double)(end - start) / CLOCKS_PER_SEC);
 
         t_order_pos += (double)(end - start) / CLOCKS_PER_SEC;
 
