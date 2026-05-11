@@ -1,0 +1,44 @@
+\section{Proposed Algorithm}
+
+In this section, we propose an algorithm to efficiently compute the resultant of two bivariate polynomials, $f$ and $g$ in $\mathbb{Z}$ using an evoluation-interpolation approach. First, we recall the results from the previous section:
+
+\begin{enumerate}
+  \item The resultant of two evoluated polynomials is equal to the resultant evoluated at the same point as a generic property, i.e. it is not true only in a Zariski-closed set.
+  \item The resultant of two bivariate polynomials has a degree bounded by $deg_{x_1}(f) \times deg_{x_2}(g) + deg_{x_1}(g) \times deg_{x_2}(f)$.
+\end{enumerate}
+
+Using these two facts, we propose the following algorithm.
+
+\begin{algorithm}
+  \caption{Efficient Bivariate Resultant Algorithm}\label{alg:res}
+  \begin{algorithmic}[1]
+    \Require $f,g\in \mathbb{Z}^2[x]$
+    \Ensure $Res_{x_2}(f, g) \in \mathbb{Z}[x_1]$
+    \State $degF_1 \gets deg_{x_1}(f), degF_2 \gets deg_{x_2}(f)$
+    \State $degG_1 \gets deg_{x_1}(g), degG_2 \gets deg_{x_2}(g)$
+    \State $N \gets degF_1 \times degG_2 + degG_1 \times degF_2$
+    \State $k \gets 1$
+    \State // We choose evoluation points ordered
+    \For{$i = 1$ to $N + 1$}
+      \State $x_i \gets k$
+      \While{$lc_1(f)(x_i) = 0$ or $lc_2(f)(x_i) = 0$}
+        \State $k \gets k + 1$
+        \State $x_i \gets k$
+      \EndWhile
+      \State $k \gets k + 1$
+    \EndFor
+    \\
+    \State // We evoluate polynomials on chosen points
+    \For{$i = 1$ to $N + 1$}
+      \State This resultant is in $\mathbb{Z}$ since polynomials are evoluated.
+      \State $y_i \gets Res(f(x_i), g(x_i))$
+    \EndFor
+    \State // We interpolate the resultant in $\mathbb{Z}[x_1]$
+    \\
+    \State $R \gets interpolate(x, y, N)$
+    \\
+    \Return R
+  \end{algorithmic}
+\end{algorithm}
+
+Note that interpolation points can also be chosen with another method, e.g. randomly on a given bitsize or in the order of increasing bitsize. For $\mathbb{Z}$, this would be the sequence of $0, 1, -1, 2, \dots$. We implement these different approaches in our work and present their differences on performance in the following sections.
