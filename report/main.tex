@@ -16,15 +16,17 @@
 \usepackage{verbatim}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{subcaption}
 \newcommand{\issue}[1]{\textcolor{red}{#1}}
 
 \geometry{margin=2cm}
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\textbf{Fast computation of multivariate subresultants}}
+\fancyhead[L]{\textbf{Fast Computation of Multivariate Subresultants}}
 \fancyhead[R]{Yunus GÜRLEK, Frédéric XIA}
 \fancyfoot[C]{\thepage}
 \setcounter{page}{0}
+\setlength{\headheight}{15pt}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{definition}[theorem]{Definition}
@@ -42,7 +44,7 @@
 \begin{titlepage}
     \centering
     \vspace*{5cm}
-    {\Huge \textbf{Fast computation of multivariate subresultants} \par}
+    {\Huge \textbf{Fast Computation of Multivariate Subresultants} \par}
     \vspace{0.5cm}
     {\Large A report for the CCA Project \#13 \par}
     \vspace{3cm}
@@ -64,6 +66,7 @@
 \input{chapters/resultant.tex}
 \input{chapters/subresultant.tex}
 \input{chapters/multivariate.tex}
+\input{chapters/algorithm.tex}
 \input{chapters/benchmark.tex}
 
 \newpage

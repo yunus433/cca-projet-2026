@@ -1,14 +1,14 @@
-// gcc-15 -O2 fmpq_benchmark.c ../fmpq_mpoly_resultant_interpolation.c $(pkg-config --cflags --libs flint)
+// gcc-15 -O2 fmpq_benchmark.c ../fmpq_mpoly_resultant_interpolation.c ../fmpz_mpoly_resultant_interpolation.c $(pkg-config --cflags --libs flint)
 
 #include "../mpoly_resultant_interpolation.h"
 
 int COEFF_BIT_SIZE = 50;
-int DEFAULT_EXPO_BIT_SIZE_START = 5;
+int DEFAULT_EXPO_BIT_SIZE_START = 6;
 int DEFAULT_EXPO_BIT_SIZE_END = 7;
-int DEFAULT_LENGTH_START = 5;
-int DEFAULT_LENGTH_END = 20;
+int DEFAULT_LENGTH_START = 4;
+int DEFAULT_LENGTH_END = 32;
 int DEFAULT_LENGTH_INC = 2;
-int DEFAULT_COUNT = 20;
+int DEFAULT_COUNT = 5;
 int OUTPUT_NAME_LENGTH = 100;
 
 void benchmark(
@@ -77,60 +77,60 @@ void benchmark(
         int bitsize = (degree > 0 ? log2(degree) : 0) + 4;
         // printf("Degree: %ld, Bitsize: %d\n", degree, bitsize);
 
-        start = clock();
+        // start = clock();
         // if (fmpq_mpoly_resultant_interpolation_mode(R_inter, P, Q, var_to_compute, ctx, COEFF_BIT_SIZE, BITSIZE_RANDOM)) {
         //   printf("ERROR: fmpq_mpoly_resultant_interpolation function call returned non-zero error code.\n");
         //   goto cleanup;
         // }
-        end = clock();
+        // end = clock();
         // printf("Bitsize random call completed.\n");
 
-        t_rand += (double)(end - start) / CLOCKS_PER_SEC;
+        // t_rand += (double)(end - start) / CLOCKS_PER_SEC;
 
         // if (!fmpq_mpoly_equal(R_lib, R_inter, ctx)) {
         //   printf("ERROR: Two implementations are not equal, mode = BITSIZE_RANDOM\n");
         //   goto cleanup;
         // }
 
-        start = clock();
+        // start = clock();
         // if (fmpq_mpoly_resultant_interpolation_mode(R_inter, P, Q, var_to_compute, ctx, COEFF_BIT_SIZE, BITSIZE_RANDOM_POS)) {
         //   printf("ERROR: fmpq_mpoly_resultant_interpolation function call returned non-zero error code.\n");
         //   goto cleanup;
         // }
-        end = clock();
+        // end = clock();
         // printf("Bitsize random positive small call completed.\n");
 
-        t_rand_pos += (double)(end - start) / CLOCKS_PER_SEC;
+        // t_rand_pos += (double)(end - start) / CLOCKS_PER_SEC;
 
         // if (!fmpq_mpoly_equal(R_lib, R_inter, ctx)) {
         //   printf("ERROR: Two implementations are not equal, mode = BITSIZE_RANDOM_POS\n");
         //   goto cleanup;
         // }
 
-        start = clock();
+        // start = clock();
         // if (fmpq_mpoly_resultant_interpolation_mode(R_inter, P, Q, var_to_compute, ctx, bitsize, BITSIZE_RANDOM)) {
         //   printf("ERROR: fmpq_mpoly_resultant_interpolation function call returned non-zero error code.\n");
         //   goto cleanup;
         // }
-        end = clock();
+        // end = clock();
         // printf("Bitsize random small call completed.\n");
 
-        t_rand_small += (double)(end - start) / CLOCKS_PER_SEC;
+        // t_rand_small += (double)(end - start) / CLOCKS_PER_SEC;
 
         // if (!fmpq_mpoly_equal(R_lib, R_inter, ctx)) {
         //   printf("ERROR: Two implementations are not equal, mode = BITSIZE_RANDOM_SMALL\n");
         //   goto cleanup;
         // }
 
-        start = clock();
+        // start = clock();
         // if (fmpq_mpoly_resultant_interpolation_mode(R_inter, P, Q, var_to_compute, ctx, bitsize, BITSIZE_RANDOM_POS)) {
         //   printf("ERROR: fmpq_mpoly_resultant_interpolation function call returned non-zero error code.\n");
         //   goto cleanup;
         // }
-        end = clock();
+        // end = clock();
         // printf("Bitsize random small positive call completed.\n");
 
-        t_rand_small_pos += (double)(end - start) / CLOCKS_PER_SEC;
+        // t_rand_small_pos += (double)(end - start) / CLOCKS_PER_SEC;
 
         // if (!fmpq_mpoly_equal(R_lib, R_inter, ctx)) {
         //   printf("ERROR: Two implementations are not equal, mode = BITSIZE_RANDOM_SMALL_POS\n");

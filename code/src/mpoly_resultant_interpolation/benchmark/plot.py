@@ -4,7 +4,7 @@ import sys
 import os
 import numpy as np
 
-BIT_SIZE = [5]
+BIT_SIZE = [6]
 INCLUDE_RAND = False
 
 def plot_benchmark(mode):
@@ -40,7 +40,7 @@ def plot_benchmark(mode):
     plt.legend()
     plt.xlabel("Length of the Polynomial")
     plt.ylabel("Execution Time")
-    plt.title(f'For {mode} Execution Time vs Length of the Polynomial for Exponent Bitsize {bit_size}')
+    plt.title(f'{mode} - Execution Time vs Length of the Polynomial for Exponent Bitsize {bit_size}')
     plt.grid(True)
     plt.tight_layout()
     plt.show()
