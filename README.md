@@ -32,6 +32,31 @@ Presentation:
 - pas d'autres algo, seulement methode avec interpolation
 - les benchmarks
 
+À faire (15.05.2026):
+- fixer tous les bugs (subresultant pseudo remainder, cas avec 0 aussi)
+- Dire que subresultant algo c'est le même pas besoin de pseudo code
+- Expliquer mieux la fluctuations avec une exemple de FLINT random
+- Ajouter pourcentange de différence pour les benchmarks
+- Faire resultant pour n=3 
+- Pour le meilleur algo de resultant, comparer avec wolfram benchmark (temps)
+- Rapport:
+        - Intro change un peu, fixer les benchmarks etc.
+        - Sylvester et Proposition 5 pas besoin, peut faire comme un rappel
+        - chapitre 2 ajoute subresultant peut etre aussi trouve avec algo
+        - conclusion: resultat theorique, resultats pratiques, etc..
+- Presentation:
+        - Avoir euclid coeff / subres coeff cote à cote
+        - subresultant polynomial exemple
+        - subresultant algo change un peu, le faire plus facile avec C1 C2 par ex
+        - concataner les slides (6-7 slides) et avoir pause dans Latex
+        - state of art - date etc..  Dire implementation est sur FLINT
+        - partie theorique ajouter multimodulaire avec chinese remainder the
+        - Dire que le GCD est le dernère polynome sousresultant non-bul
+        - (D + 1)^(n-1)
+        - Avoir les commentaires des benchmarks sur des boites sur des images
+        - Changer images sur le meme diapos (le nb de page ne doit pas chagner!!!)
+        - conclusion
+
 13 mercredi => slides etc..
 21 jeudi => repetition
 
