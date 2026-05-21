@@ -7,6 +7,7 @@
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{graphicx}
+\usepackage{tikz}
 
 \newcommand{\Res}{\operatorname{Res}}
 \newcommand{\sRes}{\operatorname{sRes}}
@@ -24,7 +25,7 @@
 
 \begin{document}
 
-\begin{frame}
+\begin{frame}[plain,noframenumbering]
   \centering
   {\Large \inserttitle \par}
   \vspace{1em}
@@ -38,157 +39,129 @@
   {\small \insertdate \par}
 \end{frame}
 
-\begin{frame}{Outline}
+\begin{frame}[plain,noframenumbering]{Outline}
   \tableofcontents
 \end{frame}
 
+\setcounter{framenumber}{0}
+
 \section{Introduction}
 
-\begin{frame}{Goal}
+\begin{frame}{Introduction}
 \begin{block}{Problem}
 Given $f,g\in R[x]$ with $\deg(f)=p>q=\deg(g)$, compute
 \[
   \gcd(f,g), \qquad \Res(f,g), \qquad \bigl(\sResP_i(f,g)\bigr)_{0\le i\le q}.
 \]
 \end{block}
+\pause
 \begin{block}{Main idea}
 Use subresultants and specialization to replace expensive symbolic computations by many cheaper univariate computations.
+\end{block}
+\pause
+\begin{block}{Background}
+Univariate and multivariate polynomials, GCD, resultants, subresultants and subresultant polynomials.
 \end{block}
 \end{frame}
 
 \begin{frame}{Euclidean Algorithm: Correct but Costly}
-\[
-  r_0=f, \qquad r_1=g, \qquad r_{i+1}=r_{i-1}\bmod r_i.
-\]
-
-\vspace{0.4em}
-The last non-zero remainder is $\gcd(f,g)$.
-
-\vspace{0.8em}
-\begin{alertblock}{Issue}
-Over rings such as $\Z$, coefficient sizes may grow quickly during division.
-\end{alertblock}
+\footnotesize
+\begin{columns}
+  \begin{column}{0.45\textwidth}
+    Euclidean GCD: \\
+    \vspace{-2em}
+    \[
+      r_0=f, \qquad r_1=g, \qquad r_{i+1}=r_{i-1}\bmod r_i.
+    \]
+    \vspace{-2em}
+    \pause
+    \begin{alertblock}{Issue}
+    Over rings such as $\Z$, coefficient sizes may grow quickly during division.
+    \end{alertblock}
+    \pause
+    \vspace{-1em}
+    \[
+    \begin{aligned}
+    f&=x^8+x^6-3x^4-3x^3+8x^2+2x-5,\\
+    g&=3x^6+5x^4-4x^2-9x+21.
+    \end{aligned}
+    \]
+    \vspace{1em}
+    \[
+    \begin{aligned}
+    r_2 &= -\frac{5}{9}x^4+\frac{1}{9}x^2-\frac{1}{3}, &
+    r_3 &= -\frac{117}{25}x^2-9x+\frac{441}{25},\\
+    r_4 &= \frac{233150}{19773}x-\frac{102500}{6591}, &
+    r_5 &= -\frac{1288744821}{543589225}.
+    \end{aligned}
+    \]
+    \vspace{1em}
+    \[
+      \gcd(f,g)=1.
+    \]
+  \end{column}
+  \pause
+  \begin{column}{0.45\textwidth}
+    Using Subresultants:
+    \begin{block}{Key property}
+    The subresultant subsequence of polynomials is proportional to the Euclidean remainder sequence, and GCD is the final non-zero subresultant polynomial.
+    \end{block}
+    \pause
+    For the same $f$ and $g$:
+    \[
+    \begin{aligned}
+    \sResP_5(f,g) &= 15x^4-3x^2+9, \\
+    \sResP_3(f,g) &= 65x^2+125x-245,\\
+    \sResP_2(f,g) &= 9326x-12300, \\
+    \sResP_0(f,g) &= 260708.
+    \end{aligned}
+    \]
+    \vspace{0.5em}
+    \[
+      \gcd(f,g)=1.
+    \]
+  \end{column}
+\end{columns}
 \end{frame}
 
-\begin{frame}{Example: Coefficient Growth}
-\small
-\[
-\begin{aligned}
- f&=x^8+x^6-3x^4-3x^3+8x^2+2x-5,\\
- g&=3x^6+5x^4-4x^2-9x+21.
-\end{aligned}
-\]
+\section{State of the Art and Contribution}
 
-\[
-\begin{aligned}
- r_2 &= -\frac{5}{9}x^4+\frac{1}{9}x^2-\frac{1}{3}, &
- r_3 &= -\frac{117}{25}x^2-9x+\frac{441}{25},\\
- r_4 &= \frac{233150}{19773}x-\frac{102500}{6591}, &
- r_5 &= -\frac{1288744821}{543589225}.
-\end{aligned}
-\]
-
-\[
-  \gcd(f,g)=1.
-\]
+\begin{frame}{State of the Art and Contribution}
+  \begin{columns}
+    \begin{column}{0.45\textwidth}
+      State of the art:
+      \begin{itemize}
+        \item ~1750, Subresultants were already known to Euler.
+        \pause
+        \item ~1960, Collins used them heavily in computational algebra.
+        \pause
+        \item ~2000, Lazard and Ducos improved the subresultant algorithm.
+        \pause
+        \item today, FLINT and Maple use subresultant-based methods for resultants.
+        \item today, Wolfram exposes \texttt{SubresultantPolynomials} directly.
+      \end{itemize}
+    \end{column}
+    \pause
+    \begin{column}{0.45\textwidth}
+      \begin{block}{This work}
+      Design and implement (on FLINT) a fast algorithm for subresultants over $\Q$, $\Z$, and $\Fp$.
+      \end{block}
+      \pause
+      \begin{block}{Technique}
+      Use evoluation and interpolation, generalizing Collins's resultant algorithm.
+      \end{block}
+      \pause
+      \begin{block}{Observed performance}
+      Speedups up to $7\times$ on benchmarks with total degree of bitsize $6$ and coefficient bit size $50$, both on FMPZ and FMPQ.
+      \end{block}
+    \end{column}
+  \end{columns}
 \end{frame}
 
-\begin{frame}{Subresultants}
-\begin{block}{Key property}
-An appropriate subsequence of
-\[
-  \bigl(\sResP_i(f,g)\bigr)_{0\le i\le q}
-\]
-is proportional to the Euclidean remainder sequence.
-\end{block}
-
-\vspace{0.5em}
-They are defined by determinants, so coefficients remain in the base ring.
-\end{frame}
-
-\begin{frame}{Example: Subresultants}
-For the same $f$ and $g$:
-\[
-\begin{aligned}
-\sResP_5(f,g) &= 15x^4-3x^2+9, &
-\sResP_3(f,g) &= 65x^2+125x-245,\\
-\sResP_2(f,g) &= 9326x-12300, &
-\sResP_0(f,g) &= 260708.
-\end{aligned}
-\]
-
-\vspace{0.5em}
-\[
-  \gcd(f,g)=1.
-\]
-\end{frame}
-
-\begin{frame}{State of the Art}
-\begin{itemize}
-  \item Subresultants were already known to Euler.
-  \item Collins introduced their use in computer algebra.
-  \item Lazard and Ducos improved the subresultant algorithm.
-  \item FLINT and Maple use subresultant-based methods for resultants.
-  \item Wolfram exposes \texttt{SubresultantPolynomials} directly.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Contribution}
-\begin{block}{This work}
-Design a fast algorithm for subresultants over
-\[
-  \Q, \qquad \Z, \qquad \Fp.
-\]
-\end{block}
-
-\begin{block}{Technique}
-Use specialization and interpolation, generalizing Collins's resultant algorithm.
-\end{block}
-
-\begin{block}{Observed performance}
-Speedups up to $20\times$ on benchmarks with total degree $30$ and coefficient bit size $100$.
-\end{block}
-\end{frame}
-
-\section{Resultants}
-
-\begin{frame}{Sylvester Matrix}
-Let
-\[
- f=a_p x^p+\cdots+a_0, \qquad g=b_qx^q+\cdots+b_0.
-\]
-
-The Sylvester matrix represents
-\[
-\phi:R[x]_{<q}\oplus R[x]_{<p}\to R[x]_{<p+q},
-\qquad (u,v)\mapsto uf+vg.
-\]
-
-\begin{block}{Resultant}
-\[
-  \Res(f,g)=\det S(f,g).
-\]
-\end{block}
-\end{frame}
-
-\begin{frame}{Resultant and GCD}
-Assume $R$ is a domain with fraction field $\K$.
-
-\begin{block}{Criterion}
-\[
-  \Res(f,g)\ne 0
-  \quad\Longleftrightarrow\quad
-  \gcd(f,g)=1 \text{ in } \K[x].
-\]
-\end{block}
-
-\vspace{0.5em}
-No proof included.
-\end{frame}
-
-\section{Subresultants}
-
-\begin{frame}{Subresultant Polynomial}
+\begin{frame}{Subresultant Polynomials}
+\footnotesize
+\begin{columns}
+\begin{column}{0.45\textwidth}
 For $0\le i\le q$ and $0\le j\le i$, let $M_{i,j}(f,g)$ be the corresponding Sylvester-Habicht minor.
 
 \begin{block}{Definition}
@@ -202,202 +175,159 @@ For $0\le i\le q$ and $0\le j\le i$, let $M_{i,j}(f,g)$ be the corresponding Syl
   \deg\bigl(\sResP_i(f,g)\bigr)=i.
 \]
 \end{block}
-\end{frame}
-
-\begin{frame}{Structure Theorem: Operational Meaning}
+\end{column}
+\pause
+\begin{column}{0.45\textwidth}
 \begin{itemize}
   \item Non-zero subresultants encode Euclidean remainders.
   \item Defective subresultants reveal degree drops.
   \item Zero subresultants indicate gaps in the sequence.
+  \item Last non-zero subresultant polynomial equals the GCD.
 \end{itemize}
 
 \vspace{0.8em}
 \begin{block}{Consequence}
 The GCD and resultant can be computed without division in the fraction field.
 \end{block}
-\end{frame}
-
-\begin{frame}{Subresultant Algorithm: Skeleton}
-\small
-\begin{enumerate}
-  \item Initialize
-  \[
-    \sResP_p=f, \qquad \sResP_{p-1}=g.
-  \]
-  \item Scale the first subresultant:
-  \[
-    \sResP_q=(-1)^{(p-q)(p-q-1)/2}\lc(g)^{p-q-1}g.
-  \]
-  \item Repeatedly compute pseudo-remainders:
-  \[
-    \sResP_{k-1}= -\frac{\Rem(s_k t_{j-1}\sResP_{i-1},\sResP_{j-1})}{s_jt_{i-1}}.
-  \]
-  \item Fill defective entries when needed.
-\end{enumerate}
-\end{frame}
-
-\section{Multivariate Polynomials}
-
-\begin{frame}{Multivariate Setting}
-Let
-\[
-  f,g\in \Z[x_1,\dots,x_n].
-\]
-
-View them as univariate polynomials in $x_1$:
-\[
-  f,g\in R[x_1], \qquad R=\Z[x_2,
-\dots,x_n].
-\]
-
-\begin{block}{Goal}
-Compute
-\[
-  \Res_{x_1}(f,g), \qquad \sResP_i(f,g).
-\]
-\end{block}
-\end{frame}
-
-\begin{frame}{Why Specialize?}
-Symbolic computation over
-\[
-  R=\Z[x_2,\dots,x_n]
-\]
-can be expensive.
-
-\vspace{0.5em}
-Instead, choose evaluation points
-\[
-  \eta\in\Z^{n-1}
-\]
-and compute in
-\[
-  \Z[x_1].
-\]
-
-\begin{block}{Workflow}
-\[
-  \text{evaluate} \quad\to\quad \text{univariate computation} \quad\to\quad \text{interpolate}.
-\]
-\end{block}
+\end{column}
+\end{columns}
 \end{frame}
 
 \section{Proposed Algorithm}
 
-\begin{frame}{Specialization of the Resultant}
-Let
-\[
-  h=\lc_{x_1}(f)\lc_{x_1}(g).
-\]
+\begin{frame}{Multivariate Setting}
+  \begin{columns}
+    \begin{column}{0.45 \textwidth}
+      Let
+      \[
+        f,g\in \Z[x_1,\dots,x_n].
+      \]
 
-\begin{block}{Valid evaluation point}
-If $h(\eta)\ne 0$, then
-\[
-  \Res_{x_1}(f(\eta),g(\eta))
-  =
-  \Res_{x_1}(f,g)(\eta).
-\]
-\end{block}
+      View them as univariate polynomials in $x_1$:
+      \[
+        f,g\in R[x_1], \qquad R=\Z[x_2,
+      \dots,x_n].
+      \]
 
-\begin{alertblock}{Bad points}
-Degree drops after evaluation can break the equality.
-\end{alertblock}
+      \begin{block}{Goal}
+      Compute
+      \[
+        \Res_{x_1}(f,g), \qquad \sResP_i(f,g).
+      \]
+      \end{block}
+    \end{column}
+    \pause
+    \begin{column}{0.45 \textwidth}
+      Symbolic computation over
+      \[
+        R=\Z[x_2,\dots,x_n]
+      \]
+      can be expensive.
+
+      \vspace{0.5em}
+      Instead, choose evaluation points
+      \[
+        \eta\in\Z^{n-1}
+      \]
+      and compute in
+      \[
+        \Z[x_1].
+      \]
+    \end{column}
+  \end{columns}
 \end{frame}
 
-\begin{frame}{Degree Bound}
-Let
-\[
-D=\deg_{x_1}(f)\deg_{x_2,\dots,x_n}(g)
-+
-\deg_{x_1}(g)\deg_{x_2,\dots,x_n}(f).
-\]
-
-\begin{block}{Bound}
-\[
-  \deg\bigl(\Res_{x_1}(f,g)\bigr)\le D.
-\]
-\end{block}
-
-\begin{block}{Interpolation cost}
-For $n=2$, at most $D+1$ evaluation points are needed.
-\end{block}
-\end{frame}
-
-\begin{frame}{Specialization of Subresultants}
-Assume
-\[
-  \deg_{x_1}(f)>\deg_{x_1}(g)
-\]
-and $h(\eta)\ne 0$.
-
-\begin{block}{Property}
-\[
-  \sResP_i(f(\eta),g(\eta))
-  =
-  \sResP_i(f,g)(\eta)
-  \qquad
-  0\le i\le \deg_{x_1}(g).
-\]
-\end{block}
-
-Each coefficient can be reconstructed by interpolation.
-\end{frame}
-
-\begin{frame}{Non-defective Subresultants}
-Computing only non-defective subresultants can be faster.
-
-\vspace{0.7em}
-But evaluation must preserve the degree pattern:
-\[
-  \deg\bigl(\sResP_i(f(\eta),g(\eta))\bigr)
-  =
-  \deg\bigl(\sResP_i(f,g)\bigr).
-\]
-
-\begin{alertblock}{Extra condition}
-Avoid points where a non-defective subresultant becomes defective.
-\end{alertblock}
+\begin{frame}{Backbone of the Approach}
+\footnotesize
+\begin{columns}
+  \begin{column}{0.45 \textwidth}
+    \textbf{Specialization of the Resultant}\\
+    Let
+    \[
+      h=\lc_{x_1}(f)\lc_{x_1}(g).
+    \]
+    \begin{alertblock}{Bad points}
+    Degree drops after evaluation can break the equality.
+    \end{alertblock}
+    \pause
+    \begin{block}{Valid evaluation point}
+    If $h(\eta)\ne 0$, then
+    \[
+      \Res_{x_1}(f(\eta),g(\eta))
+      =
+      \Res_{x_1}(f,g)(\eta).
+    \]
+    \end{block}
+  \end{column}
+  \pause
+  \begin{column}{0.45 \textwidth}
+    \textbf{Degree Bound}\\
+    Let
+    \[
+    D=\deg_{x_1}(f)\deg_{x_2,\dots,x_n}(g)
+    +
+    \deg_{x_1}(g)\deg_{x_2,\dots,x_n}(f).
+    \]
+    \pause
+    \begin{block}{Bound}
+    \[
+      \deg\bigl(\Res_{x_1}(f,g)\bigr)\le D.
+    \]
+    \end{block}
+    \pause
+    \begin{block}{Interpolation cost}
+    For $n=2$, at most $D+1$ evaluation points are needed.
+    \end{block}
+  \end{column}
+\end{columns}
 \end{frame}
 
 \begin{frame}{Proposed Bivariate Resultant Algorithm}
-For $f,g\in\Z[x_1,x_2]$:
-\[
-  N=\deg_{x_1}(f)\deg_{x_2}(g)
-  +
-  \deg_{x_1}(g)\deg_{x_2}(f).
-\]
+\begin{columns}
+  \begin{column}{0.45 \textwidth}
+    For $f,g\in\Z[x_1,x_2]$:
+    \[
+      N=\deg_{x_1}(f)\deg_{x_2}(g)
+      +
+      \deg_{x_1}(g)\deg_{x_2}(f).
+    \]
 
-\begin{enumerate}
-  \item Choose $N+1$ good evaluation points.
-  \item Compute
-  \[
-    y_i=\Res(f(x_i),g(x_i)).
-  \]
-  \item Interpolate
-  \[
-    R=\operatorname{interpolate}(x_i,y_i,N).
-  \]
-\end{enumerate}
-\end{frame}
+    \begin{enumerate}
+      \item Choose $N+1$ good evaluation points.
+      \item Compute
+      \[
+        y_i=\Res(f(x_i),g(x_i)).
+      \]
+      \item Interpolate
+      \[
+        R=\operatorname{interpolate}(x_i,y_i,N+1).
+      \]
+    \end{enumerate}
+  \end{column}
+  \pause
+  \begin{column}{0.45 \textwidth}
+    Implemented strategies:
+    \begin{itemize}
+      \item Random Points
+      \item Random Positive Points
+      \item Small Random Points
+      \item Small Random Positive Points
+      \item Ordered Points
+      \item Ordered Positive Points
+    \end{itemize}
 
-\begin{frame}{Choosing Evaluation Points}
-Implemented strategies:
-\begin{itemize}
-  \item Random Points
-  \item Random Positive Points
-  \item Small Random Points
-  \item Small Random Positive Points
-  \item Ordered Points
-  \item Ordered Positive Points
-\end{itemize}
-
-\vspace{0.5em}
-Small and ordered points usually reduce interpolation cost.
+    \vspace{0.5em}
+    Small and ordered points usually reduce interpolation cost.
+  \end{column}
+\end{columns}
 \end{frame}
 
 \section{Benchmarks}
 
-\begin{frame}{Benchmark Setup}
+\begin{frame}{FMPZ Benchmarks}
+\footnotesize
+\only<1>{
+\textbf{Benchmark Setup}\\
 \begin{itemize}
   \item Apple MacBook, 8-core Apple M2 SoC
   \item 16 GB unified memory
@@ -405,149 +335,298 @@ Small and ordered points usually reduce interpolation cost.
   \item Coefficient bit size fixed at $50$
   \item Comparison against FLINT bivariate resultant computation
 \end{itemize}
+}
+
+\only<2>{
+\begin{columns}[T,onlytextwidth]
+  \begin{column}{0.75\textwidth}
+    \centering
+    \includegraphics[
+      width=\linewidth,
+      height=0.75\textheight,
+      keepaspectratio
+    ]{./images/fmpz_bitsize_3.png}
+  \end{column}
+
+  \begin{column}{0.23\textwidth}
+    \footnotesize
+    \begin{beamercolorbox}[
+      rounded=true,
+      shadow=false,
+      sep=0.1em,
+      wd=\linewidth
+    ]{block body}
+      \textbf{Bitsize 3} \\
+      \vspace{0.6em}
+      Random interpolation points with large bitsize are much slower. \\
+      \vspace{0.4em}
+      Not too much difference between other benchmarks. \\
+      \vspace{0.4em}
+      Length of the polynomial does not affect the performance significantly.
+    \end{beamercolorbox}
+  \end{column}
+\end{columns}
+}
+
+\only<3>{
+\begin{columns}[T,onlytextwidth]
+  \begin{column}{0.75\textwidth}
+    \centering
+    \includegraphics[
+      width=\linewidth,
+      height=0.75\textheight,
+      keepaspectratio
+    ]{./images/fmpz_bitsize_4.png}
+  \end{column}
+
+  \begin{column}{0.23\textwidth}
+    \footnotesize
+    \begin{beamercolorbox}[
+      rounded=true,
+      shadow=false,
+      sep=0.7em,
+      wd=\linewidth
+    ]{block body}
+      \textbf{Bitsize 4} \\
+      \vspace{0.6em}
+      Library implementation is slower than our algorithm.\\
+      \vspace{0.4em}
+      Not too much difference between random interpolation with small bitsize and ordered points. \\
+      \vspace{0.4em}
+      Execution time increases as the length of the polynomial increases.
+    \end{beamercolorbox}
+  \end{column}
+\end{columns}
+}
+
+\only<4>{
+\begin{columns}[T,onlytextwidth]
+  \begin{column}{0.75\textwidth}
+    \centering
+    \includegraphics[
+      width=\linewidth,
+      height=0.75\textheight,
+      keepaspectratio
+    ]{./images/fmpz_bitsize_5.png}
+  \end{column}
+
+  \begin{column}{0.23\textwidth}
+    \footnotesize
+    \begin{beamercolorbox}[
+      rounded=true,
+      shadow=false,
+      sep=0.7em,
+      wd=\linewidth
+    ]{block body}
+      \textbf{Bitsize 5} \\
+      \vspace{0.6em}
+      Point bitsize strongly affects interpolation time.\\
+      \vspace{0.4em}
+      We observe high fluctuations in the performance because of random polynomial generation. \\
+      \vspace{0.4em}
+      Not an accurate measurement of dependance to the length, but the ratio between different methods.
+    \end{beamercolorbox}
+  \end{column}
+\end{columns}
+}
+
+\only<5>{
+\begin{columns}[T,onlytextwidth]
+  \begin{column}{0.75\textwidth}
+    \centering
+    \includegraphics[
+      width=\linewidth,
+      height=0.75\textheight,
+      keepaspectratio
+    ]{./images/fmpz_bitsize_6.png}
+  \end{column}
+
+  \begin{column}{0.23\textwidth}
+    \footnotesize
+    \begin{beamercolorbox}[
+      rounded=true,
+      shadow=false,
+      sep=0.7em,
+      wd=\linewidth
+    ]{block body}
+      \textbf{Bitsize 6} \\
+      \vspace{0.6em}
+      We remove random interpolation methods.\\
+      \vspace{0.4em}
+      We observe 6x performance difference between our methods. \\
+      \vspace{0.4em}
+      Difference becomes more important as the length of the polynomial \& bitsize of the exponent increase.
+    \end{beamercolorbox}
+  \end{column}
+\end{columns}
+}
 \end{frame}
 
-\begin{frame}{FMPZ Benchmarks: Bitsize 3}
-\begin{figure}
-  \centering
-  \includegraphics[
-    width=\linewidth,
-    height=0.75\textheight,
-    keepaspectratio
-  ]{./images/fmpz_bitsize_3.png}
-  \caption{FMPZ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 3.}
-  \label{fig:benc.fmpz.3}
-\end{figure}
-\end{frame}
-
-\begin{frame}{FMPZ Benchmarks: Bitsize 4}
-\begin{figure}
-  \centering
-  \includegraphics[
-    width=\linewidth,
-    height=0.75\textheight,
-    keepaspectratio
-  ]{./images/fmpz_bitsize_4.png}
-  \caption{FMPZ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 4.}
-  \label{fig:benc.fmpz.4}
-\end{figure}
-\end{frame}
-
-\begin{frame}{FMPZ Benchmarks: Bitsize 5}
-\begin{figure}
-  \centering
-  \includegraphics[
-    width=\linewidth,
-    height=0.75\textheight,
-    keepaspectratio
-  ]{./images/fmpz_bitsize_5.png}
-  \caption{FMPZ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 5.}
-  \label{fig:benc.fmpz.5}
-\end{figure}
-\end{frame}
-
-\begin{frame}{FMPZ Benchmarks: Bitsize 6}
-\begin{figure}
-  \centering
-  \includegraphics[
-    width=\linewidth,
-    height=0.75\textheight,
-    keepaspectratio
-  ]{./images/fmpz_bitsize_6.png}
-  \caption{FMPZ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 6.}
-  \label{fig:benc.fmpz.6}
-\end{figure}
-\end{frame}
-
-\begin{frame}{FMPZ Benchmark Takeaways}
+\begin{frame}{FMPQ Benchmarks}
+\footnotesize
+\only<1>{
+\textbf{Benchmark Setup}\\
 \begin{itemize}
-  \item Fully random interpolation points are much slower.
-  \item Point bit size strongly affects interpolation time.
-  \item For larger exponent bitsizes, the proposed methods outperform FLINT.
-  \item Ordered and small-random points perform similarly.
+  \item Apple MacBook, 8-core Apple M2 SoC
+  \item 16 GB unified memory
+  \item Average of 5 independent trials
+  \item Coefficient bit size fixed at $50$
+  \item Comparison against FLINT bivariate resultant computation
 \end{itemize}
-\end{frame}
+}
 
-\begin{frame}{FMPQ Benchmarks: Bitsize 3}
-\begin{figure}
-  \centering
-  \includegraphics[
-    width=\linewidth,
-    height=0.75\textheight,
-    keepaspectratio
-  ]{./images/fmpq_bitsize_3.png}
-  \caption{FMPQ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 3.}
-  \label{fig:benc.fmpq.3}
-\end{figure}
-\end{frame}
+\only<2>{
+\begin{columns}[T,onlytextwidth]
+  \begin{column}{0.75\textwidth}
+    \centering
+    \includegraphics[
+      width=\linewidth,
+      height=0.75\textheight,
+      keepaspectratio
+    ]{./images/fmpq_bitsize_3.png}
+  \end{column}
 
-\begin{frame}{FMPQ Benchmarks: Bitsize 4}
-\begin{figure}
-  \centering
-  \includegraphics[
-    width=\linewidth,
-    height=0.75\textheight,
-    keepaspectratio
-  ]{./images/fmpq_bitsize_4.png}
-  \caption{FMPQ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 4.}
-  \label{fig:benc.fmpq.4}
-\end{figure}
-\end{frame}
+  \begin{column}{0.23\textwidth}
+    \footnotesize
+    \begin{beamercolorbox}[
+      rounded=true,
+      shadow=false,
+      sep=0.1em,
+      wd=\linewidth
+    ]{block body}
+      \textbf{Bitsize 3} \\
+      \vspace{0.6em}
+      Random interpolation points with large bitsize are much slower. \\
+      \vspace{0.4em}
+      Not too much difference between other benchmarks. \\
+      \vspace{0.4em}
+      Length of the polynomial does not affect the performance significantly.
+    \end{beamercolorbox}
+  \end{column}
+\end{columns}
+}
 
-\begin{frame}{FMPQ Benchmarks: Bitsize 5}
-\begin{figure}
-  \centering
-  \includegraphics[
-    width=\linewidth,
-    height=0.75\textheight,
-    keepaspectratio
-  ]{./images/fmpq_bitsize_5.png}
-  \caption{FMPQ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 5.}
-  \label{fig:benc.fmpq.5}
-\end{figure}
-\end{frame}
+\only<3>{
+\begin{columns}[T,onlytextwidth]
+  \begin{column}{0.75\textwidth}
+    \centering
+    \includegraphics[
+      width=\linewidth,
+      height=0.75\textheight,
+      keepaspectratio
+    ]{./images/fmpq_bitsize_4.png}
+  \end{column}
 
-\begin{frame}{FMPQ Benchmarks: Bitsize 6}
-\begin{figure}
-  \centering
-  \includegraphics[
-    width=\linewidth,
-    height=0.75\textheight,
-    keepaspectratio
-  ]{./images/fmpq_bitsize_6.png}
-  \caption{FMPQ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 6.}
-  \label{fig:benc.fmpq.6}
-\end{figure}
-\end{frame}
+  \begin{column}{0.23\textwidth}
+    \footnotesize
+    \begin{beamercolorbox}[
+      rounded=true,
+      shadow=false,
+      sep=0.7em,
+      wd=\linewidth
+    ]{block body}
+      \textbf{Bitsize 4} \\
+      \vspace{0.6em}
+      Library implementation is slower than our algorithm.\\
+      \vspace{0.4em}
+      Not too much difference between random interpolation with small bitsize and ordered points. \\
+      \vspace{0.4em}
+      Execution time increases as the length of the polynomial increases.
+    \end{beamercolorbox}
+  \end{column}
+\end{columns}
+}
 
-\begin{frame}{FMPQ Benchmark Takeaways}
-\begin{itemize}
-  \item Behavior is similar to the $\Z$ case.
-  \item Large random points remain expensive.
-  \item Ordered points are slightly faster in many cases.
-  \item The gap with FLINT grows with degree and length.
-\end{itemize}
+\only<4>{
+\begin{columns}[T,onlytextwidth]
+  \begin{column}{0.75\textwidth}
+    \centering
+    \includegraphics[
+      width=\linewidth,
+      height=0.75\textheight,
+      keepaspectratio
+    ]{./images/fmpq_bitsize_5.png}
+  \end{column}
+
+  \begin{column}{0.23\textwidth}
+    \footnotesize
+    \begin{beamercolorbox}[
+      rounded=true,
+      shadow=false,
+      sep=0.7em,
+      wd=\linewidth
+    ]{block body}
+      \textbf{Bitsize 5} \\
+      \vspace{0.6em}
+      Point bitsize strongly affects interpolation time.\\
+      \vspace{0.4em}
+      We observe high fluctuations in the performance because of random polynomial generation. \\
+      \vspace{0.4em}
+      Not an accurate measurement of dependance to the length, but the ratio between different methods.
+    \end{beamercolorbox}
+  \end{column}
+\end{columns}
+}
+
+\only<5>{
+\begin{columns}[T,onlytextwidth]
+  \begin{column}{0.75\textwidth}
+    \centering
+    \includegraphics[
+      width=\linewidth,
+      height=0.75\textheight,
+      keepaspectratio
+    ]{./images/fmpq_bitsize_6.png}
+  \end{column}
+
+  \begin{column}{0.23\textwidth}
+    \footnotesize
+    \begin{beamercolorbox}[
+      rounded=true,
+      shadow=false,
+      sep=0.7em,
+      wd=\linewidth
+    ]{block body}
+      \textbf{Bitsize 6} \\
+      \vspace{0.6em}
+      We remove random interpolation methods.\\
+      \vspace{0.4em}
+      We observe 7x performance difference between our methods. \\
+      \vspace{0.4em}
+      Behaviour is similar to $\mathbb{Z}$ mostly.
+    \end{beamercolorbox}
+  \end{column}
+\end{columns}
+}
 \end{frame}
 
 \section{Conclusion}
 
-\begin{frame}{Summary}
-\begin{itemize}
-  \item Subresultants control coefficient growth in GCD/resultant computations.
-  \item Specialization is valid away from leading-coefficient zeros.
-  \item Interpolation recovers multivariate resultants and subresultants.
-  \item Evaluation point choice is critical for performance.
-  \item Ordered or small-bit-size points work best in the benchmarks.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Next Steps}
-\begin{itemize}
-  \item Extend from resultants to full subresultant sequences.
-  \item Improve handling of defective subresultants.
-  \item Tune point selection for $\Z$, $\Q$, and $\Fp$.
-  \item Compare directly against Wolfram, Maple, and FLINT interfaces.
-\end{itemize}
+\begin{frame}{Conclusion}
+\footnotesize
+\begin{columns}
+\begin{column}{0.45\textwidth}
+  \textbf{Summary of Results}
+  \begin{itemize}
+    \item Subresultants control coefficient growth in GCD/resultant computations.
+    \item Specialization is valid away from leading-coefficient zeros.
+    \item Interpolation recovers multivariate resultants and subresultants.
+    \item Evaluation point choice is critical for performance.
+    \item Ordered or small-bit-size points work best in the benchmarks.
+    \item Our implementation improves FLINT's performance, especially for polynomials with high degree and length.
+  \end{itemize}
+\end{column}
+\pause
+\begin{column}{0.45\textwidth}
+  \textbf{Next Steps}
+  \begin{itemize}
+    \item Extend implementation from resultants / subresultants to subresultant polynomials.
+    \item Extend implementation to higher dimension multivariate polynomials (note that number of points for interpolation increases - $(D + 1)^{n-1}$).
+    \item Understand and implement specialization conditions for subresultant polynomials.
+    \item Optimize, test, and benchmark for higher degree and length polynomials.
+  \end{itemize}
+\end{column}
+\end{columns}
 \end{frame}
 
 \end{document}
