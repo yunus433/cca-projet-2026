@@ -1,15 +1,15 @@
-\section{Multivariate Polynomials}
+\section{Reduction properties}
 
-Let $n\geq 2$, and $f,g\in\mathbb{Z}[x_1,\dots,x_n]$. $f$ and $g$ can be viewed as univariate polynomials in $x_1$ with coefficients in $R=\mathbb{Z}[x_2,\dots,x_n]$.
+Let $n\geq 2$, and $f,g\in R[x_1,\dots,x_n]$, where $R$ is either $\mathbb{Z}$, $\mathbb{Q}$, or $\mathbb{F}_{p}$. $f$ and $g$ can be viewed as univariate polynomials in $x_1$ with coefficients in $R[x_2,\dots,x_n]$.
 The resultant of $f$ and $g$ with respect to $x_1$, denoted by $\Res_{x_1}(f,g)$, is then defined as the resultant of these univariate polynomials in $x_1$; the subresultant polynomials are defined analogously.
 
-While subresultant algorithms can be used to compute $\Res_{x_1}(f,g)$ (resp. the subresultants), their efficiency may be compromised by the rapid growth of the coefficients in $R=\mathbb{Z}[x_2,\dots,x_n]$ during the computation. To mitigate this, one may instead evaluate the input polynomials at suitable values of $x_2,\dots,x_n$, compute the resultant of the resulting univariate polynomials in $x_1$, and then interpolate to recover $\Res_{x_1}(f,g)$. This evaluation-interpolation approach replaces expensive symbolic computations in $R$ with more efficient numerical computations in $\mathbb{Z}$, often leading to significant performance improvements.
+While subresultant algorithms can be used to compute $\Res_{x_1}(f,g)$ (resp. the subresultants), their efficiency may be compromised by the rapid growth of the coefficients in $R[x_2,\dots,x_n]$ during the computation. To mitigate this, one may instead evaluate the input polynomials at suitable values of $x_2,\dots,x_n$, compute the resultant of the resulting univariate polynomials in $x_1$, and then interpolate to recover $\Res_{x_1}(f,g)$. This evaluation-interpolation approach replaces expensive symbolic computations in $R[x_2,\dots,x_n]$ with more efficient numerical computations in $R$, often leading to significant performance improvements.
 
 Still, it is crucial to ensure that the evaluation points are chosen such that the interpolation process is valid and yields the correct result. In the following, we discuss the conditions under which this approach is valid and how to choose suitable evaluation points.
 
 \subsection{Specialization property of the resultant}
 
-Intuitively, let $\eta\in\mathbb{Z}^{n-1}$, and $f(\eta),g(\eta)\in\mathbb{Z}[x_1]$ be the univariate polynomials obtained by evaluating $f$ and $g$ at $\eta$. We then have $\Res_{x_1}(f(\eta),g(\eta))\in\mathbb{Z}$. We would like to have $\Res_{x_1}(f(\eta),g(\eta))=\Res_{x_1}(f,g)(\eta)$, so that we can compute $\Res_{x_1}(f,g)$ by interpolation. However, this equality does not hold for all $\eta$:
+Intuitively, let $\eta\in R^{n-1}$, and $f(\eta),g(\eta)\in R[x_1]$ be the univariate polynomials obtained by evaluating $f$ and $g$ at $\eta$. We then have $\Res_{x_1}(f(\eta),g(\eta))\in R$. We would like to have $\Res_{x_1}(f(\eta),g(\eta))=\Res_{x_1}(f,g)(\eta)$, so that we can compute $\Res_{x_1}(f,g)$ by interpolation. However, this equality does not hold for all $\eta$:
 
 \begin{example}
     Let $f=x_1x_2+1$ and $g=x_1+1$. Then, $\Res_{x_1}(f,g)=x_2-1$. However, for $\eta=0$, we have $\Res_{x_1}(f(\eta),g(\eta))=1\neq\Res_{x_1}(f,g)(\eta)=-1$.
@@ -18,14 +18,14 @@ Intuitively, let $\eta\in\mathbb{Z}^{n-1}$, and $f(\eta),g(\eta)\in\mathbb{Z}[x_
 What happens in the above example is that the degree of $f$ and $g$ changes after evaluation, which leads to Sylvester matrix of different sizes. For the equality $\Res_{x_1}(f(\eta),g(\eta))=\Res_{x_1}(f,g)(\eta)$ to hold, we should ensure that the degree of $f$ and $g$ does not change after evaluation. Formally, we have the following result.
 
 \begin{proposition}
-    Let $f,g\in\mathbb{Z}[x_1,\dots,x_n]$, and $\eta\in\mathbb{Z}^{n-1}$. Let $h=\lc_{x_1}(f)\lc_{x_1}(g)\in\mathbb{Z}[x_2,\dots,x_n]$ be the product of the leading coefficients of $f$ and $g$ with respect to $x_1$. If $h(\eta)\neq 0$, then $\Res_{x_1}(f(\eta),g(\eta))=\Res_{x_1}(f,g)(\eta)$.
+    Let $f,g\in R[x_1,\dots,x_n]$, $\eta\in R^{n-1}$, and $h=\lc_{x_1}(f)\lc_{x_1}(g)\in R[x_2,\dots,x_n]$ be the product of the leading coefficients of $f$ and $g$ with respect to $x_1$. If $h(\eta)\neq 0$, then $\Res_{x_1}(f(\eta),g(\eta))=\Res_{x_1}(f,g)(\eta)$.
 \end{proposition}
 
 \begin{proof}
     $h(\eta)\neq 0$ implies that $\lc_{x_1}(f)(\eta)\neq 0$ and $\lc_{x_1}(g)(\eta)\neq 0$. Therefore, $\deg_{x_1}(f(\eta))=\deg_{x_1}(f)$ and $\deg_{x_1}(g(\eta))=\deg_{x_1}(g)$, so that $S(f(\eta),g(\eta))=S(f,g)(\eta)$, hence the result.
 \end{proof}
 
-The property that $h(\eta)\neq 0$ is a generic condition, as it holds for all $\eta\in\mathbb{C}^{n-1}$ except those in the proper Zariski-closed set defined by $h=0$. Therefore, we can choose as many evaluation points as we want in $\mathbb{Z}^{n-1}$ such that $h$ does not vanish at these points, and then interpolate to recover $\Res_{x_1}(f,g)$. A natural question is to ask how many evaluation points we need to recover $\Res_{x_1}(f,g)$ by interpolation. This can be answered by the following result.
+When $R$ is either $\mathbb{Z}$ or $\mathbb{Q}$, the property that $h\neq 0$ is a generic condition, as $\lbrace\eta\in\mathbb{C}^{n-1} : h(\eta)=0\rbrace$ is a proper Zariski-closed subset of $\mathbb{C}^{n-1}$. Consequently, we can find sufficiently many evaluation points as we want such that $h$ does not vanish at these points, and then interpolate to recover $\Res_{x_1}(f,g)$. However, it is not the case when $R=\mathbb{F}_p$ for whatever $p$. A natural question is to ask how many evaluation points we need to recover $\Res_{x_1}(f,g)$ by interpolation. This is answered by the following degree bound of the resultant.
 
 \begin{proposition}
     Let $f,g\in\mathbb{Z}[x_1,\dots,x_n]$. Denote by $\deg_{x_2,\dots,x_n}(f)$ (resp. $\deg_{x_2,\dots,x_n}(g)$) the total degree of $f$ (resp. $g$) with respect to $x_2,\dots,x_n$. Then, we have
@@ -38,7 +38,7 @@ The property that $h(\eta)\neq 0$ is a generic condition, as it holds for all $\
     Each term in $\det(S(f,g))$ is a product of $\deg_{x_1}(g)$ coefficients of $f$ and $\deg_{x_1}(f)$ coefficients of $g$, and therefore has degree bounded by $D$. We can then conclude by the definition of the resultant as the determinant of the Sylvester matrix.
 \end{proof}
 
-When $n=2$, we can then recover $\Res_{x_1}(f,g)$ by Lagrange interpolation from at most $D + 1$ evaluation points. When $n>2$, we can recover $\Res_{x_1}(f,g)$ by multivariate interpolation from at most $\binom{D + n-1}{n-1}$ evaluation points. For each evaluation point $\eta$, $\Res_{x_1}(f(\eta),g(\eta))$ may be computed either using the subresultant algorithm or by evaluating the determinant of the Sylvester matrix.
+Hence, we can recover $\Res_{x_1}(f,g)$ by multivariate interpolation from at most $\binom{D + n-1}{n-1}$ evaluation points, thus from at most $D + 1$ evaluation points when $n=2$. When $R=\mathbb{F}_p$, $h$ can at most vanish at $p^{n-2}\deg(h)$ points, so that when $p$ is large enough such that $p^{n-2}(p-\deg(h))>\binom{D + n-1}{n-1}$, we can still recover $\Res_{x_1}(f,g)$ by interpolation.
 
 \subsection{Specialization property of subresultant polynomials}
 
