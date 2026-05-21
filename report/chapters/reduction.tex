@@ -75,9 +75,9 @@ When $n=2$, a prime $p$ between $2^{30}$ and $2^{31}-1$ is large enough to ensur
 
 \subsection{Reduction properties of subresultant polynomial remainders}
 
-In Algorithm \ref{alg:subres}, returning the subsequence $\sResP_k(f,g)$ computed on Line 16 yields the so-called \emph{subresultant polynomial remainder sequence} of $f$ and $g$. Up to scaling factors, the sequence is of one-to-one correspondence with the sequence of Euclidean remainders of $f$ and $g$. One immediate application of this variant is the computation of the Sturm–Habicht sequence of $f$, namely the subresultant polynomial remainder sequence of $f$ and its derivative $\frac{\partial f}{\partial x_1}$, up to sign changes.
+In Algorithm \ref{alg:subres}, returning the subsequence $\sResP_k(f,g)$ computed on Line 16 yields the subresultant polynomial remainder sequence of $f$ and $g$. One immediate application of this variant is the computation of the Sturm–Habicht sequence of $f$, namely the subresultant polynomial remainder sequence of $f$ and its derivative $\frac{\partial f}{\partial x_1}$, up to sign changes.
 
-A natural question is to ask whether we can compute the subresultant polynomial remainders without computing all subresultant polynomials. The answer is positive, but one needs to take extra attention to the choice of evaluation points.
+A natural question is to ask whether we can compute the subresultant polynomial remainders with evaluation-interpolation as well. The answer is positive, but one needs to take extra attention to the choice of evaluation points.
 
 \begin{example}
     Let $f=x_1^4+x_1^2x_2+1$ and $g=x_1^3+x_1+x_2$. Then, the subresultant polynomial remainders of $f$ and $g$ with respect to $x_1$ are
