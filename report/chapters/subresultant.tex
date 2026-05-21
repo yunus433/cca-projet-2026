@@ -1,12 +1,38 @@
+\section{Preliminaries}
+
+Throughout the section, we let $R$ be a ring, and $f,g\in R[x]$ be two non-zero univariate polynomials of degree $p$ and $q$, respectively. Thus, we can write $f=a_p x^p + a_{p-1} x^{p-1} + \cdots + a_0$ and $g=b_q x^q + b_{q-1} x^{q-1} + \cdots + b_0$, with $a_p, b_q \neq 0$.
+
 \subsection{Subresultant polynomials}
 
-% As before, for the entire section, let $f, g \in \mathbb{Z}[x]$ with $\deg f = n$ and $\deg g = m$. Moreover, we assume $m \leq n$ without loss of generality.
+\begin{definition}[Sylvester matrix]
+    The Sylvester matrix associated to $f$ and $g$ is the $(p+q)\times(p+q)$ matrix defined as follows:
+    \begin{equation*}
+        \Syl(f,g)=
+        \begin{pmatrix}
+            a_p     &        &        &        & b_q     &        &        &        \\
+            a_{p-1} & a_p    &        &        & b_{q-1} & b_q    &        &        \\
+            \vdots  & \vdots & \ddots &        & \vdots  & \vdots & \ddots &        \\
+            a_0     & a_1    & \cdots & a_p    & b_0     & b_1    & \cdots & b_q    \\
+                    & a_0    & \ddots & \vdots &         & b_0    & \ddots & \vdots \\
+                    &        & \ddots & a_1    &         &        & \ddots & b_1    \\
+                    &        &        & a_0    &         &        &        & b_0
+        \end{pmatrix},
+    \end{equation*}
+    where all the non-specified coefficients are zero.
+\end{definition}
 
-% Resultant of polynomials is important, as it gives us an efficient manner to understand if two polynomials have a common root or not. However, it does not give any other information but about gcd. Thus, we can extend the resultant definition into subresultants, which include all results of the Extended Euclidean Algorithm \cite{subresultant}.
+In Sylvester's original paper \cite{sylvester1853xviii}, no explicit row or column convention was specified for the Sylvester matrix. Consequently, some sources in the literature (e.g., \cite{basu2006algorithms}) present the Sylvester matrix as the transpose of the form given above. In this report, we adopt a column-oriented convention, under which the Sylvester matrix is the matrix of the linear map
+\begin{align*}
+    \phi : R[x]_{<q} \oplus R[x]_{<p} & \to R[x]_{<p+q} \\
+    (u,v)                             & \mapsto uf + vg
+\end{align*}
+in the canonical monomial basis $(1,x,x^2,\ldots)$. This leads to the well-known definition of the resultant as the determinant of the Sylvester matrix.
 
-% Specifically, the resultant is directly related to the GCD, as shown in the previous section, that it dissapears whenever the GCD is constant. In the case of subresultant, the subresultant polynomial (i.e. the polynomial that is constructed through subresultant determinants, defined below) expresses the remainders (with a scaling factor) in the sequence of the Euclidean GCD algorithm. The advantage over the regular algorithm is that in the case of subresultant polynomials, as they are defined through the determinant of a matrix in $\mathbb{Z}$, they are in $\mathbb{Z}[x]$, which prevents coefficients from growing too big. This is why it is important to be able to compute subresultant polynomials efficiently.
+\begin{definition}[Resultant]
+    The resultant of $f$ and $g$, denoted by $\Res(f,g)$, is defined as the determinant of the Sylvester matrix $\Syl(f,g)$.
+\end{definition}
 
-Likewise, we can define subresultant polynomials with the determinants of certain submatrices of the Sylvester matrix. Suppose that $p>q$.
+As for the subresultant polynomials, they are defined using the determinants of certain submatrices of the Sylvester matrix, called the \emph{Sylvester-Habicht matrices}, which are defined as follows.
 
 \begin{definition}[Sylvester-Habicht matrix]
     Given $0\leq i\leq q$, the $i$-th Sylvester-Habicht matrix $S_i(f,g)$ is the $(p+q-i)\times(p+q-2i)$ submatrix of $\Syl(f,g)$ obtained as follows: take the first $p-i$ columns of $\Syl(f,g)$ without their last $i$ zero rows, then append the next $q-i$ columns starting from the $(p+1)$-th row of $\Syl(f,g)$ without their last $i$ zero rows.
@@ -17,7 +43,11 @@ For $0\leq j\leq i$, we denote by $M_{i,j}(f,g)$ the $(p+q-2i)\times(p+q-2i)$ su
     \phi_i : R[x]_{<q-i} \oplus R[x]_{<p-i} & \to R[x]_{<p+q-2i} \\
     (u,v)                                   & \mapsto uf + vg
 \end{align*}
-in the canonical monomial basis. The determinant of $M_{i,j}(f,g)$ is often referred to as the $j$-th subresultant $\sRes_j(f,g)$ of $f$ and $g$. We now give the definition of the $i$-th subresultant polynomial of $f$ and $g$.
+in the canonical monomial basis. In the same spirit for resultants, the subresultants and subresultant polynomials of $f$ and $g$ are then defined with the determinants of $M_{i,j}(f,g)$'s.
+
+\begin{definition}[Subresultant]
+    Given $0\leq i\leq q$, the $i$-th subresultant of $f$ and $g$, denoted by $\sRes_i(f,g)$, is defined as the determinant of the matrix $M_{i,i}(f,g)$.
+\end{definition}
 
 \begin{definition}[Subresultant polynomial]
     Given $0\leq i\leq q$, the $i$-th subresultant polynomial of $f$ and $g$, denoted by $\sResP_i(f,g)$, is defined as
@@ -30,7 +60,7 @@ in the canonical monomial basis. The determinant of $M_{i,j}(f,g)$ is often refe
 
 \subsection{Structure theorem for subresultants}
 
-Instead of computing subresultants through the determinant of the Sylvester-Habicht matrix, we can compute subresultant polynomials through a variant of the Euclidean algorithm, called the subresultant algorithm. The key idea is to use the structure theorem for subresultants, which gives the relation between subresultant polynomials, to compute the sequence of subresultant polynomials without performing any division in the fraction field of $R$.
+While subresultants are defined as the determinants of certain submatrices of the Sylvester matrix, they also have a nice structure that relates them to the GCD and the remainder in the Euclidean algorithm, allowing us to compute them iteratively without performing any division in the fraction field of $R$. This is known as the structure theorem for subresultants, which is stated as follows.
 
 \begin{theorem}[{\cite[Thm. 8.56]{basu2006algorithms}}]
     Let $0\leq i\leq q$. Suppose that $\sResP_{i-1}(f,g)$ is non-zero and of degree $0\leq j\leq i-1$. Then,
