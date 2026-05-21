@@ -15,7 +15,7 @@ Note that for our proposed implementation, we present 6 different running times,
   \item Ordered Positive Points: Ordered and positive points in the ascending order of bitsize.
 \end{enumerate}
 
-\subsection{FMPZ Benchmarks}
+\subsection{Benchmarks for integer polynomials}
 
 \begin{figure}[H]
   \centering
@@ -28,33 +28,30 @@ Note that for our proposed implementation, we present 6 different running times,
 
 In Figure \ref{fig:benc.fmpz.3}, we first compare our implementation against the library in small polynomials, i.e. of exponent bitsize 3. We see that while the random selection of points for the interpolation method is significantly slower than the rest, other methods have similar running times. This important difference between random selection and others can be explained by the bitsize of the points used in the interpolation. When a uniformly random selection is performed, bitsize of the points used in the interpolation is the same as the bitsize of coefficients, i.e. 50. Thus, the interpolation takes significantly more time than other approaches.
 
-Another important observation, about rest of the measured methods, is that even though FLINT's implementation is slower in some cases, there is no important difference between their running times. 
+Another important observation, about rest of the measured methods, is that even though FLINT's implementation is slower in some cases, there is no important difference between their running times.
 
 \begin{figure}[H]
   \centering
-  \begin{subfigure}{0.75\textwidth}
+  \begin{subfigure}{0.45\textwidth}
     \includegraphics[width=\linewidth]{./images/fmpz_bitsize_4.png}
-  \end{subfigure}
-  \caption{FMPZ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 4 with varying lengths.}
-  \label{fig:benc.fmpz.4}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \begin{subfigure}{0.75\textwidth}
+    \caption{FMPZ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 4 with varying lengths.}
+    \label{fig:benc.fmpz.4}
+  \end{subfigure}%
+  \hspace{0.05\textwidth}%
+  \begin{subfigure}{0.45\textwidth}
     \includegraphics[width=\linewidth]{./images/fmpz_bitsize_5.png}
+    \caption{FMPZ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 5 with varying lengths.}
+    \label{fig:benc.fmpz.5}
   \end{subfigure}
-  \caption{FMPZ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 5 with varying lengths.}
-  \label{fig:benc.fmpz.5}
 \end{figure}
 
 In Figure \ref{fig:benc.fmpz.4} and \ref{fig:benc.fmpz.5}, we extend our analysis to bigger polynomials with the exponent bitsize 4 and 5, respectively. We see that the relation between the random selection method and other categories is still the same, while the difference between the FLINT library implementation and our methods starts to become visible. As the length of polynomials increase, FLINT performs much slower than our algorithm. Notice also that there is not too much difference between randomly selecting interpolation points with small bitsize and having them ordered in the bitsize, which supports our intiution that the running time of polynomial interpolation depends on the bitsize of selected points.
 
-Moreover, we can observe that all curves follow a similar shape with considerable fluctuations. Even though the overall trend is that increasing the polynomial's length increases the running time, we see that for some lengths there is a sharp decrease in the measure time. This result can be explained by the properties of the random bivariate polynomial generation function of FLINT. For some testcases, the generated polynomials have a resultant that is much harder to compute. This fluctuation can be minimized by increasing number of trials per length, but since our main motivation is comparing different methods, but not giving an accurate estimate of their dependence of the length of the polynomial, we keep this methodology. 
+Moreover, we can observe that all curves follow a similar shape with considerable fluctuations. Even though the overall trend is that increasing the polynomial's length increases the running time, we see that for some lengths there is a sharp decrease in the measure time. This result can be explained by the properties of the random bivariate polynomial generation function of FLINT. For some testcases, the generated polynomials have a resultant that is much harder to compute. This fluctuation can be minimized by increasing number of trials per length, but since our main motivation is comparing different methods, but not giving an accurate estimate of their dependence of the length of the polynomial, we keep this methodology.
 
 \begin{figure}[H]
   \centering
-  \begin{subfigure}{0.75\textwidth}
+  \begin{subfigure}{0.5\textwidth}
     \includegraphics[width=\linewidth]{./images/fmpz_bitsize_6.png}
   \end{subfigure}
   \caption{FMPZ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 6 with varying lengths.}
@@ -63,39 +60,36 @@ Moreover, we can observe that all curves follow a similar shape with considerabl
 
 Finally, we measure with polynomials of the exponent bitsize 6, where we only include the library and ordered implementations to minimize the total running time. We observe that the difference between both methods becomes even more important. For bigger bitsizes, total running times exceeds 30 seconds for a single measurement, thus we do not present the results here.
 
-\subsection{FMPQ Benchmarks}
+\subsection{Benchmarks for rational polynomials}
 
 In this section, we extend our analysis to polynomials over $\mathbb{Q}$ instead of $\mathbb{Z}$, but note that presented results do not really differ from what we have observed for $\mathbb{Z}$. Interpolation using random points with big bitsize is significantly slower than rest of the methods, and the FLINT implementation starts becoming much slower than our implementations as the exponent bitsize and the length of the polynomials increase. Using ordered points in bitsize for interpolation is slightly more performant than using random points with small bitsize, but both methods are still significantly faster than FLINT.
 
 \begin{figure}[H]
   \centering
-  \begin{subfigure}{0.75\textwidth}
+  \begin{subfigure}{0.45\textwidth}
     \includegraphics[width=\linewidth]{./images/fmpq_bitsize_3.png}
-  \end{subfigure}
-  \caption{FMPQ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 3 with varying lengths.}
-  \label{fig:benc.fmpq.3}
-\end{figure}
-\begin{figure}[H]
-  \centering
-  \begin{subfigure}{0.75\textwidth}
+    \caption{FMPQ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 3 with varying lengths.}
+    \label{fig:benc.fmpq.3}
+  \end{subfigure}%
+  \hspace{0.05\textwidth}%
+  \begin{subfigure}{0.45\textwidth}
     \includegraphics[width=\linewidth]{./images/fmpq_bitsize_4.png}
+    \caption{FMPQ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 4 with varying lengths.}
+    \label{fig:benc.fmpq.4}
   \end{subfigure}
-  \caption{FMPQ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 4 with varying lengths.}
-  \label{fig:benc.fmpq.4}
 \end{figure}
+
 \begin{figure}[H]
   \centering
-  \begin{subfigure}{0.75\textwidth}
+  \begin{subfigure}{0.45\textwidth}
     \includegraphics[width=\linewidth]{./images/fmpq_bitsize_5.png}
-  \end{subfigure}
-  \caption{FMPQ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 5 with varying lengths.}
-  \label{fig:benc.fmpq.5}
-\end{figure}
-\begin{figure}[H]
-  \centering
-  \begin{subfigure}{0.75\textwidth}
+    \caption{FMPQ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 5 with varying lengths.}
+    \label{fig:benc.fmpq.5}
+  \end{subfigure}%
+  \hspace{0.05\textwidth}%
+  \begin{subfigure}{0.45\textwidth}
     \includegraphics[width=\linewidth]{./images/fmpq_bitsize_6.png}
+    \caption{FMPQ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 6 with varying lengths.}
+    \label{fig:benc.fmpq.6}
   \end{subfigure}
-  \caption{FMPQ bivariate polynomial resultant execution time (in seconds) for exponent bitsize 6 with varying lengths.}
-  \label{fig:benc.fmpq.6}
 \end{figure}

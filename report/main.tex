@@ -27,6 +27,12 @@
 \fancyfoot[C]{\thepage}
 \setcounter{page}{0}
 \setlength{\headheight}{15pt}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{definition}[theorem]{Definition}
@@ -61,6 +67,7 @@
 \end{titlepage}
 
 \tableofcontents
+\thispagestyle{empty}
 \newpage
 
 \input{chapters/intro.tex}
