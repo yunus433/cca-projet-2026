@@ -9,7 +9,7 @@
 Likewise, we can define subresultant polynomials with the determinants of certain submatrices of the Sylvester matrix. Suppose that $p>q$.
 
 \begin{definition}[Sylvester-Habicht matrix]
-    Given $0\leq i\leq q$, the $i$-th Sylvester-Habicht matrix $S_i(f,g)$ is the $(p+q-i)\times(p+q-2i)$ submatrix of $S(f,g)$ obtained as follows: take the first $p-i$ columns of $S(f,g)$ without their last $i$ zero rows, then append the next $q-i$ columns starting from the $(p+1)$-th row of $S(f,g)$ without their last $i$ zero rows.
+    Given $0\leq i\leq q$, the $i$-th Sylvester-Habicht matrix $S_i(f,g)$ is the $(p+q-i)\times(p+q-2i)$ submatrix of $\Syl(f,g)$ obtained as follows: take the first $p-i$ columns of $\Syl(f,g)$ without their last $i$ zero rows, then append the next $q-i$ columns starting from the $(p+1)$-th row of $\Syl(f,g)$ without their last $i$ zero rows.
 \end{definition}
 
 For $0\leq j\leq i$, we denote by $M_{i,j}(f,g)$ the $(p+q-2i)\times(p+q-2i)$ submatrix of $S_i(f,g)$ obtained by taking the first $p+q-2i-1$ rows of $S_i(f,g)$ and the $(p+q-i-j)$-th row of $S_i(f,g)$. Then, $M_{i,i}(f,g)$ is the matrix of the linear map
@@ -28,7 +28,9 @@ in the canonical monomial basis. The determinant of $M_{i,j}(f,g)$ is often refe
     We say that $\sResP_i(f,g)$ is non-defective if $\deg(\sResP_i(f,g))=i$ (i.e., $\sRes_i(f,g)\neq 0$), and defective otherwise.
 \end{definition}
 
-We now state the structure theorem for subresultants, which gives the relation between subresultant polynomials. An immediate consequence is that non-defective subresultant polynomials are essentially the remainders in the Euclidean algorithm, up to a scaling factor.
+\subsection{Structure theorem for subresultants}
+
+Instead of computing subresultants through the determinant of the Sylvester-Habicht matrix, we can compute subresultant polynomials through a variant of the Euclidean algorithm, called the subresultant algorithm. The key idea is to use the structure theorem for subresultants, which gives the relation between subresultant polynomials, to compute the sequence of subresultant polynomials without performing any division in the fraction field of $R$.
 
 \begin{theorem}[{\cite[Thm. 8.56]{basu2006algorithms}}]
     Let $0\leq i\leq q$. Suppose that $\sResP_{i-1}(f,g)$ is non-zero and of degree $0\leq j\leq i-1$. Then,
@@ -43,7 +45,13 @@ We now state the structure theorem for subresultants, which gives the relation b
     \end{itemize}
 \end{theorem}
 
-We refer the reader to \cite[Chapter 8]{basu2006algorithms} for a detailed proof of the structure theorem for subresultants, as well as the explicit formulas for the scaling factors. This theorem enables computation of the sequence of subresultant polynomials, and hence the GCD and resultant of two polynomials, without performing any division in the fraction field of $R$. The algorithm is given as follows.
+An immediate consequence is that non-defective subresultant polynomials $\sResP_{k-1}(f,g)$'s, as well as the $\sResP_{k}(f,g)$'s, are essentially the remainders in the Euclidean algorithm, up to a scaling factor. The latter sequence of subresultant polynomials, shown in Example \ref{ex:subres}, is known as the \emph{subresultant polynomial remainder sequence} of $f$ and $g$.
+
+We refer the reader to \cite[Chapter 8]{basu2006algorithms} for a detailed proof of the structure theorem for subresultants, as well as the explicit formulas for the scaling factors.
+
+\paragraph{The subresultant algorithm}
+
+The structure theorem for subresultants provides a way to compute the sequence of subresultant polynomials, and hence the GCD and resultant of two polynomials, without performing any division in the fraction field of $R$. Algorithm \ref{alg:subres} gives the pseudo-code of the subresultant algorithm, with Lazard's optimization for computing the scaling factors \cite{ducos2000optimizations}.
 
 \begin{algorithm}
     \caption{The subresultant algorithm}\label{alg:subres}
@@ -64,7 +72,7 @@ We refer the reader to \cite[Chapter 8]{basu2006algorithms} for a detailed proof
         \State $t_{j-\delta-1} \gets (-1)^{\delta}(t_{j-1}t_{j-\delta})/s_j$
         \EndFor
         \State $s_{k} \gets t_{k}$
-        \State // Computation of defective subresultant polynomials (optional)
+        \State // Computation of defective subresultant polynomials
         \State $\sResP_{k} \gets s_k \sResP_{j-1}/t_{j-1}$
         \For{$\ell=k+1$ to $j-1$}
         \State $\sResP_{\ell} \gets 0$
@@ -83,3 +91,7 @@ We refer the reader to \cite[Chapter 8]{basu2006algorithms} for a detailed proof
 \end{algorithm}
 
 We emphasize that for the subresultant polynomials to be well-defined in $R[x]$, the assumption that $p>q$ is crucial. In the case of $p=q$, the algorithm defines $\sResP_{q}(f,g)=b_q^{-1} g$, which may fail to lie in $R[x]$ if $b_q$ is not a unit. Nevertheless, the polynomials $\sResP_i(f,g)$ for $0\leq i\leq q-1$ remain well-defined in $R[x]$ and can be computed by the algorithm; we do not pursue the case of $p=q$ in this report for simplicity.
+
+\paragraph{Variants of the subresultant algorithm.}
+
+Algorithm \ref{alg:subres} returns the sequence of subresultant polynomials $(\sResP_i(f,g))_{0\leq i\leq q}$, which contains all non-defective subresultant polynomials together with some defective ones. If only the non-defective subresultant polynomials are required, the computation of defective subresultant polynomials on Lines 15–19 can be omitted. In the meantime, returning only $\sResP_k(f,g)$'s computed on Line 16 produces the subresultant polynomial remainder sequence of $f$ and $g$.
