@@ -7,7 +7,7 @@ Throughout the section, we let $R$ be a ring, and $f,g\in R[x]$ be two non-zero 
 \begin{definition}[Sylvester matrix]
     The Sylvester matrix associated to $f$ and $g$ is the $(p+q)\times(p+q)$ matrix defined as follows:
     \begin{equation*}
-        S(f,g)=
+        \Syl(f,g)=
         \begin{pmatrix}
             a_p     &        &        &        & b_q     &        &        &        \\
             a_{p-1} & a_p    &        &        & b_{q-1} & b_q    &        &        \\
@@ -29,7 +29,7 @@ In Sylvester's original paper \cite{sylvester1853xviii}, no explicit row or colu
 in the canonical monomial basis $(1,x,x^2,\ldots)$. This leads to the definition of the resultant as follows, as well as the following fundamental property of the resultant.
 
 \begin{definition}[Resultant]
-    The resultant of $f$ and $g$, denoted by $\Res(f,g)$, is defined as the determinant of the Sylvester matrix $S(f,g)$.
+    The resultant of $f$ and $g$, denoted by $\Res(f,g)$, is defined as the determinant of the Sylvester matrix $\Syl(f,g)$.
 \end{definition}
 
 \begin{proposition}
