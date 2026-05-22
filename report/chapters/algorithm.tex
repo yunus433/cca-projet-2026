@@ -1,42 +1,50 @@
-\section{Proposed Algorithm}
+\section{Algorithms}
 
-In this section, we propose an algorithm to efficiently compute the resultant of two bivariate polynomials, $f$ and $g$ in $\mathbb{Z}$ using an evaluation-interpolation approach. First, we recall the results from the previous section:
+In this section, we propose algorithms to efficiently compute the subresultant polynomials of two polynomials $f,g\in R[x_1,\dots,x_n]$ with coefficients in $R=\mathbb{Z}$, $\mathbb{R}$, or $\mathbb{F}_p$ with sufficiently large $p$, by using an evaluation-interpolation approach. We recall the results from the previous section:
 
 \begin{enumerate}
-  \item The resultant of two evaluated polynomials is generically equal to the resultant evaluated at the same point, outside the set of points where either $\lc_{x_2}(f)$ or $\lc_{x_2}(g)$ vanishes.
-  \item The resultant of two bivariate polynomials has a degree bounded by $\deg_{x_1}(f)\deg_{x_2}(g)+\deg_{x_1}(g)\deg_{x_2}(f)$.
+  \item The subresultants of two evaluated polynomials are equal to the subresultants evaluated at the same point, outside the set of points where either $\lc_{x_1}(f)$ or $\lc_{x_1}(g)$ vanishes.
+  \item The degree bound for subresultants is $\deg_{x_1}(f)\deg_{x_2,\dots,x_n}(g) + \deg_{x_1}(g)\deg_{x_2,\dots,x_n}(f)$.
 \end{enumerate}
 
-Using these two facts, we propose the following algorithm.
+\subsection{Algorithm for bivariate subresultants}
 
-\begin{algorithm}
-  \caption{\textsf{BivariateResultant}}\label{alg:res}
+For bivariate polynomials $f,g\in R[x_1,x_2]$, the degree bound of their resultant is given by $\deg_{x_1}(f)\deg_{x_2}(g)+\deg_{x_1}(g)\deg_{x_2}(f)$. Using the above facts, Algorithm \ref{alg:res} computes the subresultant polynomials of $f$ and $g$ by evaluating $f$ and $g$ at sufficiently many points, computing the subresultant polynomials of the evaluated univariate polynomials, and then interpolating to recover the subresultant polynomials of $f$ and $g$. In Algorithm \ref{alg:res}, we denote by $\textsf{Interpolate}(x,y)$ the interpolation method from the set of points $(x_i,y_i)_{1\leq i\leq N+1}$, which is provided by FLINT in our implementation.
+
+\begin{algorithm}[ht]
+  \caption{\textsf{BivariateSubresultantPolynomials}}\label{alg:res}
   \begin{algorithmic}[1]
-    \Require $f,g\in \mathbb{Z}[x]^2$
-    \Ensure $\Res_{x_2}(f, g) \in \mathbb{Z}[x_1]$
-    \State $N \gets \deg_{x_1}(f) \times \deg_{x_2}(g) + \deg_{x_1}(g) \times \deg_{x_2}(f)$
-    \State // We choose evaluation points starting from $1$ and increasing,
+    \Require $f,g\in R[x_1,x_2]^2$, $p=\deg_{x_1}(f)$, $q=\deg_{x_1}(g)$, $p>q$
+    \Ensure $(\sResP_i(f,g))_{0\leq i\leq q}$
+    \State $N \gets \deg_{x_1}(f)\deg_{x_2}(g)+\deg_{x_1}(g)\deg_{x_2}(f)$
+    \State // We choose evaluation points starting from $0$ and increasing,
     \State // until we have $N + 1$ points where leading coefficients do not vanish
-    \State $k \gets 1$
+    \State $\eta \gets 0$
     \For{$i = 1$ to $N + 1$}
-    \State $x_i \gets k$
-    \While{$\lc_{x_2}(f)(x_i) = 0$ or $\lc_{x_2}(g)(x_i) = 0$}
-    \State $k \gets k + 1$
-    \State $x_i \gets k$
+    \While{$\lc_{x_2}(f)(\eta) = 0$ or $\lc_{x_2}(g)(\eta) = 0$}
+    \State $\eta \gets \eta + 1$
     \EndWhile
-    \State $k \gets k + 1$
+    \State $x_i \gets \eta$
+    \State $\eta \gets \eta + 1$
     \EndFor
-    \State // We evaluate polynomials on chosen points
+    \State // We compute the subresultant polynomials specialized at the evaluation points
     \For{$i = 1$ to $N + 1$}
-    \State This resultant is in $\mathbb{Z}$ since polynomials are evaluated.
-    \State $y_i \gets \Res(f(x_i), g(x_i))$
+    \For{$j = 0$ to $q$}
+    \State $y_{j,i} \gets \sResP_j(f(x_i),g(x_i))$
     \EndFor
-    \State // We interpolate the resultant in $\mathbb{Z}[x_1]$
-    \State $R \gets \textsf{interpolate}(x, y, N)$
-    \State \Return R
+    \EndFor
+    \State // We interpolate the coefficients to recover the subresultant polynomials
+    \For{$j = 0$ to $q$}
+    \State $\sResP_j \gets \textsf{Interpolate}(x, y_j)$
+    \EndFor
+    \State \Return $(\sResP_j)_{0\leq j\leq q}$
   \end{algorithmic}
 \end{algorithm}
 
-Note that interpolation points can also be chosen with another method, e.g. randomly on a given bitsize or in the order of increasing bitsize. For $\mathbb{Z}$, a good choice is to choose points in the order $0, 1, -1, 2, -2, \dots$, etc. We implement these different approaches in our work and present their differences on performance in the following sections.
+Note that interpolation points can also be chosen with another method, e.g. randomly on a given bitsize or in the order of increasing bitsize. For $R=\mathbb{Z}$, a good choice is to choose points in the order $0, 1, -1, 2, -2, \dots$, etc. We implement these different approaches in our work and present their differences on performance in the following sections.
 
-It is also important to note that the above algorithm can be generalized to subresultants or subresultant polynomials. In our work, we also present an implementation of this approach for subresultants, using again our own implementation for univariate polynomial subresultant computation, as FLINT does not expose the subresultant algorithm. We do not include the pseudocode of the algorithm, as it is almost the same as the resultant computation, with the slight difference of repeating the same process for each subresultant instead of a single time.
+\subsection{Generalization to trivariate and multivariate subresultants}
+
+For trivariate polynomials $f,g\in R[x_1,x_2,x_3]$, we can apply the same evaluation-interpolation approach as in the bivariate case, but with a different choice of evaluation points. Specifically, we evaluate at points of the form $(\eta_2,\eta_3)$, chosen so that the $\lc_{x_1}(f)$ and $\lc_{x_1}(g)$ do not vanish at these points, then perform multivariate interpolation to recover the subresultant polynomials of $f$ and $g$. When fixing $\eta_2$, however, one must ensure that $\lc_{x_1}(f)$ and $\lc_{x_1}(g)$ are not identically zero as polynomials in $x_3$.
+
+The same idea extends recursively to polynomials in more than three variables, where we evaluate at points of the form $(\eta_2,\dots,\eta_n)$, chosen so that $\lc_{x_1}(f)$ and $\lc_{x_1}(g)$ do not vanish at these points.
