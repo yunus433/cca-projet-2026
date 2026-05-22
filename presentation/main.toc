@@ -1,0 +1,5 @@
+\beamer@sectionintoc {1}{Introduction}{3}{0}{1}
+\beamer@sectionintoc {2}{State of the Art and Contribution}{11}{0}{2}
+\beamer@sectionintoc {3}{Proposed Algorithm}{20}{0}{3}
+\beamer@sectionintoc {4}{Benchmarks}{29}{0}{4}
+\beamer@sectionintoc {5}{Conclusion}{40}{0}{5}

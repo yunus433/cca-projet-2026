@@ -1,0 +1,351 @@
+#include "mpoly_resultant_interpolation.h"
+
+int fmpz_mpoly_resultant_interpolation(
+  fmpz_mpoly_t R,
+  const fmpz_mpoly_t P,
+  const fmpz_mpoly_t Q,
+  slong var,
+  const fmpz_mpoly_ctx_struct *ctx
+) {
+  if (fmpz_mpoly_ctx_nvars(ctx) != 2 || var < 0 || var >= 2)
+    return -1;
+
+  int code = 0;
+  slong var_to_compute = var;
+  slong var_to_evaluate = var_to_compute ? 0 : 1;
+  slong vars[1];
+  ulong exps[1];
+
+  fmpz_mpoly_t temp_mpoly;
+  fmpz_poly_t lead_p, lead_q, temp_poly, temp_poly_2, resultant;
+
+  if (fmpz_mpoly_is_zero(P, ctx) || fmpz_mpoly_is_zero(Q, ctx)) {
+    fmpz_mpoly_zero(R, ctx);
+    return 0;
+  }
+
+  slong degP_var = fmpz_mpoly_degree_si(P, var_to_compute, ctx);
+  slong degQ_var = fmpz_mpoly_degree_si(Q, var_to_compute, ctx);
+  slong degP_eval = fmpz_mpoly_degree_si(P, var_to_evaluate, ctx);
+  slong degQ_eval = fmpz_mpoly_degree_si(Q, var_to_evaluate, ctx);
+  if (degP_var < 0 || degQ_var < 0 || degP_eval < 0 || degQ_eval < 0)
+    return -1;
+
+  slong number_of_points = degP_eval * degQ_var + degQ_eval * degP_var + 1;
+
+  fmpz_mpoly_init(temp_mpoly, ctx);
+  fmpz_poly_init(lead_p);
+  fmpz_poly_init(lead_q);
+  fmpz_poly_init(temp_poly);
+  fmpz_poly_init(temp_poly_2);
+  fmpz_poly_init(resultant);
+
+  // printf("Number of Points: %ld\n", number_of_points);
+  fmpz_t temp;
+  fmpz_init(temp);
+
+  fmpz *x = FLINT_ARRAY_ALLOC(number_of_points, fmpz);
+  if (x == NULL) {
+    code = -1;
+    goto cleanup;
+  }
+  fmpz *y = FLINT_ARRAY_ALLOC(number_of_points, fmpz);
+  if (y == NULL) {
+    flint_free(x);
+    x = NULL;
+    code = -1;
+    goto cleanup;
+  }
+  for (slong i = 0; i < number_of_points; i++) {
+    fmpz_init(x + i);
+    fmpz_init(y + i);
+  }
+
+  vars[0] = var_to_compute;
+  exps[0] = degP_var;
+  fmpz_mpoly_get_coeff_vars_ui(temp_mpoly, P, vars, exps, 1, ctx);
+  if (!fmpz_mpoly_get_fmpz_poly(lead_p, temp_mpoly, var_to_evaluate, ctx)) {
+    printf("ERROR in fmpz_mpoly_resultant_interpolation: fmpz_mpoly_get_fmpz_poly returned non-zero error code.");
+    code = -1;
+    goto cleanup;
+  }
+
+  vars[0] = var_to_compute;
+  exps[0] = degQ_var;
+  fmpz_mpoly_get_coeff_vars_ui(temp_mpoly, Q, vars, exps, 1, ctx);
+  if (!fmpz_mpoly_get_fmpz_poly(lead_q, temp_mpoly, var_to_evaluate, ctx)) {
+    printf("ERROR in fmpz_mpoly_resultant_interpolation: fmpz_mpoly_get_fmpz_poly returned non-zero error code.");
+    code = -1;
+    goto cleanup;
+  }
+
+  int value = 1;
+  for (slong i = 0; i < number_of_points; i++, value++) {
+    fmpz_set_si(x + i, value);
+
+    fmpz_poly_evaluate_fmpz(temp, lead_p, x + i);
+    if (fmpz_is_zero(temp)) {
+      i--;
+      continue;
+    }
+    fmpz_poly_evaluate_fmpz(temp, lead_q, x + i);
+    if (fmpz_is_zero(temp)) {
+      i--;
+      continue;
+    }
+  }
+
+  for (slong i = 0; i < number_of_points; i++) {
+    if (!fmpz_mpoly_evaluate_one_fmpz(temp_mpoly, P, var_to_evaluate, x + i, ctx)) {
+      printf("ERROR in fmpz_mpoly_resultant_interpolation: fmpz_mpoly_evaluate_one_fmpz returned non-zero error code.");
+      code = -1;
+      goto cleanup;
+    }
+    if (!fmpz_mpoly_get_fmpz_poly(temp_poly, temp_mpoly, var_to_compute, ctx)) {
+      printf("ERROR in fmpz_mpoly_resultant_interpolation: fmpz_mpoly_get_fmpz_poly returned non-zero error code.");
+      code = -1;
+      goto cleanup;
+    }
+
+    if (!fmpz_mpoly_evaluate_one_fmpz(temp_mpoly, Q, var_to_evaluate, x + i, ctx)) {
+      printf("ERROR in fmpz_mpoly_resultant_interpolation: fmpz_mpoly_evaluate_one_fmpz returned non-zero error code.");
+      code = -1;
+      goto cleanup;
+    }
+    if (!fmpz_mpoly_get_fmpz_poly(temp_poly_2, temp_mpoly, var_to_compute, ctx)) {
+      printf("ERROR in fmpz_mpoly_resultant_interpolation: fmpz_mpoly_get_fmpz_poly returned non-zero error code.");
+      code = -1;
+      goto cleanup;
+    }
+
+    fmpz_poly_resultant(y + i, temp_poly, temp_poly_2);
+  }
+
+  if (!fmpz_poly_interpolate(resultant, x, y, number_of_points)) {
+    printf("ERROR in fmpz_mpoly_resultant_interpolation: fmpz_poly_interpolate returned non-zero error code.");
+    code = -1;
+    goto cleanup;
+  }
+
+  fmpz_mpoly_set_fmpz_poly(R, resultant, var_to_evaluate, ctx);
+
+cleanup:
+  fmpz_mpoly_clear(temp_mpoly, ctx);
+  fmpz_poly_clear(lead_p);
+  fmpz_poly_clear(lead_q);
+  fmpz_poly_clear(temp_poly);
+  fmpz_poly_clear(temp_poly_2);
+  fmpz_poly_clear(resultant);
+  fmpz_clear(temp);
+
+  if (x != NULL) {
+    for (slong i = 0; i < number_of_points; i++) {
+      fmpz_clear(x + i);
+    }
+    flint_free(x);
+  }
+  if (y != NULL) {
+    for (slong i = 0; i < number_of_points; i++) {
+      fmpz_clear(y + i);
+    }
+    flint_free(y);
+  }
+
+  return code;
+}
+
+int fmpz_mpoly_resultant_interpolation_mode(
+  fmpz_mpoly_t R,
+  const fmpz_mpoly_t P,
+  const fmpz_mpoly_t Q,
+  slong var,
+  const fmpz_mpoly_ctx_struct *ctx,
+  const flint_bitcnt_t bits, // This is only used for mode BITSIZE_RANDOM
+  interpolation_mode_t mode
+) {
+  if (fmpz_mpoly_ctx_nvars(ctx) != 2 || var < 0 || var >= 2)
+    return -1;
+
+  int code = 0;
+  slong var_to_compute = var;
+  slong var_to_evaluate = var_to_compute ? 0 : 1;
+  slong vars[1];
+  ulong exps[1];
+
+  flint_rand_t rand_state;
+  fmpz_mpoly_t temp_mpoly;
+  fmpz_poly_t lead_p, lead_q, temp_poly, temp_poly_2, resultant;
+
+  if (fmpz_mpoly_is_zero(P, ctx) || fmpz_mpoly_is_zero(Q, ctx)) {
+    fmpz_mpoly_zero(R, ctx);
+    return 0;
+  }
+
+  slong degP_var = fmpz_mpoly_degree_si(P, var_to_compute, ctx);
+  slong degQ_var = fmpz_mpoly_degree_si(Q, var_to_compute, ctx);
+  slong degP_eval = fmpz_mpoly_degree_si(P, var_to_evaluate, ctx);
+  slong degQ_eval = fmpz_mpoly_degree_si(Q, var_to_evaluate, ctx);
+  if (degP_var < 0 || degQ_var < 0 || degP_eval < 0 || degQ_eval < 0)
+    return -1;
+
+  slong number_of_points = degP_eval * degQ_var + degQ_eval * degP_var + 1;
+
+  flint_rand_init(rand_state);
+  flint_rand_set_seed(rand_state, time(NULL), time(NULL));
+  fmpz_mpoly_init(temp_mpoly, ctx);
+  fmpz_poly_init(lead_p);
+  fmpz_poly_init(lead_q);
+  fmpz_poly_init(temp_poly);
+  fmpz_poly_init(temp_poly_2);
+  fmpz_poly_init(resultant);
+
+  // printf("Number of Points: %ld\n", number_of_points);
+  fmpz_t temp;
+  fmpz_init(temp);
+
+  fmpz *x = FLINT_ARRAY_ALLOC(number_of_points, fmpz);
+  if (x == NULL) {
+    code = -1;
+    goto cleanup;
+  }
+  fmpz *y = FLINT_ARRAY_ALLOC(number_of_points, fmpz);
+  if (y == NULL) {
+    flint_free(x);
+    x = NULL;
+    code = -1;
+    goto cleanup;
+  }
+  for (slong i = 0; i < number_of_points; i++) {
+    fmpz_init(x + i);
+    fmpz_init(y + i);
+  }
+
+  vars[0] = var_to_compute;
+  exps[0] = degP_var;
+  fmpz_mpoly_get_coeff_vars_ui(temp_mpoly, P, vars, exps, 1, ctx);
+  if (!fmpz_mpoly_get_fmpz_poly(lead_p, temp_mpoly, var_to_evaluate, ctx)) {
+    printf("ERROR in fmpz_mpoly_resultant_interpolation: fmpz_mpoly_get_fmpz_poly returned non-zero error code.");
+    code = -1;
+    goto cleanup;
+  }
+
+  vars[0] = var_to_compute;
+  exps[0] = degQ_var;
+  fmpz_mpoly_get_coeff_vars_ui(temp_mpoly, Q, vars, exps, 1, ctx);
+  if (!fmpz_mpoly_get_fmpz_poly(lead_q, temp_mpoly, var_to_evaluate, ctx)) {
+    printf("ERROR in fmpz_mpoly_resultant_interpolation: fmpz_mpoly_get_fmpz_poly returned non-zero error code.");
+    code = -1;
+    goto cleanup;
+  }
+
+  slong value = 1;
+  for (slong i = 0; i < number_of_points; i++) {
+    if (mode == BITSIZE_RANDOM) {
+      fmpz_randbits(x + i, rand_state, bits);
+
+      while (1) {
+        int is_all_unique = 1;
+
+        for (int j = 0; j < i; j++)
+          if (fmpz_equal(x + j, x + i))
+            is_all_unique = 0;
+
+        if (is_all_unique) break;
+        fmpz_randbits(x + i, rand_state, bits);
+      }
+    } else if (mode == BITSIZE_RANDOM_POS) {
+      fmpz_randbits_unsigned(x + i, rand_state, bits);
+
+      while (1) {
+        int is_all_unique = 1;
+
+        for (int j = 0; j < i; j++)
+          if (fmpz_equal(x + j, x + i))
+            is_all_unique = 0;
+
+        if (is_all_unique) break;
+        fmpz_randbits(x + i, rand_state, bits);
+      }
+    } else if (mode == SMALL_ORDERED) {
+      fmpz_set_si(x + i, value);
+      if (value > 0) value *= -1;
+      else value = (value * -1) + 1;
+    } else if (mode == SMALL_ORDERED_POS) {
+      fmpz_set_si(x + i, value);
+      value++;
+    } else {
+      code = -1;
+      goto cleanup;
+    }
+
+    fmpz_poly_evaluate_fmpz(temp, lead_p, x + i);
+    if (fmpz_is_zero(temp)) {
+      i--;
+      continue;
+    }
+    fmpz_poly_evaluate_fmpz(temp, lead_q, x + i);
+    if (fmpz_is_zero(temp)) {
+      i--;
+      continue;
+    }
+  }
+
+  for (slong i = 0; i < number_of_points; i++) {
+    if (!fmpz_mpoly_evaluate_one_fmpz(temp_mpoly, P, var_to_evaluate, x + i, ctx)) {
+      printf("ERROR in fmpz_mpoly_resultant_interpolation: fmpz_mpoly_evaluate_one_fmpz returned non-zero error code.");
+      code = -1;
+      goto cleanup;
+    }
+    if (!fmpz_mpoly_get_fmpz_poly(temp_poly, temp_mpoly, var_to_compute, ctx)) {
+      printf("ERROR in fmpz_mpoly_resultant_interpolation: fmpz_mpoly_get_fmpz_poly returned non-zero error code.");
+      code = -1;
+      goto cleanup;
+    }
+
+    if (!fmpz_mpoly_evaluate_one_fmpz(temp_mpoly, Q, var_to_evaluate, x + i, ctx)) {
+      printf("ERROR in fmpz_mpoly_resultant_interpolation: fmpz_mpoly_evaluate_one_fmpz returned non-zero error code.");
+      code = -1;
+      goto cleanup;
+    }
+    if (!fmpz_mpoly_get_fmpz_poly(temp_poly_2, temp_mpoly, var_to_compute, ctx)) {
+      printf("ERROR in fmpz_mpoly_resultant_interpolation: fmpz_mpoly_get_fmpz_poly returned non-zero error code.");
+      code = -1;
+      goto cleanup;
+    }
+
+    fmpz_poly_resultant(y + i, temp_poly, temp_poly_2);
+  }
+
+  if (!fmpz_poly_interpolate(resultant, x, y, number_of_points)) {
+    printf("ERROR in fmpz_mpoly_resultant_interpolation: fmpz_poly_interpolate returned non-zero error code.");
+    code = -1;
+    goto cleanup;
+  }
+
+  fmpz_mpoly_set_fmpz_poly(R, resultant, var_to_evaluate, ctx);
+
+cleanup:
+  flint_rand_clear(rand_state);
+  fmpz_mpoly_clear(temp_mpoly, ctx);
+  fmpz_poly_clear(lead_p);
+  fmpz_poly_clear(lead_q);
+  fmpz_poly_clear(temp_poly);
+  fmpz_poly_clear(temp_poly_2);
+  fmpz_poly_clear(resultant);
+  fmpz_clear(temp);
+
+  if (x != NULL) {
+    for (slong i = 0; i < number_of_points; i++) {
+      fmpz_clear(x + i);
+    }
+    flint_free(x);
+  }
+  if (y != NULL) {
+    for (slong i = 0; i < number_of_points; i++) {
+      fmpz_clear(y + i);
+    }
+    flint_free(y);
+  }
+
+  return code;
+}
