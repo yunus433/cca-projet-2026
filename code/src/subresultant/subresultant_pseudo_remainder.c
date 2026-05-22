@@ -178,14 +178,18 @@ int fmpz_poly_subresultant_pseudo_remainder(
         }
 
         if (deg_ip1 >= 0 && deg_ip1 <= min_deg) {
-            fmpz_set(subresultants + deg_ip1, fmpz_poly_lead(rip1));
+            // if (deg_i == deg_im1 - 1)
+            //     fmpz_set(subresultants + (deg_i - 1), fmpz_poly_lead(rip1));
+            // else {
+                fmpz_pow_ui(subresultants + (deg_ip1), fmpz_poly_lead(rip1), deg_i - deg_ip1);
+            // }
         }
 
-        for (slong j = deg_ip1 + 1; j < deg_i; j++) {
-            if (j >= 0 && j <= min_deg) {
-                fmpz_zero(subresultants + j);
-            }
-        }
+        // for (slong j = deg_ip1 + 1; j < deg_i - 1; j++) {
+        //     if (j >= 0 && j <= min_deg) {
+        //         fmpz_zero(subresultants + j);
+        //     }
+        // }
         fmpz_set(gammaim1, gammai);
         fmpz_set(psim1, psi);
         dim1 = di;

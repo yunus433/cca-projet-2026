@@ -25,7 +25,6 @@ The subresultant theory, developed in the 19th century, offers a more efficient 
         \sResP_2(f,g) & = 9326x-12300,    &
         \sResP_0(f,g) & = 260708.
     \end{align*}
-
     Indeed, the bit size of the coefficients is better controlled, and we still have $\gcd(f,g) = 1$.
 \end{example}
 
@@ -41,5 +40,5 @@ In practice, the improved subresultant algorithm is the default method for resul
 
 \paragraph{Contributions.}
 
-In this report, we design a fast algorithm for computing the subresultant polynomials of two multivariate polynomials over $\mathbb{Q}$, $\mathbb{Z}$, or $\mathbb{F}_p$. The approach leverages the specialization property of subresultant polynomials and can be viewed as a generalization of Collins’s algorithm for computing resultants.
-Our implementation in FLINT demonstrates significant performance improvements over existing approaches in Wolfram, Maple, and FLINT itself, achieving speedups of up to 20x for polynomials with total degree $30$ and coefficients of bit size $100$. We discuss the algorithmic design, implementation details, performance benchmarks, and potential avenues for further optimization in the subsequent sections of this report.
+In this report, we design and implement a fast algorithm for computing the resultant and subresultant sequence of two multivariate polynomials over $\mathbb{Q}$, $\mathbb{Z}$, or $\mathbb{F}_p$. The approach leverages the specialization property of subresultant polynomials and can be viewed as a generalization of Collins’s algorithm for computing resultants.
+Our implementation in FLINT demonstrates significant performance improvements over existing approaches in Wolfram, Maple, and FLINT itself, achieving speedups of up to 7x for resultant of bivariate polynomials with exponents of bitsize $7$ and coefficients of bitsize $50$. We discuss the algorithmic design, implementation details, performance benchmarks, and potential avenues for further optimization in the subsequent sections of this report.
