@@ -1,14 +1,13 @@
 \section{Conclusion}
 
-We conclude that using an evoluation-interpolation approach for computing resultant, subresultants or subresultant polynomials may perform significantly faster than existing methods in well-known libraries such as FLINT. We observe a $7\times$ performance improvement in polynomials with exponent bitsize $7$ and coefficient bitsize $50$. We also note that the performance difference becomes more significant as the degree and length of polynomials increase.
+We conclude that using an evaluation-interpolation approach for computing resultants, subresultants, or subresultant polynomials can be significantly faster than existing methods in well-known libraries such as FLINT. We observe a $7\times$ performance improvement in polynomials with exponent bit size $6$ and coefficient bit size $50$. We also note that the performance difference becomes more significant as the degree and length of polynomials increase.
 
-Moreover, we also observe that the method used to choose random points for the interpolation step of our algorithm affects the performance heavily. In particular, the interpolation performs faster when working with points of smaller bitsize. Thus, we identify the fastest the implementation as the one that choses points ordered in increasing bitsize instead of using any randomization.
+We also observe that the method used to choose random points for the interpolation step of our algorithm has a strong effect on performance. In particular, the interpolation performs faster when working with points of smaller bitsize. Thus, we identify the fastest implementation as the one that chooses points in increasing order of bit size instead of using any randomization.
 
-As possible next steps of our work, we identify:
-
+As possible next steps, we identify:
 \begin{itemize}
-  \item Benchmarking the subresultant implementation for bivariate polynomials (by choosing Wolfram or similar as the reference point),
-  \item Extending the implementation from resultants / subresultants to subresultant polynomials,
-  \item Extending the implementation to higher dimension polynomials, e.g. trivariate,
-  \item Optimize, test, and benchmark for higher degree and length polynomials.
+  \item Benchmarking the subresultant implementation for bivariate polynomials, using Wolfram or a similar system as a reference point,
+  \item Extending the implementation from resultants and subresultants to subresultant polynomials,
+  \item Extending the implementation to polynomials in higher dimensions, such as trivariate polynomials,
+  \item Optimizing, testing, and benchmarking the implementation on polynomials of higher degree and length.
 \end{itemize}
