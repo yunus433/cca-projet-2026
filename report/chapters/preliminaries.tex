@@ -1,11 +1,11 @@
 \section{Preliminaries}
 
-Throughout the section, we let $R$ be a ring, and $f,g\in R[x]$ be two non-zero univariate polynomials of degree $p$ and $q$, respectively. Thus, we can write $f=a_p x^p + a_{p-1} x^{p-1} + \cdots + a_0$ and $g=b_q x^q + b_{q-1} x^{q-1} + \cdots + b_0$, with $a_p, b_q \neq 0$.
+Throughout the section, we let $R$ be a ring, and let $f,g\in R[x]$ be two non-zero univariate polynomials of degree $p$ and $q$, respectively. Thus, we can write $f=a_p x^p + a_{p-1} x^{p-1} + \cdots + a_0$ and $g=b_q x^q + b_{q-1} x^{q-1} + \cdots + b_0$, with $a_p, b_q \neq 0$.
 
 \subsection{Subresultant polynomials}
 
 \begin{definition}[Sylvester matrix]
-    The Sylvester matrix associated to $f$ and $g$ is the $(p+q)\times(p+q)$ matrix defined as follows:
+    The Sylvester matrix associated with $f$ and $g$ is the $(p+q)\times(p+q)$ matrix defined as follows:
     \begin{equation*}
         \Syl(f,g)=
         \begin{pmatrix}
@@ -18,7 +18,7 @@ Throughout the section, we let $R$ be a ring, and $f,g\in R[x]$ be two non-zero 
                     &        &        & a_0    &         &        &        & b_0
         \end{pmatrix},
     \end{equation*}
-    where all the non-specified coefficients are zero.
+    where all unspecified entries are zero.
 \end{definition}
 
 In Sylvester's original paper \cite{sylvester1853xviii}, no explicit row or column convention was specified for the Sylvester matrix. Consequently, some sources in the literature (e.g., \cite{basu2006algorithms}) present the Sylvester matrix as the transpose of the form given above. In this report, we adopt a column-oriented convention, under which the Sylvester matrix is the matrix of the linear map
@@ -43,7 +43,7 @@ For $0\leq j\leq i$, we denote by $M_{i,j}(f,g)$ the $(p+q-2i)\times(p+q-2i)$ su
     \phi_i : R[x]_{<q-i} \oplus R[x]_{<p-i} & \to R[x]_{<p+q-2i} \\
     (u,v)                                   & \mapsto uf + vg
 \end{align*}
-in the canonical monomial basis. In the same spirit for resultants, the subresultants and subresultant polynomials of $f$ and $g$ are then defined with the determinants of $M_{i,j}(f,g)$'s.
+in the canonical monomial basis. In the same spirit as for resultants, the subresultants and subresultant polynomials of $f$ and $g$ are defined using the determinants of $M_{i,j}(f,g)$.
 
 \begin{definition}[Subresultant]
     Given $0\leq i\leq q$, the $i$-th subresultant of $f$ and $g$, denoted by $\sRes_i(f,g)$, is defined as the determinant of the matrix $M_{i,i}(f,g)$.
@@ -60,7 +60,7 @@ in the canonical monomial basis. In the same spirit for resultants, the subresul
 
 \subsection{Structure theorem for subresultants}
 
-While subresultants are defined as the determinants of certain submatrices of the Sylvester matrix, they also have a nice structure that relates them to the GCD and the remainder in the Euclidean algorithm, allowing us to compute them iteratively without performing any division in the fraction field of $R$. This is known as the structure theorem for subresultants, which is stated as follows.
+While subresultants are defined as the determinants of certain submatrices of the Sylvester matrix, they also have a nice structure that relates them to the GCD and the remainders in the Euclidean algorithm, allowing us to compute them iteratively without performing any division in the fraction field of $R$. This is known as the structure theorem for subresultants, which is stated as follows.
 
 \begin{theorem}[{\cite[Thm. 8.56]{basu2006algorithms}}]
     Let $0\leq i\leq q$. Suppose that $\sResP_{i-1}(f,g)$ is non-zero and of degree $0\leq j\leq i-1$. Then,
@@ -75,7 +75,7 @@ While subresultants are defined as the determinants of certain submatrices of th
     \end{itemize}
 \end{theorem}
 
-An immediate consequence is that non-defective subresultant polynomials $\sResP_{k-1}(f,g)$'s, as well as the $\sResP_{k}(f,g)$'s, are essentially the remainders in the Euclidean algorithm, up to a scaling factor. The latter sequence of subresultant polynomials, shown in Example \ref{ex:subres}, is known as the \emph{subresultant polynomial remainder sequence} of $f$ and $g$.
+An immediate consequence is that non-defective subresultant polynomials $\sResP_{k-1}(f,g)$, as well as the $\sResP_{k}(f,g)$, are essentially the remainders in the Euclidean algorithm, up to a scaling factor. The latter sequence of subresultant polynomials, shown in Example \ref{ex:subres}, is known as the \emph{subresultant polynomial remainder sequence} of $f$ and $g$.
 
 We refer the reader to \cite[Chapter 8]{basu2006algorithms} for a detailed proof of the structure theorem for subresultants, as well as the explicit formulas for the scaling factors.
 
@@ -122,7 +122,4 @@ The structure theorem for subresultants provides a way to compute the sequence o
 
 We emphasize that for the subresultant polynomials to be well-defined in $R[x]$, the assumption that $p>q$ is crucial. In the case of $p=q$, the algorithm defines $\sResP_{q}(f,g)=b_q^{-1} g$, which may fail to lie in $R[x]$ if $b_q$ is not a unit. Nevertheless, the polynomials $\sResP_i(f,g)$ for $0\leq i\leq q-1$ remain well-defined in $R[x]$ and can be computed by the algorithm; we do not pursue the case of $p=q$ in this report for simplicity.
 
-Finally, notice that the above algorithm \ref{alg:subres} can also be used to calculate the subresultant sequence, as subresultants are just leading coefficients of subresultant polynomials find by this algorithm.
-\paragraph{Variants of the subresultant algorithm.}
-
-Algorithm \ref{alg:subres} returns the sequence of subresultant polynomials $(\sResP_i(f,g))_{0\leq i\leq q}$, which contains all non-defective subresultant polynomials together with some defective ones. If only the non-defective subresultant polynomials are required, the computation of defective subresultant polynomials on Lines 15–19 can be omitted. In the meantime, returning only $\sResP_k(f,g)$'s computed on Line 16 produces the subresultant polynomial remainder sequence of $f$ and $g$.
+Algorithm \ref{alg:subres} returns the sequence of subresultant polynomials $(\sResP_i(f,g))_{0\leq i\leq q}$, which contains all non-defective subresultant polynomials together with some defective ones. If only the non-defective subresultant polynomials are required, the computation of defective subresultant polynomials on Lines 15–19 can be omitted. Similarly, returning only $\sResP_k(f,g)$ computed on Line 16 produces the subresultant polynomial remainder sequence of $f$ and $g$.
