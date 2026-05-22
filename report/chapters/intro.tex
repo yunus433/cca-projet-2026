@@ -1,0 +1,44 @@
+\section{Introduction}
+
+Let $R$ be a ring, and let $f,g\in R[x]$ be two non-zero univariate polynomials of degree $p$ and $q$, respectively, with $p>q$. When $R$ is a domain, we denote by $\mathbb{K}$ its fraction field, and by $\gcd(f,g)$ the monic greatest common divisor of $f$ and $g$ in $\mathbb{K}[x]$.
+
+To compute $\gcd(f,g)$, a common approach is to use the Euclidean algorithm, which consists in computing the sequence of remainders $r_0 = f$, $r_1 = g$, and $r_{i+1} = r_{i-1} \mod r_i$ until we reach a remainder that is zero. The last non-zero remainder is then the greatest common divisor of $f$ and $g$. However, this algorithm can be inefficient, as the size of the coefficients of the remainders can grow rapidly, leading to a large number of bit operations.
+
+\begin{example}
+    Let $f=x^8+x^6-3x^4-3x^3+8x^2+2x-5$ and $g=3x^6+5x^4-4x^2-9x+21$. Applying the Euclidean algorithm with $r_0=f$, $r_1=g$, we have the following remainder sequence:
+    \begin{align*}
+        r_2 & = -\frac{5}{9}x^4+\frac{1}{9}x^2-\frac{1}{3}, &
+        r_3 & = -\frac{117}{25}x^2-9x+\frac{441}{25}          \\
+        r_4 & = \frac{233150}{19773}x-\frac{102500}{6591},  &
+        r_5 & = -\frac{1288744821}{543589225}
+    \end{align*}
+    Thus, we have $\gcd(f,g) = 1$.
+\end{example}
+
+The subresultant theory, developed in the 19th century, offers a more efficient method for computing $\gcd(f,g)$. The subresultant polynomials $(\sResP_i(f,g))_{0\leq i\leq q}$, defined over $R[x]$, have the key property that an appropriately chosen subsequence is proportional to the remainder sequence produced by the Euclidean algorithm, as can be seen in the following example.
+
+\begin{example}[continued]
+    In the previous example, the subresultant polynomials are given by:
+    \begin{align*}
+        \sResP_5(f,g) & = 15x^4-3x^2+9,   &
+        \sResP_3(f,g) & = 65x^2+125x-245,   \\
+        \sResP_2(f,g) & = 9326x-12300,    &
+        \sResP_0(f,g) & = 260708.
+    \end{align*}
+    Indeed, the bit size of the coefficients is better controlled, and we still have $\gcd(f,g) = 1$.
+\end{example}
+
+The relation between the subresultant polynomials and the remainder sequence of the Euclidean algorithm was already known to Euler \cite{euler1750demonstration}, while its use in the context of computer algebra was first proposed by Collins in 1967 \cite{collins1967subresultants}. Since then, subresultant-based algorithms have been widely studied and implemented in computer algebra systems and libraries, such as Wolfram, Maple, and FLINT.
+
+\paragraph{State of the Art.}
+
+Subresultant polynomials can be computed through various methods, with the most efficient methods relying on the subresultant algorithm (see, e.g., \cite{akritas1989elements,cohen2013course,geddes1992algorithms}). Since its original development, refinements by Lazard and Ducos have led to an improved version, commonly referred to as the \emph{improved} subresultant algorithm \cite{ducos2000optimizations}. The algorithm achieves a bit complexity that is quadratic in both $p$ and the bit size of the coefficients of the input polynomials.
+
+When $R$ is a field, or an integral domain with an effective fraction field, the specialization property of the resultant $\Res(f,g):=\sResP_0(f,g)$ enables the use of evaluation-interpolation techniques. Building on this observation, Collins's algorithm \cite{collins1971calculation} applies multi-modular methods to compute the resultant efficiently, while relying on pseudo-remainder sequences rather than subresultant polynomials.
+
+In practice, the improved subresultant algorithm is the default method for resultant computation in FLINT. Maple also relies on subresultant-based methods, supplemented by multi-modular techniques for polynomials of high degree. However, neither software provides a direct interface for computing subresultant polynomials. In contrast, Wolfram offers explicit access to subresultant polynomials via the \texttt{SubresultantPolynomials} function.
+
+\paragraph{Contributions.}
+
+In this report, we design and implement a fast algorithm for computing the resultant and subresultant sequence of two multivariate polynomials over $\mathbb{Q}$, $\mathbb{Z}$, or $\mathbb{F}_p$. The approach leverages the specialization property of subresultant polynomials and can be viewed as a generalization of Collins’s algorithm for computing resultants.
+Our implementation in FLINT demonstrates significant performance improvements over existing approaches in Wolfram, Maple, and FLINT itself, achieving speedups of up to 7x for resultant of bivariate polynomials with exponents of bitsize $7$ and coefficients of bitsize $50$. We discuss the algorithmic design, implementation details, performance benchmarks, and potential avenues for further optimization in the subsequent sections of this report.

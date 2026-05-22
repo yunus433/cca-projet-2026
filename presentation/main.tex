@@ -33,7 +33,7 @@
   {\normalsize \insertauthor \par}
   \vspace{0.5em}
 
-  {\small Supervisor: Weija WANG \par}
+  {\small Supervisor: Weijia WANG \par}
   \vspace{1em}
 
   {\small \insertdate \par}
@@ -131,11 +131,11 @@ Univariate and multivariate polynomials, GCD, resultants, subresultants and subr
     \begin{column}{0.45\textwidth}
       State of the art:
       \begin{itemize}
-        \item ~1750, Subresultants were already known to Euler.
+        \item 1750, Subresultants were already known to Euler.
         \pause
-        \item ~1960, Collins used them heavily in computational algebra.
+        \item 1967, Collins used them heavily in computational algebra.
         \pause
-        \item ~2000, Lazard and Ducos improved the subresultant algorithm.
+        \item 2000, Lazard and Ducos improved the subresultant algorithm.
         \pause
         \item today, FLINT and Maple use subresultant-based methods for resultants.
         \item today, Wolfram exposes \texttt{SubresultantPolynomials} directly.
@@ -246,10 +246,8 @@ The GCD and resultant can be computed without division in the fraction field.
     \[
       h=\lc_{x_1}(f)\lc_{x_1}(g).
     \]
-    \begin{alertblock}{Bad points}
-    Degree drops after evaluation can break the equality.
-    \end{alertblock}
-    \pause
+
+
     \begin{block}{Valid evaluation point}
     If $h(\eta)\ne 0$, then
     \[
@@ -258,6 +256,10 @@ The GCD and resultant can be computed without division in the fraction field.
       \Res_{x_1}(f,g)(\eta).
     \]
     \end{block}
+    \pause
+    \begin{alertblock}{Bad points}
+    Degree drops after evaluation can break the equality.
+    \end{alertblock}
   \end{column}
   \pause
   \begin{column}{0.45 \textwidth}
@@ -620,9 +622,9 @@ The GCD and resultant can be computed without division in the fraction field.
 \begin{column}{0.45\textwidth}
   \textbf{Next Steps}
   \begin{itemize}
+    \item Benchmark subresultant implementation for bivariate polynomials.
     \item Extend implementation from resultants / subresultants to subresultant polynomials.
     \item Extend implementation to higher dimension multivariate polynomials (note that number of points for interpolation increases - $(D + 1)^{n-1}$).
-    \item Understand and implement specialization conditions for subresultant polynomials.
     \item Optimize, test, and benchmark for higher degree and length polynomials.
   \end{itemize}
 \end{column}

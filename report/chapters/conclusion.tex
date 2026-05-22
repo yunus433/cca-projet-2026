@@ -1,0 +1,14 @@
+\section{Conclusion}
+
+We conclude that using an evoluation-interpolation approach for computing resultant, subresultants or subresultant polynomials may perform significantly faster than existing methods in well-known libraries such as FLINT. We observe a $7\times$ performance improvement in polynomials with exponent bitsize $7$ and coefficient bitsize $50$. We also note that the performance difference becomes more significant as the degree and length of polynomials increase.
+
+Moreover, we also observe that the method used to choose random points for the interpolation step of our algorithm affects the performance heavily. In particular, the interpolation performs faster when working with points of smaller bitsize. Thus, we identify the fastest the implementation as the one that choses points ordered in increasing bitsize instead of using any randomization.
+
+As possible next steps of our work, we identify:
+
+\begin{itemize}
+  \item Benchmarking the subresultant implementation for bivariate polynomials (by choosing Wolfram or similar as the reference point),
+  \item Extending the implementation from resultants / subresultants to subresultant polynomials,
+  \item Extending the implementation to higher dimension polynomials, e.g. trivariate,
+  \item Optimize, test, and benchmark for higher degree and length polynomials.
+\end{itemize}
