@@ -38,3 +38,5 @@ Using these two facts, we propose the following algorithm.
 \end{algorithm}
 
 Note that interpolation points can also be chosen with another method, e.g. randomly on a given bitsize or in the order of increasing bitsize. For $\mathbb{Z}$, a good choice is to choose points in the order $0, 1, -1, 2, -2, \dots$, etc. We implement these different approaches in our work and present their differences on performance in the following sections.
+
+It is also important to note that the above algorithm can be generalized to subresultants or subresultant polynomials. In our work, we also present an implementation of this approach for subresultants, using again our own implementation for univariate polynomial subresultant computation, as FLINT does not expose the subresultant algorithm. We do not include the pseudocode of the algorithm, as it is almost the same as the resultant computation, with the slight difference of repeating the same process for each subresultant instead of a single time.

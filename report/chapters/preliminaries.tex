@@ -1,10 +1,50 @@
+\section{Preliminaries}
+
+Throughout the section, we let $R$ be a ring, and $f,g\in R[x]$ be two non-zero univariate polynomials of degree $p$ and $q$, respectively. Thus, we can write $f=a_p x^p + a_{p-1} x^{p-1} + \cdots + a_0$ and $g=b_q x^q + b_{q-1} x^{q-1} + \cdots + b_0$, with $a_p, b_q \neq 0$.
+
+\subsection{Resultant}
+
+\begin{definition}[Sylvester matrix]
+    The Sylvester matrix associated to $f$ and $g$ is the $(p+q)\times(p+q)$ matrix defined as follows:
+    \begin{equation*}
+        S(f,g)=
+        \begin{pmatrix}
+            a_p     &        &        &        & b_q     &        &        &        \\
+            a_{p-1} & a_p    &        &        & b_{q-1} & b_q    &        &        \\
+            \vdots  & \vdots & \ddots &        & \vdots  & \vdots & \ddots &        \\
+            a_0     & a_1    & \cdots & a_p    & b_0     & b_1    & \cdots & b_q    \\
+                    & a_0    & \ddots & \vdots &         & b_0    & \ddots & \vdots \\
+                    &        & \ddots & a_1    &         &        & \ddots & b_1    \\
+                    &        &        & a_0    &         &        &        & b_0
+        \end{pmatrix},
+    \end{equation*}
+    where all the non-specified coefficients are zero.
+\end{definition}
+
+In Sylvester's original paper \cite{sylvester1853xviii}, no explicit row or column convention was specified for the Sylvester matrix. Consequently, some sources in the literature (e.g., \cite{basu2006algorithms}) present the Sylvester matrix as the transpose of the form given above. In this report, we adopt a column-oriented convention, under which the Sylvester matrix is the matrix of the linear map
+\begin{align*}
+    \phi : R[x]_{<q} \oplus R[x]_{<p} & \to R[x]_{<p+q} \\
+    (u,v)                             & \mapsto uf + vg
+\end{align*}
+in the canonical monomial basis $(1,x,x^2,\ldots)$. This leads to the definition of the resultant as follows, as well as the following fundamental property of the resultant.
+
+\begin{definition}[Resultant]
+    The resultant of $f$ and $g$, denoted by $\Res(f,g)$, is defined as the determinant of the Sylvester matrix $S(f,g)$.
+\end{definition}
+
+\begin{proposition}
+    Suppose that $R$ is a domain, and let $\mathbb{K}$ be its fraction field. Then, $\Res(f,g)\neq 0$ if and only if $\gcd(f,g)=1$ in $\mathbb{K}[x]$.
+\end{proposition}
+
+\begin{proof}
+    As $\Res(f,g)$ is the determinant of the linear map $\phi$, we have $\Res(f,g) = 0\iff \ker(\phi)\neq \{0\}$, i.e., there exist non-zero polynomials $u$ and $v$, with $\deg(u)<q$ and $\deg(v)<p$, such that $uf+vg=0$. We now show that this is equivalent to $\gcd(f,g)\neq 1$.
+
+    $(\impliedby)$: Assume $\gcd(f,g)\neq 1$. Let $h=\gcd(f,g)$, and $f_1,g_1\in R[x]$ such that $f=hf_1$ and $g=hg_1$. Then, we can take $u=g_1$ and $v=-f_1$, so that $uf+vg=g_1hf_1-f_1hg_1=0$.
+
+    $(\implies)$: Assume that there exist non-zero polynomials $u$ and $v$, with $\deg(u)<q$ and $\deg(v)<p$, such that $uf+vg=0$. We can write $u=d u_1$ and $g=d g_1$, where $d=\gcd(u,g)$ and $\gcd(u_1,g_1)=1$. Then, we have $u_1 f=-v g_1$, which implies that $g_1\mid u_1 f$. Since $\gcd(u_1,g_1)=1$, we deduce that $g_1\mid f$. Thus, $g_1$ is a common divisor of $f$ and $g$. Moreover, we have $\deg(u)<q=\deg(g)$, which implies that $\deg(d)+\deg(u_1)<\deg(d)+\deg(g_1)$, so that $\deg(u_1)<\deg(g_1)$. Hence, $g_1$ is not constant, and we conclude that $\gcd(f,g)\neq 1$.
+\end{proof}
+
 \subsection{Subresultant polynomials}
-
-% As before, for the entire section, let $f, g \in \mathbb{Z}[x]$ with $\deg f = n$ and $\deg g = m$. Moreover, we assume $m \leq n$ without loss of generality.
-
-% Resultant of polynomials is important, as it gives us an efficient manner to understand if two polynomials have a common root or not. However, it does not give any other information but about gcd. Thus, we can extend the resultant definition into subresultants, which include all results of the Extended Euclidean Algorithm \cite{subresultant}.
-
-% Specifically, the resultant is directly related to the GCD, as shown in the previous section, that it dissapears whenever the GCD is constant. In the case of subresultant, the subresultant polynomial (i.e. the polynomial that is constructed through subresultant determinants, defined below) expresses the remainders (with a scaling factor) in the sequence of the Euclidean GCD algorithm. The advantage over the regular algorithm is that in the case of subresultant polynomials, as they are defined through the determinant of a matrix in $\mathbb{Z}$, they are in $\mathbb{Z}[x]$, which prevents coefficients from growing too big. This is why it is important to be able to compute subresultant polynomials efficiently.
 
 Likewise, we can define subresultant polynomials with the determinants of certain submatrices of the Sylvester matrix. Suppose that $p>q$.
 
@@ -83,3 +123,5 @@ We refer the reader to \cite[Chapter 8]{basu2006algorithms} for a detailed proof
 \end{algorithm}
 
 We emphasize that for the subresultant polynomials to be well-defined in $R[x]$, the assumption that $p>q$ is crucial. In the case of $p=q$, the algorithm defines $\sResP_{q}(f,g)=b_q^{-1} g$, which may fail to lie in $R[x]$ if $b_q$ is not a unit. Nevertheless, the polynomials $\sResP_i(f,g)$ for $0\leq i\leq q-1$ remain well-defined in $R[x]$ and can be computed by the algorithm; we do not pursue the case of $p=q$ in this report for simplicity.
+
+Finally, notice that the above algorithm \ref{alg:subres} can also be used to calculate the subresultant sequence, as subresultants are just leading coefficients of subresultant polynomials find by this algorithm.
