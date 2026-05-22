@@ -106,3 +106,16 @@ In this section, we extend our analysis to polynomials over $\mathbb{Q}$ instead
     \label{fig:benc.fmpq.6}
   \end{subfigure}
 \end{figure}
+
+\subsection{Comparison to Wolfram}
+
+We also perform an equivalent anaysis to compare our fastest implementation (i.e. ordered points) against Wolfram for bivariant polynomial resultant computation in exponents of bit size. We see that even though Wolfram is significantly faster than FLINT, it is still slower than our implementation with a factor of 2.5x. 
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.7\textwidth}
+    \includegraphics[width=\linewidth]{./images/wolfram_bitsize_6.png}
+  \end{subfigure}
+  \caption{Wolfram - FMPZ bivariate polynomial resultant execution time (in seconds) for exponent bit size 6 with varying lengths.}
+  \label{fig:benc.wolf.1}
+\end{figure}

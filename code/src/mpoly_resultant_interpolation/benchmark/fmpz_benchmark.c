@@ -3,8 +3,8 @@
 #include "../mpoly_resultant_interpolation.h"
 
 int COEFF_BIT_SIZE = 50;
-int DEFAULT_EXPO_BIT_SIZE_START = 7;
-int DEFAULT_EXPO_BIT_SIZE_END = 7;
+int DEFAULT_EXPO_BIT_SIZE_START = 6;
+int DEFAULT_EXPO_BIT_SIZE_END = 6;
 int DEFAULT_LENGTH_START = 4;
 int DEFAULT_LENGTH_END = 32;
 int DEFAULT_LENGTH_INC = 2;
@@ -34,6 +34,8 @@ void benchmark(
   fmpz_mpoly_init(R_lib, ctx);
   fmpz_mpoly_init(R_inter, ctx);
 
+  // FILE * fout = fopen("./benchmark-polynomials.txt", "w"); // To record random polynomials, e.g. to be used by wolfram
+
   for (int expo_bit_size = expo_bit_size_start; expo_bit_size <= expo_bit_size_end; expo_bit_size++) {
     printf("Starting expo bit size %d...\n", expo_bit_size);
 
@@ -47,9 +49,17 @@ void benchmark(
       double t_lib, t_rand, t_rand_pos, t_rand_small, t_rand_small_pos, t_order, t_order_pos;
       t_lib = t_rand = t_rand_pos = t_rand_small = t_rand_small_pos = t_order = t_order_pos = 0.0;
 
+      // fprintf(fout, "Length %d\n", length);
+
       for (int i = 0; i < count; i++) {
         fmpz_mpoly_randtest_bits(P, rand_state, length, COEFF_BIT_SIZE, expo_bit_size, ctx);
         fmpz_mpoly_randtest_bits(Q, rand_state, length, COEFF_BIT_SIZE, expo_bit_size, ctx);
+
+        // const char *vars[] = {"x", "y"};
+        // fmpz_mpoly_fprint_pretty(fout, P, vars, ctx);
+        // fprintf(fout, "\n");
+        // fmpz_mpoly_fprint_pretty(fout, Q, vars, ctx);
+        // fprintf(fout, "\n");
 
         start = clock();
         if (!fmpz_mpoly_resultant(R_lib, P, Q, var_to_compute, ctx)) {
@@ -181,6 +191,8 @@ void benchmark(
 
     fclose(output);
   }
+
+  // fclose(fout);
 
 cleanup:
   flint_rand_clear(rand_state);
