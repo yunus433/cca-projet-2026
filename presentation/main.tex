@@ -602,6 +602,39 @@ The GCD and resultant can be computed without division in the fraction field.
 }
 \end{frame}
 
+\begin{frame}{Wolfram Benchmark}
+\footnotesize
+\begin{columns}[T,onlytextwidth]
+  \begin{column}{0.75\textwidth}
+    \centering
+    \includegraphics[
+      width=\linewidth,
+      height=0.75\textheight,
+      keepaspectratio
+    ]{./images/wolfram_bitsize_6.png}
+  \end{column}
+
+  \begin{column}{0.23\textwidth}
+    \footnotesize
+    \begin{beamercolorbox}[
+      rounded=true,
+      shadow=false,
+      sep=0.1em,
+      wd=\linewidth
+    ]{block body}
+      \textbf{Bitsize 6} \\
+      \vspace{0.6em}
+      We only compare our fastest implementation against Wolfram. \\
+      \vspace{0.4em}
+      We observe Wolfram performs better than FLINT. \\
+      \vspace{0.4em}
+      Yet, our implementation is still faster by 2.5x speedup.
+    \end{beamercolorbox}
+  \end{column}
+\end{columns}
+\end{frame}
+
+
 \section{Conclusion}
 
 \begin{frame}{Conclusion}
