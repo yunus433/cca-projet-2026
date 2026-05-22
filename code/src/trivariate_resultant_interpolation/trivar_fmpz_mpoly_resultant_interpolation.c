@@ -1,3 +1,4 @@
+// DOES NOT WORK - not complete
 
 #include "trivar_fmpz_mpoly_resultant_interpolation.h"
 
