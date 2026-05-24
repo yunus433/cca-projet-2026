@@ -1,8 +1,8 @@
-PWD /Users/yunusgurlek/Programlar/sorbonne/s2/cca-projet-2026/report
+PWD /Users/yunusgurlek/Programlar/sorbonne/s2/cca-projet/report
 INPUT /usr/local/texlive/2025/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /Users/yunusgurlek/Programlar/sorbonne/s2/cca-projet-2026/report/main.tex
+INPUT /Users/yunusgurlek/Programlar/sorbonne/s2/cca-projet/report/main.tex
 OUTPUT main.log
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/base/article.cls
